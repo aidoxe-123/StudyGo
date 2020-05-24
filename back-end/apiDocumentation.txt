@@ -1,0 +1,14 @@
+POST /users
+    in: email, password
+    out: isSuccess (whether or not a new account is created)
+
+GET /users
+    in: email, password
+    out: accExist (whether or not an account with the given email is exist)
+         passwordCorrect (whether or not the password is correct)
+         userId 
+         
+GET /users/:id
+    out: idValid (whether or not the given ID is valid)
+         email 
+         password
