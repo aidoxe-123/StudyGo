@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import { TodoStyles } from '../../style/TodoStyles.js'
 import TodoItem from './TodoItem.js'
 import AddTodo from './AddTodo.js'
@@ -10,23 +10,23 @@ export default function TodoList() {
   const [todos, setTodos] = useState([]) // the data fetched from the api
 
   const [editId, setEditId] = useState(-1)
-
+        
   // get data from api
   // id cannot be -1
   useEffect(() => {
     const newTodos = [
-      { id: 1, date: new Date(2020, 5, 18), task: 'finish todo list' },
-      { id: 2, date: new Date(2020, 6, 1), task: 'submit milestone 1' },
-      { id: 3, date: new Date(2020, 8, 1), task: 'shopee hack' },
+      { id: 1, date: new Date(2020, 5, 18), task: 'finish todo list'},
+      { id: 2, date: new Date(2020, 6, 1), task: 'submit milestone 1'},
+      { id: 3, date: new Date(2020, 8, 1), task: 'shopee hack'},
     ]
-    setTodos(newTodos)
+  setTodos(newTodos)
   }, [])
 
   // Add delete an element
   function handleDelete(id) {
     setTodos(prevTodos => prevTodos.filter(item => item.id !== id))
   }
-
+    
   // Add a new element
   function handleAdd(text, date) {
     if (text.length >= 1) {
@@ -76,26 +76,26 @@ export default function TodoList() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={TodoStyles.container}>
         <View style={TodoStyles.content}>
-          <AddTodo handleAdd={handleAdd} />
+          <AddTodo handleAdd={handleAdd}/>
           <View style={TodoStyles.list}>
             <FlatList
               keyExtractor={(item) => item.id.toString()}
               data={todos}
-              renderItem={({ item }) => (
+              renderItem= {({item}) => (
                 <View style={TodoStyles.todoItem}>
-                  {editId !== item.id
-                    ? <TodoItem
-                      item={item}
-                    />
+                  { editId !== item.id
+                    ? <TodoItem 
+                        item={item} 
+                      />
                     : <EditTodo
-                      changeEditId={changeEditId}
-                      item={item}
-                      handleEdit={handleEdit}
-                    />
-
+                        changeEditId={changeEditId}
+                        item={item}
+                        handleEdit={handleEdit}
+                      />
+                        
                   }
                   <TodoButtons item={item} handleDelete={handleDelete} changeEditId={changeEditId} />
-
+                  
                 </View>
               )}
             />

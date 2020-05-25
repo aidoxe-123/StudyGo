@@ -8,7 +8,7 @@ import MainDrawer from './routes/MainDrawer'
 export default function App() {
   return (
     <NavigationContainer>
-      <LoginStack />
+       <MainDrawer />
     </NavigationContainer>
     // <TodoList />
   )
