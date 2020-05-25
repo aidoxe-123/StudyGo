@@ -41,6 +41,10 @@ export const LoginStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
   },
+  wrongInputAlert: {
+    color: 'red',
+    fontSize: 10,
+  },
   bottomRow: {
     flexDirection: 'row',
     marginTop: 30,

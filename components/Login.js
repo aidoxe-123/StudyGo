@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native'
 import { LoginStyles } from '../style/LoginStyles.js'
 
 export default function Login({ navigation }) {
@@ -21,9 +21,28 @@ export default function Login({ navigation }) {
     navigation.push('Register')
   }
 
+  function handleApiResponse({ accExist, passwordCorrect, userId }) {
+    if (!accExist || !passwordCorrect) {
+      setIsValid(false)
+    } else {
+      Alert.alert('UserId', userId)
+    }
+  }
+
   function handleLogin() {
     // send a post request to the api to check for email and password
-    setIsValid(false) // this line is just temporary
+    let requestOption = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    }
+    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/login', requestOption)
+      .then(res => res.json())
+      .then(data => handleApiResponse(data))
+      .catch(error => console.log(error))
   }
 
   return (
@@ -33,7 +52,10 @@ export default function Login({ navigation }) {
         <View style={LoginStyles.whitePanel}>
           <View style={LoginStyles.loginShow}>
             <Text h2 style={LoginStyles.heading}>LOGIN</Text>
-              <Text style={[isValid && {display: 'none'}, LoginStyles.invalidLogin]}>Email or password was incorrect, please try again</Text>
+              {
+                !isValid &&
+                <Text style={LoginStyles.invalidLogin}>Email or password was incorrect, please try again</Text>
+              } 
               <TextInput 
                 style={LoginStyles.input} 
                 placeholder='Email'

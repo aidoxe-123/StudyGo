@@ -10,6 +10,7 @@ export const TodoStyles = StyleSheet.create({
       height: 80,
       paddingTop: 38,
       backgroundColor: 'coral',
+      width: '100%',
     },
     title: {
       textAlign: 'center',

@@ -75,9 +75,6 @@ export default function TodoList() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={TodoStyles.container}>
-        <View style={TodoStyles.header}>
-          <Text style={TodoStyles.title}>Deadline Manager</Text>   
-        </View>
         <View style={TodoStyles.content}>
           <AddTodo handleAdd={handleAdd}/>
           <View style={TodoStyles.list}>
