@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, Modal } from 'react-native'
 import { Fontisto } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TodoStyles } from '../../style/TodoStyles.js'
 
-export default function AddTodo({handleAdd}) {
+export default function AddTodo({ handleAdd }) {
     const [text, setText] = useState('')
     const [date, setDate] = useState(new Date())
     const [editDate, setEditDate] = useState(false)
@@ -33,18 +33,19 @@ export default function AddTodo({handleAdd}) {
                     onChangeText={(value) => setText(value)}
                     value={text}
                 />
-                <View style={[TodoStyles.dateView, {flex: 3}]}>
+                <View style={[TodoStyles.dateView, { flex: 3 }]}>
                     <Text style={TodoStyles.dateContainer}>{dateString}</Text>
-                    <Fontisto name='date' size={18} color='#333' onPress={() => setEditDate(true)}/>
-                    { editDate && (
+                    <Fontisto name='date' size={18} color='#333' onPress={() => setEditDate(true)} />
+
+                    <Modal visible={editDate} style={{ height: 100 }}>
                         <DateTimePicker
                             value={date}
                             onChange={handleChangeDateTimePicker}
                         />
-                    )}
+                    </Modal>
                 </View>
             </View>
-            <TouchableOpacity style={TodoStyles.button} onPress={() => handleSubmit(text)}> 
+            <TouchableOpacity style={TodoStyles.button} onPress={() => handleSubmit(text)}>
                 <Text style={TodoStyles.buttonText}>Add</Text>
             </TouchableOpacity>
         </View>

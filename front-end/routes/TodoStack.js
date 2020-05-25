@@ -9,17 +9,17 @@ export default function LoginStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: 'coral'},
+        headerStyle: { backgroundColor: 'coral' },
         headerTitleStyle: {
           color: '#fff'
         },
         headerTintColor: '#fff',
       }}
     >
-      <Stack.Screen 
-        name='Deadlines' 
-        component={TodoList} 
-        options = {({routes, navigation}) => {
+      <Stack.Screen
+        name='Deadlines'
+        component={TodoList}
+        options={({ routes, navigation }) => {
           return {
             headerTitle: () => <Header title='Deadlines' navigation={navigation} />
           }
