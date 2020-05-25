@@ -1,44 +1,50 @@
-const express = require('express');
-const router = express.Router();
 const db = require('./firebaseDb').firestore();
+const express = require('express');
+const bodyParser = require('body-parser');
+
+// set up express app
+const router = express();
+const main = express();
+
+main.use('/api/v1', router);
+main.use(bodyParser.json());
+
+module.exports = main;
 
 // create new user (or not if the account with the given mail is exist)
 // (email, password) -> (isSuccess)
-router.post('/users', (req, res) => {
+router.post('/register', (req, res) => {
     let docRef = db.collection('mails').doc(req.body.email);
 
     docRef.get()
         .then(doc => {
-            if (!doc.exists) {     
+            if (!doc.exists) {
                 let newId = idGen(req.body.email);
 
                 docRef.set({
                     id: newId,
                     password: req.body.password
                 });
-                
+
                 db.collection('users').doc(newId).set({
                     email: req.body.email,
                     password: req.body.password
                 });
 
                 res.send({
-                    isSuccess: true
+                    emailUsed: false
                 })
             } else {
                 res.send({
-                    isSuccess: false
+                    emailUsed: true
                 })
             }
-        })
-        .catch(err => { 
-            console.log('Error getting document', err);
         });
 })
 
 // get the user id with the email and password
 // (email, password) -> (accExist, passwordCorrect, userId)
-router.get('/users', (req, res) => {
+router.post('/login', (req, res) => {
     let docRef = db.collection('mails').doc(req.body.email);
 
     docRef.get()
@@ -59,9 +65,6 @@ router.get('/users', (req, res) => {
                     userId: doc.data().id
                 });
             }
-        })
-        .catch(err => {
-            console.log('Error getting document', err);
         });
 });
 
@@ -83,14 +86,10 @@ router.get('/users/:id', (req, res) => {
                     password: doc.data().password
                 })
             }
-        })
-        .catch(err => {
-            console.log('Error getting document', err);
-        })
+        });
 })
-
-module.exports = router;
 
 function idGen(email) {
     return email + new Date().getTime();
 }
+
