@@ -1,16 +1,26 @@
 url: https://fir-tut2-82e4f.firebaseapp.com/api/v1
 
 POST /register
-    req: email, password
-    res: emailUsed (whether or not the email is used for another account)
+    req: email (string), password (string)
+    res: emailUsed (bool) (whether or not the email is used for another account)
 
 POST /login
-    req: email, password
-    res: accExist (whether or not an account with the given email is exist)
-         passwordCorrect (whether or not the password is correct)
-         userId 
+    req: email (string), password (string)
+    res: accExist (bool) (whether or not an account with the given email is exist)
+         passwordCorrect (bool) (whether or not the password is correct)
+         userId (string)
          
 GET /users/:id
-    res: idValid (whether or not the given ID is valid)
-         email 
-         password   
+    res: idValid (bool) (whether or not the given ID is valid)
+         email (string)
+         password (string)
+
+POST /to-do-list/add
+    req: id (string (this one is user id)), task (object: { title(string), date(date) })
+    res: idValid (bool)
+         taskId (string)
+
+POST /to-do-list
+    req: id (string)
+    res: idValid (bool)
+         tasks (array of objects: { id (string), date (date), task (string) }[])
