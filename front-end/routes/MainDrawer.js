@@ -13,17 +13,17 @@ export default function MainDrawer({route}) {
             <Drawer.Screen 
                 name='Timetable' 
                 component={TimetableStack} 
-                initialParams={{userId: route.params.userId}}
+                initialParams={route.params}
             />
             <Drawer.Screen 
                 name='Progress Tracker' 
                 component={ProgressTrackerStack}
-                initialParams={{userId: route.params.userId}}
+                initialParams={route.params}
             />
             <Drawer.Screen 
                 name='Deadlines' 
                 component={TodoStack}
-                initialParams={{userId: route.params.userId}}
+                initialParams={route.params}
             />
         </Drawer.Navigator>
     )

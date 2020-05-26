@@ -147,29 +147,27 @@ export default function TodoList({ route }) {
           textContent='Loading...'
           textStyle={TodoStyles.spinner}
         />
-        <View style={TodoStyles.content}>
-          <AddTodo handleAdd={handleAdd}/>
-          <View style={TodoStyles.list}>
-            <FlatList
-              keyExtractor={(item) => item.id.toString()}
-              data={todos}
-              renderItem= {({item}) => (
-                <View style={TodoStyles.todoItem}>
-                  { editId !== item.id
-                    ? <TodoItem 
-                        item={item} 
-                      />
-                    : <EditTodo
-                        changeEditId={changeEditId}
-                        item={item}
-                        handleEdit={handleEdit}
-                      />      
-                  }
-                  <TodoButtons item={item} handleDelete={handleDelete} changeEditId={changeEditId} />    
-                </View>
-              )}
-            />
-          </View>
+        <AddTodo handleAdd={handleAdd}/>
+        <View style={TodoStyles.list}>
+          <FlatList
+            keyExtractor={(item) => item.id.toString()}
+            data={todos}
+            renderItem= {({item}) => (
+              <View style={TodoStyles.todoItem}>
+                { editId !== item.id
+                  ? <TodoItem 
+                      item={item} 
+                    />
+                  : <EditTodo
+                      changeEditId={changeEditId}
+                      item={item}
+                      handleEdit={handleEdit}
+                    />      
+                }
+                <TodoButtons item={item} handleDelete={handleDelete} changeEditId={changeEditId} />    
+              </View>
+            )}
+          />
         </View>
       </View>
     </TouchableWithoutFeedback>

@@ -27,13 +27,9 @@ export const LoginStyles = StyleSheet.create({
     shadowOpacity: 0.43,
     shadowRadius: 9.51,
     elevation: 15,
-    zIndex: 0,
-  },
-  loginShow: {
-    zIndex: 1,
     padding: 40,
     textAlign: 'left',
-  }, 
+  },
   heading: {
     fontSize: 20,
   },

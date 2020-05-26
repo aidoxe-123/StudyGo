@@ -61,33 +61,31 @@ export default function Login({ navigation }) {
           textStyle={LoginStyles.spinner}
         />
         <View style={LoginStyles.whitePanel}>
-          <View style={LoginStyles.loginShow}>
-            <Text h2 style={LoginStyles.heading}>LOGIN</Text>
-              {
-                !isValid &&
-                <Text style={LoginStyles.invalidLogin}>Email or password was incorrect, please try again</Text>
-              } 
-              <TextInput 
-                style={LoginStyles.input} 
-                placeholder='Email'
-                value={email}
-                onChangeText={handleInputEmail}
-              />
-              <TextInput 
-                secureTextEntry={true} 
-                style={LoginStyles.input} 
-                placeholder='Password'
-                value={password}
-                onChangeText={handleInputPassword}
-              />
-              <View style={LoginStyles.bottomRow}>
-                <TouchableOpacity onPress={moveToRegister}>
-                  <Text style={LoginStyles.link}>Register</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={LoginStyles.button} onPress={handleLogin}>
-                  <Text style={LoginStyles.buttonText}>Login</Text>
-                </TouchableOpacity>
-              </View>
+          <Text h2 style={LoginStyles.heading}>LOGIN</Text>
+          {
+            !isValid &&
+            <Text style={LoginStyles.invalidLogin}>Email or password was incorrect, please try again</Text>
+          } 
+          <TextInput 
+            style={LoginStyles.input} 
+            placeholder='Email'
+            value={email}
+            onChangeText={handleInputEmail}
+          />
+          <TextInput 
+            secureTextEntry={true} 
+            style={LoginStyles.input} 
+            placeholder='Password'
+            value={password}
+            onChangeText={handleInputPassword}
+          />
+          <View style={LoginStyles.bottomRow}>
+            <TouchableOpacity onPress={moveToRegister}>
+              <Text style={LoginStyles.link}>Register</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={LoginStyles.button} onPress={handleLogin}>
+              <Text style={LoginStyles.buttonText}>Login</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

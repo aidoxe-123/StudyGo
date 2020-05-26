@@ -3,22 +3,17 @@ import { StyleSheet } from 'react-native'
 export const TodoStyles = StyleSheet.create({
     // for Todolist.js
     container: {
-        backgroundColor: '#fff',
-        flex: 1,
+      padding: 20,
+      backgroundColor: '#fff',
+      flex: 1,
     },
     spinner: {
       color: '#fff'
-    },
-    content: {
-      padding: 20,
-      marginTop: 20,
-      flex: 1,
     },
     list: {
       marginTop: 20,
       flex: 1,
     },
-
     // for AddTodo.js
     addTodoForm: {
       flexDirection: 'row',
