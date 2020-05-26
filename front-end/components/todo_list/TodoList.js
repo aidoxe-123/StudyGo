@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Keyboard} from 'react-native'
+import { View, FlatList, TouchableWithoutFeedback, Keyboard} from 'react-native'
+import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../style/TodoStyles.js'
 import TodoItem from './TodoItem.js'
 import AddTodo from './AddTodo.js'
@@ -138,13 +139,14 @@ export default function TodoList({ route }) {
       .catch(error => console.log(error))
   }
 
-  // have not designed the loading screen yet
-  if (loading) {
-    return <Text>Loading</Text>
-  }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={TodoStyles.container}>
+        <Spinner
+          visible={loading}
+          textContent='Loading...'
+          textStyle={TodoStyles.spinner}
+        />
         <View style={TodoStyles.content}>
           <AddTodo handleAdd={handleAdd}/>
           <View style={TodoStyles.list}>

@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native'
+import Spinner from 'react-native-loading-spinner-overlay';
 import { LoginStyles } from '../style/LoginStyles.js'
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isValid, setIsValid] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   function handleInputEmail(text) {
     setEmail(text)
@@ -39,9 +41,13 @@ export default function Login({ navigation }) {
         password: password
       })
     }
+    setLoading(true)
     fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/login', requestOption)
       .then(res => res.json())
-      .then(data => handleApiResponse(data))
+      .then(data => {
+        setLoading(false)
+        handleApiResponse(data)
+      })
       .catch(error => console.log(error))
   }
 
@@ -49,6 +55,11 @@ export default function Login({ navigation }) {
     // still not able to put them in scroll view yet
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={LoginStyles.container}>
+        <Spinner
+          visible={loading}
+          textContent='Loading...'
+          textStyle={LoginStyles.spinner}
+        />
         <View style={LoginStyles.whitePanel}>
           <View style={LoginStyles.loginShow}>
             <Text h2 style={LoginStyles.heading}>LOGIN</Text>

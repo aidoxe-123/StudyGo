@@ -6,11 +6,8 @@ export const TodoStyles = StyleSheet.create({
         backgroundColor: '#fff',
         flex: 1,
     },
-    title: {
-      textAlign: 'center',
-      color: '#fff',
-      fontSize: 20,
-      fontWeight: 'bold',
+    spinner: {
+      color: '#fff'
     },
     content: {
       padding: 20,

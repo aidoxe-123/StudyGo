@@ -10,6 +10,9 @@ export const LoginStyles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'coral', 
   },
+  spinner: {
+    color: '#fff'
+  },
   whitePanel: {
     backgroundColor: 'rgba(255, 255, 255, 1)',
     //height: '60%',
