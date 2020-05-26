@@ -91,11 +91,9 @@ export default function TodoList() {
                         changeEditId={changeEditId}
                         item={item}
                         handleEdit={handleEdit}
-                      />
-                        
+                      />      
                   }
-                  <TodoButtons item={item} handleDelete={handleDelete} changeEditId={changeEditId} />
-                  
+                  <TodoButtons item={item} handleDelete={handleDelete} changeEditId={changeEditId} />    
                 </View>
               )}
             />

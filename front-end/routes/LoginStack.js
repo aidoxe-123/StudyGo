@@ -2,6 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import Register from '../components/Register'
 import Login from '../components/Login'
+import MainDrawer from './MainDrawer'
 
 const Stack = createStackNavigator()
 
@@ -13,11 +14,12 @@ export default function LoginStack() {
         headerTitleStyle: {
           color: 'black'
         },
-        headerTintColor: 'black',
+        headerLeft: null,
       }}
     >
       <Stack.Screen name='Login' component={Login} />
       <Stack.Screen name='Register' component={Register} />
+      <Stack.Screen name='MainDrawer' component={MainDrawer} options={{headerShown: false}}/>
     </Stack.Navigator>
   )
 }

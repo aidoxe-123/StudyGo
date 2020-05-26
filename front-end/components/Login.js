@@ -17,7 +17,7 @@ export default function Login({ navigation }) {
     setTimeout(() => setIsValid(true), 1000)
   }
 
-  function handleNavigate() {
+  function moveToRegister() {
     navigation.push('Register')
   }
 
@@ -25,7 +25,12 @@ export default function Login({ navigation }) {
     if (!accExist || !passwordCorrect) {
       setIsValid(false)
     } else {
-      Alert.alert('UserId', userId)
+      navigation.navigate('MainDrawer', {
+        screen: 'Timetable',
+        params: {
+          userId: userId,
+        }
+      })
     }
   }
 
@@ -70,7 +75,7 @@ export default function Login({ navigation }) {
                 onChangeText={handleInputPassword}
               />
               <View style={LoginStyles.bottomRow}>
-                <TouchableOpacity onPress={handleNavigate}>
+                <TouchableOpacity onPress={moveToRegister}>
                   <Text style={LoginStyles.link}>Register</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={LoginStyles.button} onPress={handleLogin}>

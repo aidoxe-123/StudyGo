@@ -6,12 +6,6 @@ export const TodoStyles = StyleSheet.create({
         backgroundColor: '#fff',
         flex: 1,
     },
-    header: {
-      height: 80,
-      paddingTop: 38,
-      backgroundColor: 'coral',
-      width: '100%',
-    },
     title: {
       textAlign: 'center',
       color: '#fff',

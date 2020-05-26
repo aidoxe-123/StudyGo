@@ -7,12 +7,24 @@ import TodoStack from './TodoStack'
 
 const Drawer = createDrawerNavigator()
 
-export default function MainDrawer() {
+export default function MainDrawer({route}) {
     return (
         <Drawer.Navigator>
-            <Drawer.Screen name='Timetable' component={TimetableStack}/>
-            <Drawer.Screen name='Progress Tracker' component={ProgressTrackerStack}/>
-            <Drawer.Screen name='Deadlines' component={TodoStack}/>
+            <Drawer.Screen 
+                name='Timetable' 
+                component={TimetableStack} 
+                initialParams={{userId: route.params.userId}}
+            />
+            <Drawer.Screen 
+                name='Progress Tracker' 
+                component={ProgressTrackerStack}
+                initialParams={{userId: route.params.userId}}
+            />
+            <Drawer.Screen 
+                name='Deadlines' 
+                component={TodoStack}
+                initialParams={{userId: route.params.userId}}
+            />
         </Drawer.Navigator>
     )
 }

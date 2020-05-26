@@ -5,7 +5,7 @@ import Header from '../shared component/Header'
 
 const Stack = createStackNavigator()
 
-export default function LoginStack() {
+export default function TodoStack({ route }) {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -19,7 +19,8 @@ export default function LoginStack() {
       <Stack.Screen 
         name='Deadlines' 
         component={TodoList} 
-        options = {({routes, navigation}) => {
+        initialParams={route.params}
+        options = {({navigation}) => {
           return {
             headerTitle: () => <Header title='Deadlines' navigation={navigation} />
           }
