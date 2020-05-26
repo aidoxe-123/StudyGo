@@ -10,6 +10,10 @@ module.exports = router;
 router.post('/register', (req, res) => {
     let docRef = db.collection('mails').doc(req.body.email);
 
+    function idGen(email) {
+        return email + new Date().getTime();
+    }
+
     docRef.get()
         .then(doc => {
             if (!doc.exists) {
@@ -63,9 +67,9 @@ router.post('/login', (req, res) => {
 });
 
 // get the user information with the id
-// () -> (idValid, email, password)
-router.get('/users/:id', (req, res) => {
-    let docRef = db.collection('users').doc(req.params.id);
+// (id) -> (idValid, email, password)
+router.post('/users', (req, res) => {
+    let docRef = db.collection('users').doc(req.body.id);
 
     docRef.get()
         .then(doc => {
@@ -83,6 +87,3 @@ router.get('/users/:id', (req, res) => {
         });
 })
 
-function idGen(email) {
-    return email + new Date().getTime();
-}

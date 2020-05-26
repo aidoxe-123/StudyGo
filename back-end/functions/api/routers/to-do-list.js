@@ -7,7 +7,7 @@ module.exports = router;
 
 // given the id, return the complete list of task in to do list
 // (id) -> (idValid, tasks)
-router.post('/to-do-list', (req, res) => {
+router.post('/to-do-list/all', (req, res) => {
     let docRef = db.collection('users').doc(req.body.id);
 
     docRef.get()
@@ -37,7 +37,7 @@ router.post('/to-do-list', (req, res) => {
 
 //given the user id, add the task
 //(id, task) -> (idValid, taskId) (task = {title, date})
-router.post('/to-do-list/add', (req, res) => {
+router.post('/to-do-list', (req, res) => {
     let docRef = db.collection('users').doc(req.body.id);
 
     docRef.get()
@@ -60,3 +60,70 @@ router.post('/to-do-list/add', (req, res) => {
         });
 })
 
+// given the user id and task id, change the task (either name or date or both)
+// (userId, taskId, newTitle, newDate) -> (userIdValid, taskIdValid)
+router.put('/to-do-list', (req, res) => {
+    let docRef = db.collection('users').doc(req.body.userId);
+
+    docRef.get()
+        .then(doc => {
+            if (!doc.exists) {
+                res.send({
+                    userIdValid: false
+                })
+            } else {
+                let taskRef = docRef.collection('to_do_list').doc(req.body.taskId);
+                taskRef.get()
+                    .then(task => {
+                        if (!task.exists) {
+                            res.send({
+                                userIdValid: true,
+                                taskIdValid: false
+                            })
+                        } else {
+                            let newData = {
+                                title: req.body.newTitle,
+                                date: req.body.newDate
+                            }
+                            taskRef.set(newData);
+                            res.send({
+                                userIdValid: true,
+                                taskIdValid: true
+                            })
+                        }
+                    });
+            }
+        })
+})
+
+// given the user id and task id, delete the task
+// (userId, taskId) -> (userIdValid, taskIdValid)
+router.delete('/to-do-list', (req, res) => {
+    let docRef = db.collection('users').doc(req.body.userId);
+
+    docRef.get()
+        .then(doc => {
+            if (!doc.exists) {
+                res.send({
+                    userIdValid: false
+                })
+            } else {
+                let taskRef = docRef.collection('to_do_list').doc(req.body.taskId);
+                taskRef.get()
+                    .then(task => {
+                        if (!task.exists) {
+                            res.send({
+                                userIdValid: true,
+                                taskIdValid: false
+                            })
+                        } else {
+                            taskRef.delete()
+                            res.send({
+                                userIdValid: true,
+                                taskIdValid: true
+                            })
+                        }
+                    });
+            }
+        })
+})
