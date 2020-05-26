@@ -6,42 +6,106 @@ import AddTodo from './AddTodo.js'
 import EditTodo from './EditTodo.js'
 import TodoButtons from './TodoButtons.js'
 
-export default function TodoList() {
+/* features that are not yet implemented:
++ still cannot store the task locally by date 
+  -> every time a change is made, we have to wait for the data
+  -> when add/edit/delete, have to post to the api the add/edit/delete request 
+    and then fetch back all the tasks from the api to display
+  -> plan to have a local data base on the front end to store the tasks,
+   only upload the changes to the api once to minimize loading time
++ still cannot work with out the internet
+*/
+export default function TodoList({ route }) {
   const [todos, setTodos] = useState([]) // the data fetched from the api
-
   const [editId, setEditId] = useState(-1)
+  const [loading, setLoading] = useState(true)
+
+  const userId = route.params.userId
         
   // get data from api
   // id cannot be -1
   useEffect(() => {
-    const newTodos = [
-      { id: 1, date: new Date(2020, 5, 18), task: 'finish todo list'},
-      { id: 2, date: new Date(2020, 6, 1), task: 'submit milestone 1'},
-      { id: 3, date: new Date(2020, 8, 1), task: 'shopee hack'},
-    ]
-  setTodos(newTodos)
+    const requestOptions = {
+       method: 'POST',
+       headers: {'Content-Type': 'application/json'},
+       body: JSON.stringify({
+         id: userId
+       })
+    }
+    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list/all', requestOptions)
+      .then(res => res.json())
+      .then(data => data.tasks)
+      .then(tasksArr => tasksArr.map(task => {
+        return {
+          ...task,
+          date: new Date(Date.parse(task.date))
+        }
+      }))
+      .then(tasksWithCorrectDateFormat => setTodos(tasksWithCorrectDateFormat))
+      .then(() => setLoading(false))
+      .catch(error => console.log(error))
   }, [])
+
+  function fetchData() { // this function is temporary until a local database is implemented
+    const requestOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id: userId
+      })
+    }
+    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list/all', requestOptions)
+      .then(res => res.json())
+      .then(data => data.tasks)
+      .then(tasksArr => tasksArr.map(task => {
+        return {
+          ...task,
+          date: new Date(Date.parse(task.date))
+        }
+      }))
+      .then(tasksWithCorrectDateFormat => setTodos(tasksWithCorrectDateFormat))
+      .then(() => setLoading(false))
+      .catch(error => console.log(error))
+  }
 
   // Add delete an element
   function handleDelete(id) {
-    setTodos(prevTodos => prevTodos.filter(item => item.id !== id))
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        userId: userId,
+        taskId: id
+      })
+    }
+    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list', requestOptions)
+      .then(res => {
+        setLoading(true)
+        fetchData()
+      })
+      .catch(error => console.log(error))    
   }
     
   // Add a new element
   function handleAdd(text, date) {
     if (text.length >= 1) {
-      let newItem = {
-        id: Math.random(100),
-        date: date,
-        task: text
+      const requestOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: userId,
+          task: {
+            title: text,
+            date: date,
+          }
+        })
       }
-      setTodos(prevTodos => {
-        let newTodo = [
-          newItem,
-          ...prevTodos
-        ]
-        return newTodo
-      })
+      fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list', requestOptions)
+        .then(res => {
+          setLoading(true)
+          fetchData()
+        })
+        .catch(error => console.log(error))      
     }
   }
 
@@ -56,22 +120,28 @@ export default function TodoList() {
 
   // edit an element
   function handleEdit(id, task, date) {
-    setTodos(prevTodos => {
-      return prevTodos.map(item => {
-        if (item.id === id) {
-          let newItem = {
-            ...item,
-            task: task,
-            date: date,
-          }
-          return newItem
-        } else {
-          return item
-        }
+    const requestOptions = {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        userId: userId,
+        taskId: id,
+        newTitle: task,
+        newDate: date
       })
-    })
+    }
+    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list', requestOptions)
+      .then(res => {
+        setLoading(true)
+        fetchData()
+      })
+      .catch(error => console.log(error))
   }
 
+  // have not designed the loading screen yet
+  if (loading) {
+    return <Text>Loading</Text>
+  }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={TodoStyles.container}>

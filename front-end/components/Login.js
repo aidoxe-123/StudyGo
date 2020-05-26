@@ -25,12 +25,7 @@ export default function Login({ navigation }) {
     if (!accExist || !passwordCorrect) {
       setIsValid(false)
     } else {
-      navigation.navigate('MainDrawer', {
-        screen: 'Timetable',
-        params: {
-          userId: userId,
-        }
-      })
+      navigation.navigate('MainDrawer', { userId: userId })
     }
   }
 
