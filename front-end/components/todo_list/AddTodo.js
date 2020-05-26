@@ -41,13 +41,11 @@ export default function AddTodo({handleAdd}) {
                             <DateTimePicker
                                 value={date}
                                 onChange={handleChangeDateTimePicker}
-                                style={{zIndex: 1151}}
                             />
                         </Modal>
                         : editDate && <DateTimePicker
                             value={date}
                             onChange={handleChangeDateTimePicker}
-                            style={{zIndex: 1151}}
                         />
                     }
                 </View>
