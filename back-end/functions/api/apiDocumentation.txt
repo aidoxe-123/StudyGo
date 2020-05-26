@@ -1,16 +1,44 @@
 url: https://fir-tut2-82e4f.firebaseapp.com/api/v1
 
+// register an account with an email and password
 POST /register
-    req: email, password
-    res: emailUsed (whether or not the email is used for another account)
+    req: email (string), password (string)
+    res: emailUsed (bool) (whether or not the email is used for another account)
 
+// log into an account with an email and password
 POST /login
-    req: email, password
-    res: accExist (whether or not an account with the given email is exist)
-         passwordCorrect (whether or not the password is correct)
-         userId 
-         
-GET /users/:id
-    res: idValid (whether or not the given ID is valid)
-         email 
-         password   
+    req: email (string), password (string)
+    res: accExist (bool) (whether or not an account with the given email is exist)
+         passwordCorrect (bool) (whether or not the password is correct)
+         userId (string)
+
+// get all user's data with the id
+POST /users
+    req: id (string)
+    res: idValid (bool) (whether or not the given ID is valid)
+         email (string)
+         password (string)
+
+// add a new task into the to do list
+POST /to-do-list
+    req: id (string (this one is user id)), task (object: { title (string), date (date) })
+    res: idValid (bool)
+         taskId (string)
+
+// update an exist task in the to do list
+PUT /to-do-list
+    req: userId (string), taskId (string), newTitle (string), newDate (date)
+    res: userIdValid (bool)
+         taskIdValid (bool)
+
+// return all current task in the to do list (as an array of tasks)
+POST /to-do-list/all
+    req: id (string)
+    res: idValid (bool)
+         tasks (array of objects: { id (string), date (date), task (string) }[])
+
+// delete a task in the to do list
+DELETE /to-do-list
+    req: userId (string), taskId (string)
+    res: userIdValid (bool)
+         taskIdValid (bool)
