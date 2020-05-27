@@ -27,6 +27,8 @@ export default function Login({ navigation }) {
     if (!accExist || !passwordCorrect) {
       setIsValid(false)
     } else {
+      setEmail('')
+      setPassword('')
       navigation.navigate('MainDrawer', { userId: userId })
     }
   }

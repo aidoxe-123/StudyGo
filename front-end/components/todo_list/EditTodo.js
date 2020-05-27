@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import DatePicker from '../../shared component/DatePicker'
 import { Fontisto } from '@expo/vector-icons'
 import { TodoStyles } from '../../style/TodoStyles.js'
@@ -42,7 +42,7 @@ export default function EditTodo({changeEditId, item, handleEdit}) {
                 style={TodoStyles.button}
                 onPress={() => handleFormSubmit(task, date)}
             >
-                <Text style={TodoStyles.buttonText}>Change</Text>
+                <Text style={TodoStyles.buttonText}>Save changes</Text>
             </TouchableOpacity>
         </View>
     )

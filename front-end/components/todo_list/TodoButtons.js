@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet} from 'react-native'
 import { MaterialIcons, Feather } from '@expo/vector-icons'
 import { TodoStyles } from '../../style/TodoStyles.js'
 
+// the pen and bin icons on the right of each todoItem
 export default function TodoButtons({item, handleDelete, changeEditId}) {
   return (
     <View style={TodoStyles.todoButton}>

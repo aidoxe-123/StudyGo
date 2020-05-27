@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, TouchableWithoutFeedback, Keyboard} from 'react-native'
+import { View, FlatList, TouchableWithoutFeedback, Keyboard, BackHandler} from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../style/TodoStyles.js'
 import TodoItem from './TodoItem.js'
@@ -16,12 +16,17 @@ import TodoButtons from './TodoButtons.js'
    only upload the changes to the api once to minimize loading time
 + still cannot work with out the internet
 */
-export default function TodoList({ route }) {
-  const [todos, setTodos] = useState([]) // the data fetched from the api
-  const [editId, setEditId] = useState(-1)
-  const [loading, setLoading] = useState(true)
 
+export default function TodoList({ route }) {
   const userId = route.params.userId
+
+  const [todos, setTodos] = useState([]) 
+  // array of deadlines/tasks
+  const [editId, setEditId] = useState(-1) 
+  // the id of the item that is currently being edited
+  // editId === -1 means that currently there is nothing being edited
+  const [loading, setLoading] = useState(true)
+  // represent whether the screen is currenly loading
         
   // get data from api
   // id cannot be -1
@@ -47,7 +52,9 @@ export default function TodoList({ route }) {
       .catch(error => console.log(error))
   }, [])
 
-  function fetchData() { // this function is temporary until a local database is implemented
+  function fetchData() { 
+    // this function is temporary until a local database is implemented
+    // get all the tasks from the api
     const requestOptions = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
