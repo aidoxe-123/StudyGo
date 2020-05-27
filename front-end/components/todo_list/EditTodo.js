@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native'
-import RNDateTimePicker from '@react-native-community/datetimepicker'
+import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import DatePicker from '../../shared component/DatePicker'
 import { Fontisto } from '@expo/vector-icons'
 import { TodoStyles } from '../../style/TodoStyles.js'
 
@@ -36,18 +36,13 @@ export default function EditTodo({changeEditId, item, handleEdit}) {
             <View style={TodoStyles.dateView}>
                 <Text style={TodoStyles.dateContainer}>{dateString}</Text>
                 <Fontisto name='date' size={18} color='#333' onPress={() => setEditDate(true)}/>
-                { editDate &&
-                    <RNDateTimePicker
-                        value={date}
-                        onChange={handleChangeDateTimePicker}
-                    />
-                }  
+                <DatePicker showDatePicker={editDate} date={date} handleChange={handleChangeDateTimePicker}/>
             </View>
             <TouchableOpacity 
                 style={TodoStyles.button}
                 onPress={() => handleFormSubmit(task, date)}
             >
-                <Text style={TodoStyles.buttonText}>Change</Text>
+                <Text style={TodoStyles.buttonText}>Save changes</Text>
             </TouchableOpacity>
         </View>
     )

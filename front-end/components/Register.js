@@ -60,13 +60,13 @@ export default class Register extends React.Component{
     let isValid = true;
 
     // check for validation before sending request to the api
-    if (this.state.password === '') { // check if the user has entered a password
+    if (this.state.password.length < 6) { // check if the user has entered a password
       isValid = false
       this.setState({
         emptyPassword: true,
       })
     }
-    if (this.state.repeatPassword === '') { // check if the user has entered a confirm password
+    if (this.state.repeatPassword.length < 6) { // check if the user has entered a confirm password
       isValid = false
       this.setState({
         emptyRepeatPassword: true,
@@ -131,7 +131,7 @@ export default class Register extends React.Component{
               { 
                 this.state.emptyPassword &&
                 <Text style={LoginStyles.wrongInputAlert}>
-                  Please enter a password
+                  Password must have at least 6 characters
                 </Text>
               }
               <TextInput 
