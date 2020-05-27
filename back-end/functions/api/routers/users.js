@@ -6,8 +6,13 @@ const router = express();
 module.exports = router;
 
 // create new user (or not if the account with the given mail is exist)
-// (email, password) -> (isSuccess)
+// (email, password) -> ()
 router.post('/register', (req, res) => {
+    let response = {
+        StatusCode: 0,
+        msg: ""
+    }
+
     let docRef = db.collection('mails').doc(req.body.email);
 
     function idGen(email) {
@@ -29,61 +34,84 @@ router.post('/register', (req, res) => {
                     password: req.body.password
                 });
 
-                res.send({
-                    emailUsed: false
-                })
+                response.StatusCode = 200;
+
+                res.send(response)
             } else {
-                res.send({
-                    emailUsed: true
-                })
+                response.StatusCode = 409;
+                response.msg = "This email is already registered";
+
+                res.send(response);
             }
+        }).catch(err => {
+            response.StatusCode = 500;
+            response.msg = err.code + ": " + err.message;
+
+            res.send(response);
         });
 })
 
 // get the user id with the email and password
-// (email, password) -> (accExist, passwordCorrect, userId)
+// (email, password) -> (userId)
 router.post('/login', (req, res) => {
+    let response = {
+        StatusCode: 0,
+        msg: "",
+        userId: 0
+    }
     let docRef = db.collection('mails').doc(req.body.email);
 
     docRef.get()
         .then(doc => {
-            if (!doc.exists) {
-                res.send({
-                    accExist: false
-                });
-            } else if (req.body.password !== doc.data().password) {
-                res.send({
-                    accExist: true,
-                    passwordCorrect: false
-                });
+            if (!doc.exists || (req.body.password !== doc.data().password)) {
+                response.StatusCode = 401;
+                response.msg = "Incorrect email or password";
+
+                res.send(response);
             } else {
-                res.send({
-                    accExist: true,
-                    passwordCorrect: true,
-                    userId: doc.data().id
-                });
+                response.StatusCode = 200;
+                response.userId = doc.data().id;
+
+                res.send(response);
             }
+        }).catch(err => {
+            response.StatusCode = 500;
+            response.msg = err.code + ": " + err.message;
+
+            res.send(response);
         });
 });
 
 // get the user information with the id
-// (id) -> (idValid, email, password)
+// (id) -> (email, password)
 router.post('/users', (req, res) => {
+    let response = {
+        StatusCode: 0,
+        msg: "",
+        email: "",
+        password: ""
+    }
     let docRef = db.collection('users').doc(req.body.id);
 
     docRef.get()
         .then(doc => {
             if (!doc.exists) {
-                res.send({
-                    idValid: false
-                })
+                response.StatusCode = 404;
+                response.msg = "Invalid ID";
+
+                res.send(response);
             } else {
-                res.send({
-                    idValid: true,
-                    email: doc.data().email,
-                    password: doc.data().password
-                })
+                response.StatusCode = 200;
+                response.email = doc.data().email;
+                response.password = doc.data().password;
+
+                res.send(response);
             }
+        }).catch(err => {
+            response.StatusCode = 500;
+            response.msg = err.code + ": " + err.message;
+
+            res.send(response);
         });
 })
 
