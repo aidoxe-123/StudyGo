@@ -6,17 +6,21 @@ import { LoginStyles } from '../style/LoginStyles.js'
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [emptyEmail, setEmptyEmail] = useState(false)
+  const [emptyPassword, setEmptyPassword] = useState(false)
   const [isValid, setIsValid] = useState(true)
   const [loading, setLoading] = useState(false)
 
   function handleInputEmail(text) {
     setEmail(text)
-    setTimeout(() => setIsValid(true), 1000)
+    setIsValid(true)
+    setEmptyEmail(false)
   }
 
   function handleInputPassword(text) {
     setPassword(text)
-    setTimeout(() => setIsValid(true), 1000)
+    setIsValid(true)
+    setEmptyPassword(false)
   }
 
   function moveToRegister() {
@@ -34,23 +38,34 @@ export default function Login({ navigation }) {
   }
 
   function handleLogin() {
-    // send a post request to the api to check for email and password
-    let requestOption = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
+    let ok = true
+    if (email === '') {
+      setEmptyEmail(true)
+      ok = false
     }
-    setLoading(true)
-    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/login', requestOption)
-      .then(res => res.json())
-      .then(data => {
-        setLoading(false)
-        handleApiResponse(data)
-      })
-      .catch(error => console.log(error))
+    if (password === '') {
+      setEmptyPassword(true)
+      ok = false
+    }
+    if (ok) { // if both the email and password are not empty
+      // send a post request to the api to check for email and password
+      let requestOption = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      }
+      setLoading(true)
+      fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/login', requestOption)
+        .then(res => res.json())
+        .then(data => {
+          setLoading(false)
+          handleApiResponse(data)
+        })
+        .catch(error => console.log(error))
+    }
   }
 
   return (
@@ -74,6 +89,12 @@ export default function Login({ navigation }) {
             value={email}
             onChangeText={handleInputEmail}
           />
+          { 
+            emptyPassword &&
+            <Text style={LoginStyles.wrongInputAlert}>
+              Please enter email
+            </Text>
+          }
           <TextInput 
             secureTextEntry={true} 
             style={LoginStyles.input} 
@@ -81,6 +102,12 @@ export default function Login({ navigation }) {
             value={password}
             onChangeText={handleInputPassword}
           />
+          { 
+            emptyPassword &&
+            <Text style={LoginStyles.wrongInputAlert}>
+              Please enter password
+            </Text>
+          }
           <View style={LoginStyles.bottomRow}>
             <TouchableOpacity onPress={moveToRegister}>
               <Text style={LoginStyles.link}>Register</Text>

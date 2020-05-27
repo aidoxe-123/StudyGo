@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
+import { NavigationActions } from 'react-navigation'
 
 /* The common header design used by TodoStack, ProgressTrackerStack and TimetableStack
   @param:
@@ -13,7 +14,7 @@ export default function Header({title, navigation }) {
   }
   
   const moveToLogin = () => {
-    navigation.navigate('Login')
+    navigation.popToTop() // pop back to login
   }
 
   return (
