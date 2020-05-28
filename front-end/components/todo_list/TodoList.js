@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, TouchableWithoutFeedback, Keyboard, BackHandler} from 'react-native'
+import { View, FlatList, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Text} from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../style/TodoStyles.js'
 import TodoItem from './TodoItem.js'
-import AddTodo from './AddTodo.js'
-import EditTodo from './EditTodo.js'
-import TodoButtons from './TodoButtons.js'
 
 /* features that are not yet implemented:
 + still cannot store the task locally by date 
@@ -17,7 +14,7 @@ import TodoButtons from './TodoButtons.js'
 + still cannot work with out the internet
 */
 
-export default function TodoList({ route }) {
+export default function TodoList({ route, navigation }) {
   const userId = route.params.userId
 
   const [todos, setTodos] = useState([]) 
@@ -146,6 +143,7 @@ export default function TodoList({ route }) {
       .catch(error => console.log(error))
   }
 
+  //<AddTodo handleAdd={handleAdd}/>
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={TodoStyles.container}>
@@ -154,9 +152,11 @@ export default function TodoList({ route }) {
           textContent='Loading...'
           textStyle={TodoStyles.spinner}
         />
-        <AddTodo handleAdd={handleAdd}/>
+        <TouchableOpacity onPress={() => navigation.navigate('AddDeadline', {handleAdd: handleAdd})}>
+          <Text style={TodoStyles.addTask}>+ Add a new task</Text>
+        </TouchableOpacity>        
         <View style={TodoStyles.list}>
-          <FlatList
+          {/* <FlatList
             keyExtractor={(item) => item.id.toString()}
             data={todos}
             renderItem= {({item}) => (
@@ -173,6 +173,18 @@ export default function TodoList({ route }) {
                 }
                 <TodoButtons item={item} handleDelete={handleDelete} changeEditId={changeEditId} />    
               </View>
+            )}
+          /> */}
+          <FlatList
+            keyExtractor={(item) => item.id.toString()}
+            data={todos}
+            renderItem={({item}) => (
+              <TodoItem 
+                item={item} 
+                handleEdit={handleEdit} 
+                handleDelete={handleDelete}
+                navigation={navigation}
+              />
             )}
           />
         </View>
