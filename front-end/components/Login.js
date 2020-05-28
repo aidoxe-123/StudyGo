@@ -27,8 +27,8 @@ export default function Login({ navigation }) {
     navigation.push('Register')
   }
 
-  function handleApiResponse({ accExist, passwordCorrect, userId }) {
-    if (!accExist || !passwordCorrect) {
+  function handleApiResponse({ StatusCode, userId }) {
+    if (StatusCode !== 200) {
       setIsValid(false)
     } else {
       setEmail('')
@@ -38,16 +38,16 @@ export default function Login({ navigation }) {
   }
 
   function handleLogin() {
-    let ok = true
+    let valid = true
     if (email === '') {
       setEmptyEmail(true)
-      ok = false
+      valid = false
     }
     if (password === '') {
       setEmptyPassword(true)
-      ok = false
+      valid = false
     }
-    if (ok) { // if both the email and password are not empty
+    if (valid) { // if both the email and password are not empty
       // send a post request to the api to check for email and password
       let requestOption = {
         method: 'POST',
@@ -90,7 +90,7 @@ export default function Login({ navigation }) {
             onChangeText={handleInputEmail}
           />
           { 
-            emptyPassword &&
+            emptyEmail &&
             <Text style={LoginStyles.wrongInputAlert}>
               Please enter email
             </Text>

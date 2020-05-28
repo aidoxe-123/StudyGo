@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native'
+import Spinner from 'react-native-loading-spinner-overlay';
 import { LoginStyles } from '../style/LoginStyles'
 
 export default class Register extends React.Component{
@@ -9,9 +10,10 @@ export default class Register extends React.Component{
     repeatPassword: '', // main property
     validEmail: true,
     samePasswords: true,
-    emptyPassword: false,
-    emptyRepeatPassword: false,
+    emptyPassword: false, // true if password.length < 6
+    emptyRepeatPassword: false, // true if password.length < 6
     emailUsed: false,
+    loading: false
   }
 
   validateEmail = (email) => {
@@ -41,8 +43,8 @@ export default class Register extends React.Component{
     this.props.navigation.goBack()
   }
 
-  handleApiResponse = ({emailUsed}) => {
-    if (emailUsed) {
+  handleApiResponse = ({ StatusCode }) => {
+    if (StatusCode !== 200) {
       this.setState({
         password: '',
         repeatPassword: ''
@@ -87,6 +89,7 @@ export default class Register extends React.Component{
 
     // if email and password are valid, send request to the api
     if (isValid) {
+      this.setState({ loading: true })
       let requestOption = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -97,7 +100,10 @@ export default class Register extends React.Component{
       }
       fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/register', requestOption)
         .then(res => res.json())
-        .then(data => this.handleApiResponse(data))
+        .then(data => {
+          this.setState({loading: false})
+          this.handleApiResponse(data)
+        })
         .catch(error => console.log(error))
     }  
   }
@@ -106,6 +112,11 @@ export default class Register extends React.Component{
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={LoginStyles.container}>
+          <Spinner
+            visible={this.state.loading}
+            textContent='Loading...'
+            textStyle={LoginStyles.spinner}
+          />
           <View style={LoginStyles.whitePanel}>
             <View style={LoginStyles.loginShow}>
               <Text h2 style={LoginStyles.heading}>Create Account</Text>
@@ -125,7 +136,7 @@ export default class Register extends React.Component{
                 secureTextEntry={true} 
                 style={LoginStyles.input} 
                 placeholder='Password'
-                value={this.password}
+                value={this.state.password}
                 onChangeText={(text) => this.handleChange('password', text)}
               />
               { 
@@ -138,7 +149,7 @@ export default class Register extends React.Component{
                 secureTextEntry={true} 
                 style={LoginStyles.input} 
                 placeholder='Repeat Password'
-                value={this.repeatPassword}
+                value={this.state.repeatPassword}
                 onChangeText={(text) => this.handleChange('repeatPassword', text)}
               />
               { 
