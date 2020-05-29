@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import DatePicker from '../../shared component/DatePicker'
 import { Fontisto, Ionicons } from '@expo/vector-icons'
 import { AddTodoStyles } from '../../style/AddTodoStyles'
+import { YellowLine } from '../../style/yellowLine'
 
 export default function EditTodo({ route, navigation }) {
     const { item, handleEdit, handleDelete } = route.params
@@ -30,38 +31,19 @@ export default function EditTodo({ route, navigation }) {
     }
 
     return (
-        // <View style={TodoStyles.task}>
-        //     <TextInput 
-        //         style={TodoStyles.editTodoInput}
-        //         placeholder='e.g edited task'
-        //         value={task}
-        //         onChangeText={value => setTask(value)}
-        //     />
-        //     <View style={TodoStyles.dateView}>
-        //         <Text style={TodoStyles.dateContainer}>{dateString}</Text>
-        //         <Fontisto name='date' size={18} color='#333' onPress={() => setEditDate(true)}/>
-        //         <DatePicker showDatePicker={editDate} date={date} handleChange={handleChangeDateTimePicker}/>
-        //     </View>
-        //     <TouchableOpacity 
-        //         style={TodoStyles.button}
-        //         onPress={() => handleFormSubmit(task, date)}
-        //     >
-        //         <Text style={TodoStyles.buttonText}>Save changes</Text>
-        //     </TouchableOpacity>
-        // </View>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={AddTodoStyles.container}>
-                <View style={AddTodoStyles.header}>
-                    <TouchableOpacity style={AddTodoStyles.whiteButton} onPress={() => navigation.pop()}>
-                        <View style={AddTodoStyles.insideWhiteButton}>
-                            <Ionicons name='ios-arrow-back' size={18} />
-                            <Text style={AddTodoStyles.whiteButtonText}>Cancel</Text>
+                <View style={YellowLine.header}>
+                    <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Text style={YellowLine.whiteButtonText}>Cancel</Text>
                         </View> 
                     </TouchableOpacity>
-                    <Text h1 style={AddTodoStyles.headerText}>Edit Task</Text>
-                    <TouchableOpacity style={styles.whiteButton} onPress={deleteItem}>
-                        <View style={AddTodoStyles.insideWhiteButton}>
-                            <Text style={{fontSize: 16}}>Delete</Text>
+                    <Text h1 style={YellowLine.headerText}>Edit Task</Text>
+                    <TouchableOpacity style={YellowLine.rightWhiteButton} onPress={deleteItem}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Text style={YellowLine.whiteButtonText}>Delete</Text>
                         </View> 
                     </TouchableOpacity>
                 </View>
@@ -73,7 +55,6 @@ export default function EditTodo({ route, navigation }) {
                         onChangeText={(value) => setTask(value)}
                         value={task}
                     />
-                    
                     <Text style={AddTodoStyles.label}>{"\n"}Add date:</Text>
                     <View style={AddTodoStyles.dateView}>
                         <Text style={AddTodoStyles.dateBox}>{dateString}</Text>
@@ -90,12 +71,3 @@ export default function EditTodo({ route, navigation }) {
         </TouchableWithoutFeedback>
     )
 }
-
-const styles = StyleSheet.create({
-    whiteButton: {
-        borderRadius: 3,
-        backgroundColor: '#fff',
-        right: 10,
-        position: 'absolute',
-    },
-})

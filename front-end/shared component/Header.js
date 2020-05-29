@@ -14,7 +14,7 @@ export default function Header({title, navigation }) {
   }
   
   const moveToLogin = () => {
-    navigation.popToTop() // pop back to login
+    navigation.navigate('Login') // pop back to login
   }
 
   return (

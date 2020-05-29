@@ -19,9 +19,6 @@ export default function TodoList({ route, navigation }) {
 
   const [todos, setTodos] = useState([]) 
   // array of deadlines/tasks
-  const [editId, setEditId] = useState(-1) 
-  // the id of the item that is currently being edited
-  // editId === -1 means that currently there is nothing being edited
   const [loading, setLoading] = useState(true)
   // represent whether the screen is currenly loading
         
@@ -92,7 +89,7 @@ export default function TodoList({ route, navigation }) {
   }
     
   // Add a new element
-  function handleAdd(text, date) {
+  const handleAdd = (text, date) => {
     if (text.length >= 1) {
       const requestOptions = {
         method: 'POST',
@@ -111,15 +108,6 @@ export default function TodoList({ route, navigation }) {
           fetchData()
         })
         .catch(error => console.log(error))      
-    }
-  }
-
-  // change the id that conrespond to opening/closing edit form
-  function changeEditId(item) {
-    if (editId === item.id) {
-      setEditId(-1)
-    } else {
-      setEditId(item.id)
     }
   }
 
@@ -156,25 +144,6 @@ export default function TodoList({ route, navigation }) {
           <Text style={TodoStyles.addTask}>+ Add a new task</Text>
         </TouchableOpacity>        
         <View style={TodoStyles.list}>
-          {/* <FlatList
-            keyExtractor={(item) => item.id.toString()}
-            data={todos}
-            renderItem= {({item}) => (
-              <View style={TodoStyles.todoItem}>
-                { editId !== item.id
-                  ? <TodoItem 
-                      item={item} 
-                    />
-                  : <EditTodo
-                      changeEditId={changeEditId}
-                      item={item}
-                      handleEdit={handleEdit}
-                    />      
-                }
-                <TodoButtons item={item} handleDelete={handleDelete} changeEditId={changeEditId} />    
-              </View>
-            )}
-          /> */}
           <FlatList
             keyExtractor={(item) => item.id.toString()}
             data={todos}

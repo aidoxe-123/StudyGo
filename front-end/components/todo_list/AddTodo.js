@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
-import { View, TextInput, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { View, TextInput, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard, YellowBox } from 'react-native'
 import { Fontisto, Ionicons } from '@expo/vector-icons'
 import DatePicker from '../../shared component/DatePicker'
-import { AddTodoStyles } from '../../style/AddTodoStyles.js'
+import { AddTodoStyles } from '../../style/AddTodoStyles'
+import { YellowLine } from '../../style/yellowLine'
 
 export default function AddTodo({navigation, route}) {
+    YellowBox.ignoreWarnings([
+        'Non-serializable values were found in the navigation state',
+    ])
+
     const handleAdd = route.params.handleAdd
     const [text, setText] = useState('')
     const [date, setDate] = useState(new Date())
@@ -15,7 +20,7 @@ export default function AddTodo({navigation, route}) {
     function handleSubmit() {
         setText('')
         setDate(new Date())
-        navigation.pop()
+        navigation.navigate('Deadlines')
         handleAdd(text, date)
     }
 
@@ -29,14 +34,14 @@ export default function AddTodo({navigation, route}) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={AddTodoStyles.container}>
-                <View style={AddTodoStyles.header}>
-                    <TouchableOpacity style={AddTodoStyles.whiteButton} onPress={() => navigation.pop()}>
-                        <View style={AddTodoStyles.insideWhiteButton}>
-                            <Ionicons name='ios-arrow-back' size={18} />
-                            <Text style={AddTodoStyles.whiteButtonText}>Cancel</Text>
+                <View style={YellowLine.header}>
+                    <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Text style={YellowLine.whiteButtonText}>Cancel</Text>
                         </View> 
                     </TouchableOpacity>
-                    <Text h1 style={AddTodoStyles.headerText}>Add Task</Text>
+                    <Text h1 style={YellowLine.headerText}>Add Task</Text>
                 </View>
                 <View style={AddTodoStyles.form}>
                     <Text style={AddTodoStyles.label}>Task name:</Text>
