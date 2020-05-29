@@ -4,13 +4,11 @@ import { BackHandler} from 'react-native'
 import TimetableStack from './TimetableStack'
 import ProgressTrackerStack from './ProgressTrackerStack'
 import TodoStack from './TodoStack'
-
+import DrawerSlider from '../shared component/DrawerSlider'
 
 const Drawer = createDrawerNavigator()
 
-export default function MainDrawer({ route }) {
-    
-
+export default function MainDrawer({ route, navigation }) {
     useEffect(() => {
         const backAction = () => true
         BackHandler.addEventListener('hardwareBackPress', backAction)
@@ -18,7 +16,11 @@ export default function MainDrawer({ route }) {
     }, [])
 
     return (
-        <Drawer.Navigator>
+        <Drawer.Navigator 
+            drawerContent={props => <DrawerSlider {...props}/>}
+            drawerContentOptions={{
+                activeTintColor: 'rgba(0,0,0,0.87)'
+            }}>
             <Drawer.Screen 
                 name='Timetable' 
                 component={TimetableStack} 

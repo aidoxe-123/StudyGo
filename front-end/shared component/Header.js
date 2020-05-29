@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
-import { NavigationActions } from 'react-navigation'
 
 /* The common header design used by TodoStack, ProgressTrackerStack and TimetableStack
   @param:
@@ -26,7 +25,7 @@ export default function Header({title, navigation }) {
         <Text style={styles.headerText}>{title}</Text>
       </View>
       <TouchableOpacity style={styles.logout} onPress={moveToLogin}>
-        <SimpleLineIcons name='logout' size={24} color='#fff'/>
+        
       </TouchableOpacity>
     </View>
   );
