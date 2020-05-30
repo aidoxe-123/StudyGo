@@ -1,12 +1,15 @@
 url: https://fir-tut2-82e4f.firebaseapp.com/api/v1
 
+
 // all response (res) will also contain two more fields: StatusCode (according to HTTP Status Code) and msg (error message if any),
-// all status code = 200 means that the operation is success, otherwise, for example, if POST /register return the StatusCode == 409 then
-// the email is registered with another account.
+// all status code = 200 means that the operation is success, and status code = 500 means that the operation failed unexpectedly;
+// otherwise, for example, if POST /register return the StatusCode == 409 then the email is registered with another account.
+
+// error message now include: the route, the body of the request (JSON), and the error description
 
 // register an account with an email and password
 POST /register
-    req: email (string), password (string)
+    req: email (string), password (string), uesrname (string)
     res: 
     code:  409 = Email already registered
 
@@ -22,6 +25,7 @@ POST /users
     req: id (string)
     res: email (string)
          password (string)
+         username (string)
     code:  404 = Invalid ID
 
 // add a new task into the to do list

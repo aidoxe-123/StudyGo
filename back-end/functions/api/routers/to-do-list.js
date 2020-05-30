@@ -1,6 +1,6 @@
 const db = require('./../firebaseDb').firestore();
 const express = require('express');
-
+const printErr = require('./../handling-error');
 const router = express();
 
 module.exports = router;
@@ -14,38 +14,40 @@ router.post('/to-do-list/all', (req, res) => {
         tasks: []
     }
 
-    let docRef = db.collection('users').doc(req.body.id);
+    try {
+        let docRef = db.collection('users').doc(req.body.id);
 
-    docRef.get()
-        .then(doc => {
-            if (!doc.exists) {
-                response.StatusCode = 404;
-                response.msg = "Invalid ID";
+        docRef.get()
+            .then(doc => {
+                if (!doc.exists) {
+                    response.StatusCode = 404;
+                    response.msg = "Invalid ID";
 
-                res.send(response)
-            } else {
-                docRef.collection('to_do_list').get()
-                    .then(snapshot => {
-                        snapshot.forEach(doc => {
-                            response.tasks.push({
-                                id: doc.id,
-                                date: doc.data().date,
-                                task: doc.data().title
+                    res.send(response)
+                } else {
+                    docRef.collection('to_do_list').get()
+                        .then(snapshot => {
+                            snapshot.forEach(doc => {
+                                response.tasks.push({
+                                    id: doc.id,
+                                    date: doc.data().date,
+                                    task: doc.data().title
+                                });
                             });
-                        });
-                    }).then(snapshot => {
-                        response.tasks.sort((task1, task2) => (task1.date < task2.date) ? -1 : 1);
-                        response.StatusCode = 200;
+                        }).then(snapshot => {
+                            response.tasks.sort((task1, task2) => (task1.date < task2.date) ? -1 : 1);
+                            response.StatusCode = 200;
 
-                        res.send(response);
-                    })
-            }
-        }).catch(err => {
-            response.StatusCode = 500;
-            response.msg = err.code + ": " + err.message;
+                            res.send(response);
+                        })
+                }
+            })
+    } catch (err) {
+        response.StatusCode = 500;
+        response.msg = printErr("POST /to-do-list/all", req.body, err);
 
-            res.send(response);
-        });
+        res.send(response);
+    };
 })
 
 //given the user id, add the task
@@ -57,32 +59,34 @@ router.post('/to-do-list', (req, res) => {
         taskId: ""
     }
 
-    let docRef = db.collection('users').doc(req.body.id);
+    try {
+        let docRef = db.collection('users').doc(req.body.id);
 
-    docRef.get()
-        .then(doc => {
-            if (!doc.exists) {
-                response.StatusCode = 404;
-                response.msg = "Invalid ID";
-
-                res.send(response);
-            } else {
-                docRef.collection('to_do_list').add({
-                    title: req.body.task.title,
-                    date: req.body.task.date
-                }).then(ref => {
-                    response.StatusCode = 200;
-                    response.taskId = ref.id;
+        docRef.get()
+            .then(doc => {
+                if (!doc.exists) {
+                    response.StatusCode = 404;
+                    response.msg = "Invalid ID";
 
                     res.send(response);
-                })
-            }
-        }).catch(err => {
-            response.StatusCode = 500;
-            response.msg = err.code + ": " + err.message;
+                } else {
+                    docRef.collection('to_do_list').add({
+                        title: req.body.task.title,
+                        date: req.body.task.date
+                    }).then(ref => {
+                        response.StatusCode = 200;
+                        response.taskId = ref.id;
 
-            res.send(response);
-        });
+                        res.send(response);
+                    })
+                }
+            });
+    } catch (err) {
+        response.StatusCode = 500;
+        response.msg = printErr("POST /to-do-list", req.body, err);
+
+        res.send(response);
+    };
 })
 
 // given the user id and task id, change the task (either name or date or both)
@@ -93,46 +97,49 @@ router.put('/to-do-list', (req, res) => {
         StatusCode: 0,
         msg: ""
     }
-    let docRef = db.collection('users').doc(req.body.userId);
 
-    docRef.get()
-        .then(doc => {
-            if (!doc.exists) {
-                response.StatusCode = 404;
-                response.msg = "Invalid user ID";
+    try {
+        let docRef = db.collection('users').doc(req.body.userId);
 
-                res.send(response);
-            } else {
+        docRef.get()
+            .then(doc => {
+                if (!doc.exists) {
+                    response.StatusCode = 404;
+                    response.msg = "Invalid user ID";
 
-                let taskRef = docRef.collection('to_do_list').doc(req.body.taskId);
+                    res.send(response);
+                } else {
 
-                taskRef.get()
-                    .then(task => {
-                        if (!task.exists) {
-                            response.StatusCode = 404;
-                            response.msg = "Invalid task ID";
+                    let taskRef = docRef.collection('to_do_list').doc(req.body.taskId);
 
-                            res.send(response);
-                        } else {
-                            let newData = {
-                                title: req.body.newTitle,
-                                date: req.body.newDate
+                    taskRef.get()
+                        .then(task => {
+                            if (!task.exists) {
+                                response.StatusCode = 404;
+                                response.msg = "Invalid task ID";
+
+                                res.send(response);
+                            } else {
+                                let newData = {
+                                    title: req.body.newTitle,
+                                    date: req.body.newDate
+                                }
+
+                                taskRef.set(newData);
+
+                                response.StatusCode = 200;
+
+                                res.send(response);
                             }
+                        });
+                }
+            });
+    } catch (err) {
+        response.StatusCode = 500;
+        response.msg = printErr("PUT /to-do-list", req.body, err);
 
-                            taskRef.set(newData);
-
-                            response.StatusCode = 200;
-
-                            res.send(response);
-                        }
-                    });
-            }
-        }).catch(err => {
-            response.StatusCode = 500;
-            response.msg = err.code + ": " + err.message;
-
-            res.send(response);
-        });
+        res.send(response);
+    };
 })
 
 // given the user id and task id, delete the task
@@ -143,36 +150,38 @@ router.delete('/to-do-list', (req, res) => {
         msg: ""
     }
 
-    let docRef = db.collection('users').doc(req.body.userId);
+    try {
+        let docRef = db.collection('users').doc(req.body.userId);
 
-    docRef.get()
-        .then(doc => {
-            if (!doc.exists) {
-                response.StatusCode = 404;
-                response.msg = "Invalid user ID";
+        docRef.get()
+            .then(doc => {
+                if (!doc.exists) {
+                    response.StatusCode = 404;
+                    response.msg = "Invalid user ID";
 
-                res.send(response);
-            } else {
-                let taskRef = docRef.collection('to_do_list').doc(req.body.taskId);
-                taskRef.get()
-                    .then(task => {
-                        if (!task.exists) {
-                            response.StatusCode = 404;
-                            response.msg = "Invalid task ID";
+                    res.send(response);
+                } else {
+                    let taskRef = docRef.collection('to_do_list').doc(req.body.taskId);
+                    taskRef.get()
+                        .then(task => {
+                            if (!task.exists) {
+                                response.StatusCode = 404;
+                                response.msg = "Invalid task ID";
 
-                            res.send(response);
-                        } else {
-                            taskRef.delete()
+                                res.send(response);
+                            } else {
+                                taskRef.delete()
 
-                            response.StatusCode = 200;
-                            res.send(response)
-                        }
-                    });
-            }
-        }).catch(err => {
-            response.StatusCode = 500;
-            response.msg = err.code + ": " + err.message;
+                                response.StatusCode = 200;
+                                res.send(response)
+                            }
+                        });
+                }
+            });
+    } catch (err) {
+        response.StatusCode = 500;
+        response.msg = printErr("POST /login", req.body, err);
 
-            res.send(response);
-        });
+        res.send(response);
+    };
 })
