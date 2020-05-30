@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { View, FlatList, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Text} from 'react-native'
+import { View, FlatList, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Text } from 'react-native'
+import { useIsFocused } from '@react-navigation/native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../style/TodoStyles.js'
 import TodoItem from './TodoItem.js'
-import { UserIdContext} from '../../routes/MainDrawer'
+import { UserIdContext } from '../../shared component/UserIdContext'
 
 /* features that are not yet implemented:
 + still cannot store the task locally by date 
@@ -16,6 +17,8 @@ import { UserIdContext} from '../../routes/MainDrawer'
 */
 
 export default function TodoList({ navigation }) {
+  const isFocused = useIsFocused()
+  
   const userId = useContext(UserIdContext)
 
   const [todos, setTodos] = useState([]) 
@@ -26,113 +29,30 @@ export default function TodoList({ navigation }) {
   // get data from api
   // id cannot be -1
   useEffect(() => {
-    const requestOptions = {
-       method: 'POST',
-       headers: {'Content-Type': 'application/json'},
-       body: JSON.stringify({
-         id: userId
-       })
-    }
-    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list/all', requestOptions)
-      .then(res => res.json())
-      .then(data => data.tasks)
-      .then(tasksArr => tasksArr.map(task => {
-        return {
-          ...task,
-          date: new Date(Date.parse(task.date))
-        }
-      }))
-      .then(tasksWithCorrectDateFormat => setTodos(tasksWithCorrectDateFormat))
-      .then(() => setLoading(false))
-      .catch(error => console.log(error))
-  }, [])
-
-  function fetchData() { 
-    // this function is temporary until a local database is implemented
-    // get all the tasks from the api
-    const requestOptions = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        id: userId
-      })
-    }
-    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list/all', requestOptions)
-      .then(res => res.json())
-      .then(data => data.tasks)
-      .then(tasksArr => tasksArr.map(task => {
-        return {
-          ...task,
-          date: new Date(Date.parse(task.date))
-        }
-      }))
-      .then(tasksWithCorrectDateFormat => setTodos(tasksWithCorrectDateFormat))
-      .then(() => setLoading(false))
-      .catch(error => console.log(error))
-  }
-
-  // Add delete an element
-  function handleDelete(id) {
-    const requestOptions = {
-      method: 'DELETE',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        userId: userId,
-        taskId: id
-      })
-    }
-    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list', requestOptions)
-      .then(res => {
-        setLoading(true)
-        fetchData()
-      })
-      .catch(error => console.log(error))    
-  }
-    
-  // Add a new element
-  const handleAdd = (text, date) => {
-    if (text.length >= 1) {
+    if (isFocused) {
+      setLoading(true)
       const requestOptions = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          id: userId,
-          task: {
-            title: text,
-            date: date,
-          }
+          id: userId
         })
       }
-      fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list', requestOptions)
-        .then(res => {
-          setLoading(true)
-          fetchData()
-        })
-        .catch(error => console.log(error))      
+      fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list/all', requestOptions)
+        .then(res => res.json())
+        .then(data => data.tasks)
+        .then(tasksArr => tasksArr.map(task => {
+          return {
+            ...task,
+            date: new Date(Date.parse(task.date))
+          }
+        }))
+        .then(tasksWithCorrectDateFormat => setTodos(tasksWithCorrectDateFormat))
+        .then(() => setLoading(false))
+        .catch(error => console.log(error))
     }
-  }
+  }, [isFocused])
 
-  // edit an element
-  function handleEdit(id, task, date) {
-    const requestOptions = {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        userId: userId,
-        taskId: id,
-        newTitle: task,
-        newDate: date
-      })
-    }
-    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list', requestOptions)
-      .then(res => {
-        setLoading(true)
-        fetchData()
-      })
-      .catch(error => console.log(error))
-  }
-
-  //<AddTodo handleAdd={handleAdd}/>
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={TodoStyles.container}>
@@ -141,7 +61,7 @@ export default function TodoList({ navigation }) {
           textContent='Loading...'
           textStyle={TodoStyles.spinner}
         />
-        <TouchableOpacity onPress={() => navigation.navigate('AddDeadline', {handleAdd: handleAdd})}>
+        <TouchableOpacity onPress={() => navigation.navigate('AddDeadline')}>
           <Text style={TodoStyles.addTask}>+ Add a new task</Text>
         </TouchableOpacity>        
         <View style={TodoStyles.list}>
@@ -149,12 +69,13 @@ export default function TodoList({ navigation }) {
             keyExtractor={(item) => item.id.toString()}
             data={todos}
             renderItem={({item}) => (
-              <TodoItem 
-                item={item} 
-                handleEdit={handleEdit} 
-                handleDelete={handleDelete}
-                navigation={navigation}
-              />
+              <TouchableOpacity onPress={() => navigation.navigate('EditDeadline', {
+                itemId: item.id,
+                itemTask: item.task,
+                itemDate: item.date.toDateString()
+              })} >
+                <TodoItem item={item} />
+              </TouchableOpacity>
             )}
           />
         </View>

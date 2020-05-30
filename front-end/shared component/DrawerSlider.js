@@ -1,17 +1,33 @@
-import React, {useContext} from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Image } from 'react-native'
 import { DrawerItemList} from '@react-navigation/drawer'
-import { SimpleLineIcons, AntDesign } from '@expo/vector-icons';
-import { UserIdContext } from '../routes/MainDrawer'
+import { SimpleLineIcons } from '@expo/vector-icons';
+import { UserIdContext } from './UserIdContext'
 
 
 export default function DrawerSlider(props) {
   const userId = useContext(UserIdContext)
+  const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id: userId
+      })
+    }
+    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/users', requestOptions)
+      .then(res => res.json())
+      .then(data => setUsername(data.username))
+      .catch(error => console.log(error))
+  }, [])
+
   return (
     <ScrollView contentContainerStyle={{flex: 1, marginTop: 25}}>
       <View style={styles.profileContainer}>
         <Image source={require('../assets/person.png')} style={styles.profileImg}/>
-        <Text>{userId}</Text>
+        <Text>{username}</Text>
       </View>
       <SafeAreaView>
         <DrawerItemList {...props}/>

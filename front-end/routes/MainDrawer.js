@@ -6,9 +6,9 @@ import ProgressTrackerStack from './ProgressTrackerStack'
 import TodoStack from './TodoStack'
 import DrawerSlider from '../shared component/DrawerSlider'
 import { MaterialCommunityIcons, Octicons, FontAwesome5 } from '@expo/vector-icons'
+import { UserIdContext } from '../shared component/UserIdContext'
 
 const Drawer = createDrawerNavigator()
-export const UserIdContext = React.createContext('')
 
 export default function MainDrawer({ route }) {
     

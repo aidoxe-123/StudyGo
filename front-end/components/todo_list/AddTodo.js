@@ -1,16 +1,13 @@
-import React, { useState } from 'react'
-import { View, TextInput, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard, YellowBox } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { View, TextInput, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { Fontisto, Ionicons } from '@expo/vector-icons'
 import DatePicker from '../../shared component/DatePicker'
 import { AddTodoStyles } from '../../style/AddTodoStyles'
 import { YellowLine } from '../../style/yellowLine'
+import { UserIdContext } from '../../shared component/UserIdContext'
 
-export default function AddTodo({navigation, route}) {
-    YellowBox.ignoreWarnings([
-        'Non-serializable values were found in the navigation state',
-    ])
-
-    const handleAdd = route.params.handleAdd
+export default function AddTodo({navigation}) {
+    const userId = useContext(UserIdContext)
     const [text, setText] = useState('')
     const [date, setDate] = useState(new Date())
     const [editDate, setEditDate] = useState(false)
@@ -18,10 +15,26 @@ export default function AddTodo({navigation, route}) {
     var dateString = date.getDate() + '/' + date.getMonth() + '/' + (date.getYear() + 1900)
 
     function handleSubmit() {
-        setText('')
-        setDate(new Date())
-        navigation.navigate('Deadlines')
-        handleAdd(text, date)
+        if (text.length >= 1) {
+            const requestOptions = {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                id: userId,
+                task: {
+                  title: text,
+                  date: date,
+                }
+              })
+            }
+            fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list', requestOptions)
+              .then(() => {
+                setText('')
+                setDate(new Date())
+                navigation.navigate('Deadlines')
+              })
+              .catch(error => console.log(error))      
+        }        
     }
 
     function handleChangeDateTimePicker(event, date) {

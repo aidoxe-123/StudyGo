@@ -2,7 +2,7 @@ import React, {useContext} from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { YellowLine } from '../../style/yellowLine'
-import { UserIdContext} from '../../routes/MainDrawer'
+import { UserIdContext } from '../../shared component/UserIdContext'
 
 
 export default function Timetable() {
