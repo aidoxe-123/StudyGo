@@ -1,0 +1,18 @@
+Collection
+document
+_data
+
+Mails
+	mail
+		_password
+		_id
+
+Users
+	id
+		_email
+		_password						
+        _username
+		Todolist
+			task
+				_title
+				_deadline
