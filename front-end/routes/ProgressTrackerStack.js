@@ -5,7 +5,7 @@ import Header from '../shared component/Header'
 
 const Stack = createStackNavigator()
 
-export default function ProgressTrackerStack({route}) {
+export default function ProgressTrackerStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -19,7 +19,6 @@ export default function ProgressTrackerStack({route}) {
       <Stack.Screen
         name='Progress Tracker' 
         component={ProgressTracker}
-        initialParams={route.params}
         options = {({navigation}) => {
           return {
             headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />

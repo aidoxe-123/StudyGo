@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { View, FlatList, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Text} from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../style/TodoStyles.js'
 import TodoItem from './TodoItem.js'
+import { UserIdContext} from '../../routes/MainDrawer'
 
 /* features that are not yet implemented:
 + still cannot store the task locally by date 
@@ -14,8 +15,8 @@ import TodoItem from './TodoItem.js'
 + still cannot work with out the internet
 */
 
-export default function TodoList({ route, navigation }) {
-  const userId = route.params.userId
+export default function TodoList({ navigation }) {
+  const userId = useContext(UserIdContext)
 
   const [todos, setTodos] = useState([]) 
   // array of deadlines/tasks

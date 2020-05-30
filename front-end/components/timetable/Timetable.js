@@ -1,10 +1,12 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { YellowLine } from '../../style/yellowLine'
+import { UserIdContext} from '../../routes/MainDrawer'
 
-export default function Timetable({ route }) {
-  const userId = route.params.userId
+
+export default function Timetable() {
+  const userId = useContext(UserIdContext)
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -18,6 +20,7 @@ export default function Timetable({ route }) {
               </View> 
           </TouchableOpacity>
         </View>
+        <Text>{userId}</Text>
       </View>
     </TouchableWithoutFeedback>
   )

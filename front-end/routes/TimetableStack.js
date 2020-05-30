@@ -5,7 +5,7 @@ import Header from '../shared component/Header'
 
 const Stack = createStackNavigator()
 
-export default function TimetableStack({ route }) {
+export default function TimetableStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -19,7 +19,6 @@ export default function TimetableStack({ route }) {
       <Stack.Screen 
         name='Timetable' 
         component={Timetable}
-        initialParams={route.params}
         options = {({navigation}) => {
           return {
             headerTitle: () => <Header title='Timetable' navigation={navigation} />

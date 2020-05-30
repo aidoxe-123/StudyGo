@@ -21,7 +21,6 @@ export default function TodoStack({ route }) {
       <Stack.Screen 
         name='Deadlines' 
         component={TodoList} 
-        initialParams={route.params}
         options = {({navigation}) => {
           return {
             headerTitle: () => <Header title='Deadlines' navigation={navigation} />
