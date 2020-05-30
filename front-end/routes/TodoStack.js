@@ -7,7 +7,7 @@ import EditTodo from '../components/todo_list/EditTodo'
 
 const Stack = createStackNavigator()
 
-export default function TodoStack({ route }) {
+export default function TodoStack() {
   return (
     <Stack.Navigator
       screenOptions={{

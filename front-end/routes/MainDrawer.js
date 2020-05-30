@@ -10,7 +10,7 @@ import { MaterialCommunityIcons, Octicons, FontAwesome5 } from '@expo/vector-ico
 const Drawer = createDrawerNavigator()
 export const UserIdContext = React.createContext('')
 
-export default function MainDrawer({ route, navigation }) {
+export default function MainDrawer({ route }) {
     
     useEffect(() => {
         const backAction = () => true
