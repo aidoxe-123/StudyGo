@@ -5,7 +5,7 @@ url: https://fir-tut2-82e4f.firebaseapp.com/api/v1
 // all status code = 200 means that the operation is success, and status code = 500 means that the operation failed unexpectedly;
 // otherwise, for example, if POST /register return the StatusCode == 409 then the email is registered with another account.
 
-// error message now include: the route, the body of the request (JSON), and the error description
+// error message for status code 500 now include: the route, the body of the request (JSON), and the error description
 
 // register an account with an email and password
 POST /register
