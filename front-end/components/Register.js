@@ -189,16 +189,13 @@ export default class Register extends React.Component{
   render() {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        {/* <View style={LoginStyles.container}>
-          {this.form()}
-        </View> */}
         {
           Platform.OS === 'ios'
           ? <KeyboardAwareScrollView 
               style={{backgroundColor: 'coral'}}
               resetScrollToCoords={{x: 0, y: 0}}
               contentContainerStyle={LoginStyles.container}
-              scrollEnabled={false}
+              scrollEnabled={true}
             >
               <Spinner
                 visible={this.state.loading}
