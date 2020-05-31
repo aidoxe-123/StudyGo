@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native'
+import { 
+  View, Text, TextInput, TouchableWithoutFeedback, 
+  Keyboard, TouchableOpacity, Alert, Platform
+} from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { LoginStyles } from '../style/LoginStyles'
 
 export default class Register extends React.Component{
@@ -108,87 +112,110 @@ export default class Register extends React.Component{
     }  
   }
 
+  form = () => (
+    <View style={LoginStyles.whitePanel}>
+      <View style={LoginStyles.loginShow}>
+        <Text h2 style={LoginStyles.heading}>Create Account</Text>
+        <TextInput
+          style={LoginStyles.input} 
+          placeholder='Username'
+          value={this.state.username}
+          onChangeText={(text) => this.handleChange('username', text)}
+        />
+        { 
+          !this.state.validUsername &&
+          <Text style={LoginStyles.wrongInputAlert}>
+            Username cannot be empty
+          </Text>
+        }
+        <TextInput
+          style={LoginStyles.input} 
+          placeholder='Email'
+          value={this.state.email}
+          onChangeText={(text) => this.handleChange('email', text)}
+        />
+        { 
+          !this.state.validEmail &&
+          <Text style={LoginStyles.wrongInputAlert}>
+            Please enter a valid email
+          </Text>
+        }
+        <TextInput 
+          secureTextEntry={true} 
+          style={LoginStyles.input} 
+          placeholder='Password'
+          value={this.state.password}
+          onChangeText={(text) => this.handleChange('password', text)}
+        />
+        { 
+          !this.state.validPassword &&
+          <Text style={LoginStyles.wrongInputAlert}>
+            Password must have at least 6 characters
+          </Text>
+        }
+        <TextInput 
+          secureTextEntry={true} 
+          style={LoginStyles.input} 
+          placeholder='Repeat Password'
+          value={this.state.repeatPassword}
+          onChangeText={(text) => this.handleChange('repeatPassword', text)}
+        />
+        { 
+          !this.state.validRepeatPassword &&
+          <Text style={LoginStyles.wrongInputAlert}>
+            Please confirm your password
+          </Text>
+        } 
+        { 
+          this.state.validPassword && 
+          this.state.validRepeatPassword && 
+          !this.state.samePasswords &&
+          <Text style={LoginStyles.wrongInputAlert}>
+            Passwords do not match
+          </Text>
+        }
+        <View style={LoginStyles.bottomRow}>
+          <TouchableOpacity onPress={this.handleNavigation}>
+            <Text style={LoginStyles.link}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={LoginStyles.button} onPress={this.handleRegister}>
+            <Text style={LoginStyles.buttonText}>Register</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  )
+
   render() {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={LoginStyles.container}>
-          <Spinner
-            visible={this.state.loading}
-            textContent='Loading...'
-            textStyle={LoginStyles.spinner}
-          />
-          <View style={LoginStyles.whitePanel}>
-            <View style={LoginStyles.loginShow}>
-              <Text h2 style={LoginStyles.heading}>Create Account</Text>
-              <TextInput
-                style={LoginStyles.input} 
-                placeholder='Username'
-                value={this.state.username}
-                onChangeText={(text) => this.handleChange('username', text)}
+        {/* <View style={LoginStyles.container}>
+          {this.form()}
+        </View> */}
+        {
+          Platform.OS === 'ios'
+          ? <KeyboardAwareScrollView 
+              style={{backgroundColor: 'coral'}}
+              resetScrollToCoords={{x: 0, y: 0}}
+              contentContainerStyle={LoginStyles.container}
+              scrollEnabled={false}
+            >
+              <Spinner
+                visible={this.state.loading}
+                textContent='Loading...'
+                textStyle={LoginStyles.spinner}
               />
-              { 
-                !this.state.validUsername &&
-                <Text style={LoginStyles.wrongInputAlert}>
-                  Username cannot be empty
-                </Text>
-              }
-              <TextInput
-                style={LoginStyles.input} 
-                placeholder='Email'
-                value={this.state.email}
-                onChangeText={(text) => this.handleChange('email', text)}
+              {this.form()}
+            </KeyboardAwareScrollView>
+          : <View style={LoginStyles.container}>
+              <Spinner
+                visible={this.state.loading}
+                textContent='Loading...'
+                textStyle={LoginStyles.spinner}
               />
-              { 
-                !this.state.validEmail &&
-                <Text style={LoginStyles.wrongInputAlert}>
-                  Please enter a valid email
-                </Text>
-              }
-              <TextInput 
-                secureTextEntry={true} 
-                style={LoginStyles.input} 
-                placeholder='Password'
-                value={this.state.password}
-                onChangeText={(text) => this.handleChange('password', text)}
-              />
-              { 
-                !this.state.validPassword &&
-                <Text style={LoginStyles.wrongInputAlert}>
-                  Password must have at least 6 characters
-                </Text>
-              }
-              <TextInput 
-                secureTextEntry={true} 
-                style={LoginStyles.input} 
-                placeholder='Repeat Password'
-                value={this.state.repeatPassword}
-                onChangeText={(text) => this.handleChange('repeatPassword', text)}
-              />
-              { 
-                !this.state.validRepeatPassword &&
-                <Text style={LoginStyles.wrongInputAlert}>
-                  Please confirm your password
-                </Text>
-              } 
-              { 
-                this.state.validPassword && 
-                this.state.validRepeatPassword && 
-                !this.state.samePasswords &&
-                <Text style={LoginStyles.wrongInputAlert}>
-                  Passwords do not match
-                </Text>
-              }
-              <View style={LoginStyles.bottomRow}>
-                <TouchableOpacity onPress={this.handleNavigation}>
-                  <Text style={LoginStyles.link}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={LoginStyles.button} onPress={this.handleRegister}>
-                  <Text style={LoginStyles.buttonText}>Register</Text>
-                </TouchableOpacity>
-              </View>
+              {this.form()}
             </View>
-          </View>
-        </View>
+        }
       </TouchableWithoutFeedback>
     )
   }
