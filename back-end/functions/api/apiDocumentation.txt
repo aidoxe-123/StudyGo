@@ -51,3 +51,27 @@ DELETE /to-do-list
     req: userId (string), taskId (string)
     res: 
     code:  404 = Invalid user ID or task ID
+
+// show all events of a particular month of a year
+POST /calendar/events
+    req: userId (string), month (number), year (number)
+    res: events ({<date>:object[])})
+    code:  404 = Invalid user ID
+
+// add an event
+POST /calendar
+    req: userId (string), date (string (YYYY-MM-DD...)), event (any object)
+    res: eventId (string)
+    code:  404 = Invalid user ID 
+
+// edit an event in a particular day
+PUT /calendar
+    req: userId (string), date (string (YYYY-MM-DD...)), newEvent (any object), eventId (string)
+    res:
+    code:  404 = Invalid user ID, event ID or date
+
+// delete an event in a particular day
+DELETE /calendar
+    req: userId (string), date (string (YYYY-MM-DD...)), eventId (string)
+    res:
+    code:  404 = Invalid user ID, event ID or date
