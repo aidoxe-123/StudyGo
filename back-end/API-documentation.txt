@@ -7,6 +7,7 @@ url: https://fir-tut2-82e4f.firebaseapp.com/api/v1
 
 // error message for status code 500 now include: the route, the body of the request (JSON), and the error description
 
+------------------------------------------------------LOG IN / REGISTER------------------------------------------------------------------
 // register an account with an email and password
 POST /register
     req: email (string), password (string), uesrname (string)
@@ -27,6 +28,8 @@ POST /users
          password (string)
          username (string)
     code:  404 = Invalid ID
+
+------------------------------------------------------TO DO LIST------------------------------------------------------------------------
 
 // add a new task into the to do list
 POST /to-do-list
@@ -52,6 +55,8 @@ DELETE /to-do-list
     res: 
     code:  404 = Invalid user ID or task ID
 
+------------------------------------------------------CALENDAR-------------------------------------------------------------------------
+
 // show all events of a particular month of a year
 POST /calendar/events
     req: userId (string), month (number), year (number)
@@ -75,3 +80,29 @@ DELETE /calendar
     req: userId (string), date (string (YYYY-MM-DD...)), eventId (string)
     res:
     code:  404 = Invalid user ID, event ID or date
+
+------------------------------------------------------TIMETABLE----------------------------------------------------------------------
+
+// return all tasks in timetable (each task is )
+POST /timetable/all
+    req: userId (string)
+    res: timetable (object: keys are days in a week (monday,...), values are arrays of tasks, each task is an object with an additional field "id")
+    res:  404 = Invalid user ID
+
+// add a task in the timetable
+POST /timetable
+    req: userId (string), day ("monday", "tuesday",...), task (object)
+    res: taskId
+    code:  404 = Invalid user ID
+
+// update a task in the timetable
+PUT /timetable
+    req: userId (string), taskId (string), newTask (object), newDay ("monday",...)
+    res: 
+    code:  404 = Invalid user ID or task ID
+
+// delete a task in the timetable
+DELETE /timetable
+    req: userId (string), taskId (string)
+    res:
+    code:  404 = Invalid user ID or task ID

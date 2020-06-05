@@ -24,3 +24,9 @@ Users
 				...
 				_31
 
+Timetable
+	userId
+		_monday
+		_tuesday
+		_...
+

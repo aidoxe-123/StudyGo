@@ -29,7 +29,12 @@ const pretestChecker = (req, res, next) => {
         'POST /api/v1/calendar/events': ['userId', 'month', 'year'],
         'POST /api/v1/calendar': ['userId', 'date', 'event'],
         'PUT /api/v1/calendar': ['userId', 'date', 'newEvent', 'eventId'],
-        'DELETE /api/v1/calendar': ['userId', 'date', 'eventId']
+        'DELETE /api/v1/calendar': ['userId', 'date', 'eventId'],
+        // timetable.js
+        'POST /api/v1/timetable': ['userId', 'day', 'task'],
+        'POST /api/v1/timetable/all': ['userId'],
+        'PUT /api/v1/timetable': ['userId', 'taskId', 'newTask', 'newDay'],
+        'DELETE /api/v1/timetable': ['userId', 'taskId']
     }
 
     const target = req.method + " " + req.path;
