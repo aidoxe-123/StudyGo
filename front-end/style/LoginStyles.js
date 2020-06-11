@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native'
-import { RawButton } from 'react-native-gesture-handler'
 
 // bootstap reference: https://bootsnipp.com/snippets/92gmX
 
