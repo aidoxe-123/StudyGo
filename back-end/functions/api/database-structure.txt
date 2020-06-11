@@ -16,3 +16,17 @@ Users
 			task
 				_title
 				_deadline
+		Calendar
+			month-year	
+				_1
+				_2
+				_3
+				...
+				_31
+
+Timetable
+	userId
+		_monday
+		_tuesday
+		_...
+
