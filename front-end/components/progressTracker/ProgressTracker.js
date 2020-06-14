@@ -1,10 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TouchableHighlight, ScrollView, StyleSheet, Alert } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import { YellowLine } from '../../style/yellowLine'
 import { UserIdContext } from '../../shared component/UserIdContext'
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { modulesSupplier, useFetch } from './DataFetcher';
 import { useIsFocused } from '@react-navigation/native'
 
 export default function ProgressTracker({ navigation }) {

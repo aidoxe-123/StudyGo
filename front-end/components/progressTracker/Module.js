@@ -1,9 +1,7 @@
 import React, { useState, useEffect, userContext } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FinishedTasks from './FinishedTask';
 import UnfinishedTasks from './UnfinishedTask';
-import { TouchableHighlight, TouchableOpacity } from "react-native";
 import { Entypo } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();

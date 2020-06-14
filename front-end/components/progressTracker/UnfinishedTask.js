@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import { FAB } from 'react-native-paper'
 
 
 export default function Finished({ navigation }) {
