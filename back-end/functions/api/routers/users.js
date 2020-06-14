@@ -54,6 +54,16 @@ router.post('/register', wrapper(async (req, res) => {
             email: email,
             password: password,
             username: username
+        }),
+        db.collection('Timetable').doc(userId).set({
+            "monday": [],
+            "tuesday": [],
+            "wednesday": [],
+            "thursday": [],
+            "friday": [],
+            "saturday": [],
+            "sunday": [],
+            "map": {}
         })
     ]);
 

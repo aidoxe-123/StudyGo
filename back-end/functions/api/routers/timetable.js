@@ -24,7 +24,25 @@ router.post('/timetable/all', wrapper(async (req, res, next) => {
         throw new Error("Invalid ID");
     }
 
-    let timetable = (await db.collection('Timetable').doc(userId).get()).data();
+    let timetableDoc = await db.collection('Timetable').doc(userId).get();
+
+    if (!timetableDoc.exists) {
+        // this should be delete because timetable initialization should happen
+        // when user account is created
+        await timetableDoc.ref.set({
+            "monday": [],
+            "tuesday": [],
+            "wednesday": [],
+            "thursday": [],
+            "friday": [],
+            "saturday": [],
+            "sunday": [],
+            "map": {}
+        })
+        timetableDoc = await db.collection('Timetable').doc(userId).get();
+    }
+
+    let timetable = timetableDoc.data();
     delete timetable.map;
 
     res.send(success({ timetable: timetable }));
