@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import Timetable from '../components/timetable/Timetable'
-import Header from '../shared component/Header'
+import Timetable from '../screens/timetable/Timetable'
+import { Header } from '../components/index'
 
 const Stack = createStackNavigator()
 

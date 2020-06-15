@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext } from 'react'
 import { View, FlatList, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Text } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import Spinner from 'react-native-loading-spinner-overlay';
-import { TodoStyles } from '../../style/TodoStyles.js'
+import { TodoStyles } from '../../../style/TodoStyles.js'
 import TodoItem from './TodoItem.js'
-import { UserIdContext } from '../../shared component/UserIdContext'
+import { UserIdContext } from '../../components/index'
 
 /* features that are not yet implemented:
 + still cannot store the task locally by date 

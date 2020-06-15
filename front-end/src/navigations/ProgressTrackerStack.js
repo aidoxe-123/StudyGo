@@ -7,7 +7,7 @@ import AddFinished from '../screens/progressTracker/Add Finished';
 import AddUnfinished from '../screens/progressTracker/Add Unfinished';
 import EditFinished from '../screens/progressTracker/EditFinished';
 import EditUnfinished from '../screens/progressTracker/EditUnfinished';
-import Header from '../../shared component/Header'
+import { Header } from '../components/index'
 
 const Stack = createStackNavigator()
 

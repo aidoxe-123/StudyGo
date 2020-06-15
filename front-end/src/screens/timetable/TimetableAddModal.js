@@ -4,9 +4,8 @@ import { View, Animated, Modal, Text,
   TouchableWithoutFeedback, Keyboard, Picker, Alert
 } from 'react-native'
 import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons'; 
-import { TimetableStyles } from '../../style/TimetableStyles'
-import { TimetableEditStyles } from '../../style/TimetableEditStyles'
-import { getAutoFocusEnabled } from 'expo/build/AR';
+import { TimetableStyles } from '../../../style/TimetableStyles'
+import { TimetableEditStyles } from '../../../style/TimetableEditStyles'
 
 export default function TimetableEditModal({height, width, x, y, handleClose, handleAdd}) {
   const SCREEN_WIDTH = Dimensions.get('window').width

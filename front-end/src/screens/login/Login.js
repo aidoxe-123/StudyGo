@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
-import { LoginStyles } from '../style/LoginStyles.js'
+import { LoginStyles } from '../../../style/LoginStyles.js'
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('')

@@ -1,9 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import TodoList from '../components/todo_list/TodoList'
-import AddTodo from '../components/todo_list/AddTodo'
-import Header from '../shared component/Header'
-import EditTodo from '../components/todo_list/EditTodo'
+import TodoList from '../screens/todoList/TodoList'
+import AddTodo from '../screens/todoList/AddTodo'
+import { Header } from '../components/index'
+import EditTodo from '../screens/todoList/EditTodo'
 
 const Stack = createStackNavigator()
 

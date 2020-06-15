@@ -2,11 +2,10 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import React, { useEffect } from 'react'
 import { BackHandler } from 'react-native'
 import TimetableStack from './TimetableStack'
-import ProgressTrackerStack from '../src/navigations/ProgressTrackerStack'
+import ProgressTrackerStack from './ProgressTrackerStack'
 import TodoStack from './TodoStack'
-import DrawerSlider from '../shared component/DrawerSlider'
 import { MaterialCommunityIcons, Octicons, FontAwesome5 } from '@expo/vector-icons'
-import { UserIdContext } from '../shared component/UserIdContext'
+import { UserIdContext, DrawerSlider } from '../components/index'
 
 const Drawer = createDrawerNavigator()
 

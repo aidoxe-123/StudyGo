@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import Register from '../components/Register'
-import Login from '../components/Login'
+import Register from '../screens/login/Register'
+import Login from '../screens/login/Login'
 import MainDrawer from './MainDrawer'
 
 const Stack = createStackNavigator()

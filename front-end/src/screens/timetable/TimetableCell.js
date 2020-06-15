@@ -1,6 +1,6 @@
 import React, {useState, useRef} from 'react'
 import { TouchableOpacity, Text, View, Modal } from 'react-native'
-import { TimetableStyles } from '../../style/TimetableStyles'
+import { TimetableStyles } from '../../../style/TimetableStyles'
 
 export default function TimetableCell({lesson, openModal}) {
   const thisCell = useRef(null)

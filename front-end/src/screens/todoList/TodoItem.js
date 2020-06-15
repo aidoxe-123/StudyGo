@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { TodoItemStyles } from '../../style/TodoItemStyles.js'
+import { TodoItemStyles } from '../../../style/TodoItemStyles.js'
 
 export default function TodoItem({ item }) {
     var dateString = item.date.getDate() + '/' + item.date.getMonth() + '/' + (item.date.getYear() + 1900)

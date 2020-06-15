@@ -5,9 +5,9 @@ import {
 } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Ionicons, AntDesign } from '@expo/vector-icons'
-import { YellowLine } from '../../style/yellowLine'
-import { TimetableStyles } from '../../style/TimetableStyles'
-import { UserIdContext } from '../../shared component/UserIdContext'
+import { YellowLine } from '../../../style/yellowLine'
+import { TimetableStyles } from '../../../style/TimetableStyles'
+import { UserIdContext } from '../../components/index'
 import TimetableHourColumn from './TimetableHourColumn'
 import TimetableColumn from './TimetableColumn'
 import TimetableEditModal from './TimetableEditModal'

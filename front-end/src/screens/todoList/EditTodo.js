@@ -1,10 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import DatePicker from '../../shared component/DatePicker'
 import { Fontisto, Ionicons } from '@expo/vector-icons'
-import { AddTodoStyles } from '../../style/AddTodoStyles'
-import { YellowLine } from '../../style/yellowLine'
-import { UserIdContext } from '../../shared component/UserIdContext'
+import { AddTodoStyles } from '../../../style/AddTodoStyles'
+import { YellowLine } from '../../../style/yellowLine'
+import { UserIdContext, DatePicker } from '../../components/index'
 
 export default function EditTodo({ route, navigation }) {
     const userId = useContext(UserIdContext)

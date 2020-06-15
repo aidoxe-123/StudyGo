@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { TimetableStyles } from '../../style/TimetableStyles'
+import { TimetableStyles } from '../../../style/TimetableStyles'
 
 export default function TimetableHourColumn() {
   const timeArray = []

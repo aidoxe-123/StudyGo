@@ -5,7 +5,7 @@ import {
 } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
-import { LoginStyles } from '../style/LoginStyles'
+import { LoginStyles } from '../../../style/LoginStyles'
 
 export default class Register extends React.Component{
   state = {
