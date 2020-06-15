@@ -1,12 +1,11 @@
-import React, { useContext, useState, Children } from 'react'
+import React, { useState } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native'
+import { PrettyTextInput } from '../../components/index'
 
 export default function Finished({ navigation, route }) {
     const { title, progress } = route.params;
     const [newTitle, setTitle] = useState(title);
-    const [color, setColor] = useState("grey");
     const [newProgress, setProgress] = useState(progress);
-    const [color2, setColor2] = useState("grey");
 
     const handleTitleInput = (text) => { setTitle(text); }
     const handleProgressInput = (text) => { setProgress(text); }
@@ -24,13 +23,10 @@ export default function Finished({ navigation, route }) {
             <View style={{ flex: 1 }}>
                 {/*Title input*/}
                 <View style={styles.InputWithTitle}>
-                    <TextInput
+                    <PrettyTextInput
                         onChangeText={text => handleTitleInput(text)}
                         value={title}
-                        onFocus={() => setColor("coral")}
-                        onBlur={() => setColor("grey")}
                         placeholder="What have yet to finished?"
-                        style={{ borderBottomColor: color, borderBottomWidth: 3 }}
                     />
                     <Text>Title</Text>
                 </View>
@@ -40,10 +36,7 @@ export default function Finished({ navigation, route }) {
                     <TextInput
                         onChangeText={text => handleProgressInput(text)}
                         value={progress}
-                        onFocus={() => setColor2("coral")}
-                        onBlur={() => setColor2("grey")}
                         placeholder="How much have you done?"
-                        style={{ borderBottomColor: color2, borderBottomWidth: 3 }}
                     />
                     <Text>Progress</Text>
                 </View>

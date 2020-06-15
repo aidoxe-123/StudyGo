@@ -1,13 +1,13 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import ProgressTracker from '../components/progressTracker/ProgressTracker'
-import Module from '../components/progressTracker/Module';
-import AddModule from '../components/progressTracker/Add Module';
-import AddFinished from '../components/progressTracker/Add Finished';
-import AddUnfinished from '../components/progressTracker/Add Unfinished';
-import EditFinished from '../components/progressTracker/EditFinished';
-import EditUnfinished from '../components/progressTracker/EditUnfinished';
-import Header from '../shared component/Header'
+import ProgressTracker from '../screens/progressTracker/ProgressTracker'
+import Module from './ProgressTrackerBottomTab';
+import AddModule from '../screens/progressTracker/Add Module';
+import AddFinished from '../screens/progressTracker/Add Finished';
+import AddUnfinished from '../screens/progressTracker/Add Unfinished';
+import EditFinished from '../screens/progressTracker/EditFinished';
+import EditUnfinished from '../screens/progressTracker/EditUnfinished';
+import Header from '../../shared component/Header'
 
 const Stack = createStackNavigator()
 

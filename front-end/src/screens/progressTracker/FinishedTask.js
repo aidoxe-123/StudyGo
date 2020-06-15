@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
+import { FloatingAdd } from '../../components/index'
 
 export default function Finished({ navigation }) {
     const [milestones, setMilestones] = useState([
@@ -39,9 +40,7 @@ export default function Finished({ navigation }) {
                     renderItem={renderItem}
                 />
 
-                <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate("Add Finished")}>
-                    <AntDesign name="pluscircle" size={50} color="coral" />
-                </TouchableOpacity>
+                <FloatingAdd onPress={() => navigation.navigate("Add Finished")} />
             </View>
         </TouchableWithoutFeedback>
     )
@@ -64,12 +63,5 @@ const styles = StyleSheet.create({
     },
     stat: {
         color: 'coral'
-    },
-    fab: {
-        color: "red",
-        position: "absolute",
-        margin: 16,
-        right: 0,
-        bottom: 0,
     }
 });

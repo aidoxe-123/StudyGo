@@ -1,12 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TouchableHighlight, ScrollView, StyleSheet, Alert } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import { UserIdContext } from '../../shared component/UserIdContext'
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useIsFocused } from '@react-navigation/native'
+import { FloatingAdd } from '../../components/index'
 
 export default function ProgressTracker({ navigation }) {
-  const userId = useContext(UserIdContext);
   const isFocus = useIsFocused();
   const [tasks, setTasks] = useState([]);
   // interact with database
@@ -18,7 +17,7 @@ export default function ProgressTracker({ navigation }) {
   useEffect(() => {
     if (isFocus) {
       setTasks([
-        { key: "CS2020", text: "CS2030" },
+        { key: "CS2030", text: "CS2030" },
         { key: "CS2040S", text: "CS2040S" },
         { key: "CS2100", text: "CS2100" },
         { key: "CS1101S", text: "CS1101S" }
@@ -34,9 +33,10 @@ export default function ProgressTracker({ navigation }) {
       "Are you sure you want to delete this module?",
       [{
         text: "Cancel",
-        style: "cancel"
+        style: 'cancel'
       }, {
         text: "OK",
+        style: 'destructive',
         onPress: () => handleDelete(item)
       }], { cancelable: false }
     );
@@ -81,9 +81,7 @@ export default function ProgressTracker({ navigation }) {
         />
 
         {/*add module button*/}
-        <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate("Add Module")}>
-          <AntDesign name="pluscircle" size={50} color="coral" />
-        </TouchableOpacity>
+        <FloatingAdd onPress={() => navigation.navigate("Add Module")} />
       </View>
     </TouchableWithoutFeedback>
   )
@@ -130,15 +128,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     right: 0,
   },
-
-
-
-
-  fab: {
-    color: "red",
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  }
 });

@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react'
-import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
+import { PrettyTextInput } from '../../components/index'
 
 export default function Finished({ navigation }) {
     const [module, setModule] = useState();
-    const [color, setColor] = useState("grey");
     const handleTextInput = (text) => { setModule(text); }
 
     const handleAdd = (module) => {
@@ -16,13 +16,10 @@ export default function Finished({ navigation }) {
             <View style={{ flex: 1 }}>
                 {/*Add title textbox*/}
                 <View style={styles.InputWithTitle}>
-                    <TextInput
+                    <PrettyTextInput
                         onChangeText={text => handleTextInput(text)}
                         value={module}
-                        onFocus={() => setColor("coral")}
-                        onBlur={() => setColor("grey")}
                         placeholder="Module (e.g. CS2030, CS2040S,..."
-                        style={{ borderBottomColor: color, borderBottomWidth: 3, }}
                     />
                     <Text>Title</Text>
                 </View>

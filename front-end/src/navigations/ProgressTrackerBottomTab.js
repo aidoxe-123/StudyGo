@@ -1,7 +1,7 @@
 import React, { useState, useEffect, userContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import FinishedTasks from './FinishedTask';
-import UnfinishedTasks from './UnfinishedTask';
+import FinishedTasks from '../screens/progressTracker/FinishedTask';
+import UnfinishedTasks from '../screens/progressTracker/UnfinishedTask';
 import { Entypo } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();

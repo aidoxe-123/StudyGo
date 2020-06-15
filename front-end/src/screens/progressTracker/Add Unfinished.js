@@ -1,11 +1,10 @@
-import React, { useContext, useState, Children } from 'react'
-import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
+import { PrettyTextInput } from '../../components/index'
 
 export default function Finished({ navigation }) {
     const [title, setTitle] = useState("");
-    const [color, setColor] = useState("grey");
     const [progress, setProgress] = useState("");
-    const [color2, setColor2] = useState("grey");
 
     const handleTitleInput = (text) => { setTitle(text); }
     const handleProgressInput = (text) => { setProgress(text); }
@@ -23,25 +22,19 @@ export default function Finished({ navigation }) {
             <View style={{ flex: 1 }}>
                 {/*Title input*/}
                 <View style={styles.InputWithTitle}>
-                    <TextInput
+                    <PrettyTextInput
                         onChangeText={text => handleTitleInput(text)}
                         value={title}
-                        onFocus={() => setColor("coral")}
-                        onBlur={() => setColor("grey")}
                         placeholder="What have yet to finished?"
-                        style={{ borderBottomColor: color, borderBottomWidth: 3 }}
                     />
                     <Text>Title</Text>
                 </View>
                 {/*Progress percentage input*/}
                 <View style={styles.InputWithTitle} >
-                    <TextInput
+                    <PrettyTextInput
                         onChangeText={text => handleProgressInput(text)}
                         value={progress}
-                        onFocus={() => setColor2("coral")}
-                        onBlur={() => setColor2("grey")}
                         placeholder="How much have you done?"
-                        style={{ borderBottomColor: color2, borderBottomWidth: 3 }}
                     />
                     <Text>Progress</Text>
                 </View>
