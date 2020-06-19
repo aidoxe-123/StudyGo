@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput } from '../../components/index'
+import { PrettyTextInput, UserIdContext } from '../../components/index'
+import wrapper from '../../utils/data-fetchers/fetchingWrapper';
+import { addTask } from '../../utils/data-fetchers/ProgressTracker';
 
-export default function Finished({ navigation }) {
+export default function Finished({ navigation, route }) {
     const [title, setTitle] = useState("");
     const [progress, setProgress] = useState("");
+    const userId = useContext(UserIdContext)
 
     const handleTitleInput = (text) => { setTitle(text); }
     const handleProgressInput = (text) => { setProgress(text); }
@@ -12,8 +15,8 @@ export default function Finished({ navigation }) {
     const handleAdd = () => {
         if (title === "") Alert.alert("", "Please input the title!");
         else {
-
-            navigation.goBack();
+            wrapper(() => addTask(userId, route.params.moduleId, title, false, progress),
+                response => navigation.goBack());
         }
     }
 

@@ -1,34 +1,33 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput, RadioButtons } from './../../components/index'
-export default function Finished({ navigation }) {
+import { PrettyTextInput, RadioButtons, UserIdContext } from './../../components/index'
+import { addTask } from '../../utils/data-fetchers/ProgressTracker';
+import wrapper from '../../utils/data-fetchers/fetchingWrapper';
+
+export default function Finished({ navigation, route }) {
     const [title, setTitle] = useState("");
     const [mark, setMark] = useState("");
     const [choice, setChoice] = useState(0);
+    const userId = useContext(UserIdContext);
 
     const handleTitleInput = (text) => { setTitle(text); }
     const handleMarkInput = (text) => { setMark(text); }
     const handleAdd = () => {
+        let details = "";
         if (title === "") Alert.alert("", "Please input the title!");
-        else {
-            switch (choice) {
-                case 0: Alert.alert("", title + " Not graded yet");
-                    break;
-                case 1: Alert.alert("", title + " Ungraded");
-                    break;
-                case 2:
-                    if (mark === "") {
-                        Alert.alert("", "Please input your mark!");
-                        return;
-                    }
-                    Alert.alert("", title + " Score: " + mark);
-                    break;
-            }
-            navigation.goBack();
+        else switch (choice) {
+            case 0: details = "Not graded yet";
+                break;
+            case 1: details = "Ungraded";
+                break;
+            case 2:
+                if (mark === "") {
+                    Alert.alert("", "Please input your mark!");
+                    return;
+                }
+                details = mark;
         }
-    }
-    const handleChoice = (index) => {
-        setChoice(index);
+        wrapper(() => addTask(userId, route.params.moduleId, title, true, details), response => navigation.goBack());
     }
 
     return (
@@ -45,7 +44,7 @@ export default function Finished({ navigation }) {
                 </View>
 
                 {/*Radio buttons*/}
-                <RadioButtons onPressIndex={handleChoice} initialChoice={choice}>
+                <RadioButtons onPressIndex={(index) => setChoice(index)} initialChoice={choice}>
                     <Text>Not graded yet</Text>
 
                     <Text>Ungraded</Text>

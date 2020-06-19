@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput } from '../../components/index'
+import { PrettyTextInput, UserIdContext, Spinner } from '../../components/index'
+import { updateTask } from '../../utils/data-fetchers/ProgressTracker';
+import wrapper from '../../utils/data-fetchers/fetchingWrapper';
 
 export default function Finished({ navigation, route }) {
-    const { title, progress } = route.params;
+    const { title, taskId, details } = route.params;
     const [newTitle, setTitle] = useState(title);
-    const [newProgress, setProgress] = useState(progress);
+    const [newProgress, setProgress] = useState(details);
+    const userId = useContext(UserIdContext);
+    const [loading, setLoading] = useState(false)
 
     const handleTitleInput = (text) => { setTitle(text); }
     const handleProgressInput = (text) => { setProgress(text); }
@@ -13,14 +17,19 @@ export default function Finished({ navigation, route }) {
     const handleAdd = () => {
         if (newTitle === "") Alert.alert("", "Please input the title!");
         else {
-
-            navigation.goBack();
+            setLoading(true);
+            console.log(newProgress);
+            wrapper(() => updateTask(userId, taskId, newTitle, false, newProgress),
+                response => { setLoading(false); navigation.goBack(); });
         }
     }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
             <View style={{ flex: 1 }}>
+                <Spinner
+                    visible={loading}
+                />
                 {/*Title input*/}
                 <View style={styles.InputWithTitle}>
                     <PrettyTextInput
@@ -33,9 +42,9 @@ export default function Finished({ navigation, route }) {
 
                 {/*Progress percentage input*/}
                 <View style={styles.InputWithTitle} >
-                    <TextInput
+                    <PrettyTextInput
                         onChangeText={text => handleProgressInput(text)}
-                        value={progress}
+                        value={newProgress}
                         placeholder="How much have you done?"
                     />
                     <Text>Progress</Text>

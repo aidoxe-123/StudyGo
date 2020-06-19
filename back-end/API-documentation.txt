@@ -106,3 +106,45 @@ DELETE /timetable
     req: userId (string), taskId (string)
     res:
     code:  404 = Invalid user ID or task ID
+
+-------------------------------------------------------PROGRESS TRACKER------------------------------------------------------------------
+
+// return all registered modules of user
+POST /progress-tracker/modules/all
+    req: userId (string)
+
+// add new module to server
+POST /progress-tracker/modules/admin
+    req: moduleId (string), title (string)
+
+// add new module
+POST /progress-tracker/modules
+    req: userId (string), moduleId (string)
+
+// delete a module
+DELETE /progress-tracker/modules
+    req: userId (string), moduleId (string)
+
+// return all tasks (finished or unfinished)
+POST /progress-tracker/tasks/list
+    req: userId (string), moduleId (string), isFinished (boolean)
+
+// add new unfinished task
+POST /progress-tracker/tasks/addUnfinished
+    req: userId (string), moduleId(string), title(string), progress(string)
+
+//  add new finished task
+POST /progress-tracker/tasks/addFinished
+    req: userId (string), details (object)
+
+// edit a finished task
+PUT /progress-tracker/tasks/updateFinished
+    req: userId (string), taskId (string), details (object)
+
+// edit an unfinished task
+PUT /progress-tracker/tasks/updateUnfinished
+    req: userId (string), taskId (string), details (object)
+
+// delete a task
+DELETE /progress-tracker/tasks
+    req: userId (string), taskId (string)

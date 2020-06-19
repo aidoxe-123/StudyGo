@@ -34,7 +34,16 @@ const pretestChecker = (req, res, next) => {
         'POST /api/v1/timetable': ['userId', 'day', 'task'],
         'POST /api/v1/timetable/all': ['userId'],
         'PUT /api/v1/timetable': ['userId', 'taskId', 'newTask', 'newDay'],
-        'DELETE /api/v1/timetable': ['userId', 'taskId']
+        'DELETE /api/v1/timetable': ['userId', 'taskId'],
+        // progresstracker.js
+        'POST /api/v1/progress-tracker/modules/admin': ['moduleId', 'title'],
+        'POST /api/v1/progress-tracker/modules': ['userId', 'moduleId'],
+        'POST /api/v1/progress-tracker/modules/all': ['userId'],
+        'DELETE /api/v1/progress-tracker/modules': ['userId', 'moduleId'],
+        'POST /api/v1/progress-tracker/tasks': ['userId', 'moduleId', 'title', 'isFinished', 'details'],
+        'PUT /api/v1/progress-tracker/tasks': ['userId', 'taskId', 'title', 'isFinished', 'details'],
+        'DELETE /api/v1/progress-tracker/tasks': ['userId', 'taskId'],
+        'POST /api/v1/progress-tracker/tasks/all': ['userId', 'moduleId', 'isFinished']
     }
 
     const target = req.method + " " + req.path;

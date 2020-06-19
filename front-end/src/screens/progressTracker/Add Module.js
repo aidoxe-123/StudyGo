@@ -1,19 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput } from '../../components/index'
+import { PrettyTextInput, UserIdContext } from '../../components/index'
+import { addModule } from '../../utils/data-fetchers/ProgressTracker'
+import { useIsFocused } from "@react-navigation/native"
+import Spinner from 'react-native-loading-spinner-overlay';
+import { TodoStyles } from '../../../style/TodoStyles.js'
 
 export default function Finished({ navigation }) {
+    const userId = useContext(UserIdContext);
     const [module, setModule] = useState();
     const handleTextInput = (text) => { setModule(text); }
+    const [loading, setLoading] = useState(false)
 
-    const handleAdd = (module) => {
-        Alert.alert("", "Added " + module + "!");
+    const handleAdd = (moduleId) => {
+        setLoading(true);
+        addModule(userId, moduleId).then(() => setLoading(false)).catch(error => console.log(error));
+        Alert.alert("", "Added " + moduleId + "!");
         navigation.goBack();
     };
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
             <View style={{ flex: 1 }}>
+                <Spinner
+                    visible={loading}
+                    textContent='Loading...'
+                    textStyle={TodoStyles.spinner}
+                />
                 {/*Add title textbox*/}
                 <View style={styles.InputWithTitle}>
                     <PrettyTextInput

@@ -12,6 +12,7 @@ main.use('/api/v1', require('./routers/users'));
 main.use('/api/v1', require('./routers/to-do-list'));
 main.use('/api/v1', require('./routers/calendar'));
 main.use('/api/v1', require('./routers/timetable'));
+main.use('/api/v1', require('./routers/progresstracker'));
 main.use(errorHandler);
 
 

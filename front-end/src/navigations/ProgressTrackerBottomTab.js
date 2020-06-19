@@ -6,7 +6,7 @@ import { Entypo } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
-export default function Module({ navigation }) {
+export default function Module({ navigation, route }) {
 
     const screenOptions = ({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -29,10 +29,9 @@ export default function Module({ navigation }) {
     }
 
     return (
-        <Tab.Navigator screenOptions={screenOptions} tabBarOptions={tabBarOptions}>
-            <Tab.Screen name="Unfinished Tasks" component={UnfinishedTasks} />
-            <Tab.Screen name="Finished Tasks" component={FinishedTasks} />
-
+        <Tab.Navigator screenOptions={screenOptions} tabBarOptions={tabBarOptions} initialRouteName="Unfinished Tasks">
+            <Tab.Screen name="Unfinished Tasks" component={UnfinishedTasks} initialParams={{ moduleId: route.params.moduleId }} />
+            <Tab.Screen name="Finished Tasks" component={FinishedTasks} initialParams={{ moduleId: route.params.moduleId }} />
         </Tab.Navigator>
     )
 }

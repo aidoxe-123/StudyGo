@@ -1,54 +1,58 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput, RadioButtons } from '../../components/index'
+import { PrettyTextInput, RadioButtons, UserIdContext, Spinner } from '../../components/index'
+import { updateTask } from '../../utils/data-fetchers/ProgressTracker';
+import wrapper from '../../utils/data-fetchers/fetchingWrapper';
+
 
 export default function Finished({ navigation, route }) {
-    const map = { notGraded: 0, ungraded: 1, graded: 2 };
-    const { title, mark, status } = route.params;
+    const map = { "Not graded yet": 0, "Ungraded": 1, graded: 2 };
+    const { title, taskId, details } = route.params;
     const [newTitle, setTitle] = useState(title);
-    const [newMark, setMark] = useState(mark);
-    const [choice, setChoice] = useState(map[status]);
-
+    const [newMark, setMark] = useState(details);
+    const [choice, setChoice] = useState(details === "Not graded yet" ? 0 : (details === "Ungraded" ? 1 : 2));
+    const userId = useContext(UserIdContext);
+    const [loading, setLoading] = useState(false)
 
     const handleTitleInput = (text) => { setTitle(text); }
     const handleMarkInput = (text) => { setMark(text); }
     const handleAdd = () => {
+        let details = "";
         if (title === "") Alert.alert("", "Please input the title!");
-        else {
-            switch (choice) {
-                case 0: Alert.alert("", newTitle + " Not graded yet");
-                    break;
-                case 1: Alert.alert("", newTitle + " Ungraded");
-                    break;
-                case 2:
-                    if (mark === "") {
-                        Alert.alert("", "Please input your mark!");
-                        return;
-                    }
-                    Alert.alert("", newTitle + " Score: " + newMark);
-                    break;
-            }
-            navigation.goBack();
+        else switch (choice) {
+            case 0: details = "Not graded yet";
+                break;
+            case 1: details = "Ungraded";
+                break;
+            case 2:
+                if (newMark === "") {
+                    Alert.alert("", "Please input your mark!");
+                    return;
+                }
+                details = newMark;
         }
-    }
-    const handleChoice = (index) => {
-        setChoice(index);
+        setLoading(true);
+        wrapper(() => updateTask(userId, taskId, newTitle, true, details), response => { setLoading(false); navigation.goBack(); });
+
     }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
             <View style={{ flex: 1 }}>
                 {/*Title input text box*/}
+                <Spinner
+                    visible={loading}
+                />
                 <View style={styles.InputWithTitle}>
                     <PrettyTextInput
                         onChangeText={text => handleTitleInput(text)}
-                        value={title}
+                        value={newTitle}
                         placeholder="What have you finished?"
                     />
                     <Text>Title</Text>
                 </View>
                 {/*Radio buttons*/}
-                <RadioButtons onPressIndex={handleChoice} initialChoice={map[status]}>
+                <RadioButtons onPressIndex={(index) => setChoice(index)} initialChoice={choice}>
                     {/*Choice 1*/}
                     <Text>Not graded yet</Text>
                     {/*Choice 2*/}
@@ -56,7 +60,7 @@ export default function Finished({ navigation, route }) {
                     {/*Choice 3*/}
                     <PrettyTextInput
                         onChangeText={text => handleMarkInput(text)}
-                        value={mark}
+                        value={choice === 2 ? newMark : ""}
                         placeholder="Mark (e.g. 38)"
                     />
                 </RadioButtons>

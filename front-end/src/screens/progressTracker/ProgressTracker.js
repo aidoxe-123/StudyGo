@@ -1,29 +1,31 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TouchableHighlight, ScrollView, StyleSheet, Alert } from 'react-native'
-import { AntDesign } from '@expo/vector-icons'
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useIsFocused } from '@react-navigation/native'
-import { FloatingAdd } from '../../components/index'
+import { FloatingAdd, UserIdContext, Spinner } from '../../components/index'
+import { getModules, deleteModule } from '../../utils/data-fetchers/ProgressTracker'
+import wrapper from '../../utils/data-fetchers/fetchingWrapper'
 
 export default function ProgressTracker({ navigation }) {
+  const userId = useContext(UserIdContext)
   const isFocus = useIsFocused();
-  const [tasks, setTasks] = useState([]);
-  // interact with database
-  // ---------------------
-  const handleDelete = (item) => {
-    setTasks(tasks.filter(obj => (obj.key != item.text)));
-  }
+  const [modules, setModules] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (isFocus) {
-      setTasks([
-        { key: "CS2030", text: "CS2030" },
-        { key: "CS2040S", text: "CS2040S" },
-        { key: "CS2100", text: "CS2100" },
-        { key: "CS1101S", text: "CS1101S" }
-      ])
+      setLoading(true);
+      return wrapper(() => getModules(userId),
+        response => { setModules(response.data); setLoading(false) })
     };
   }, [isFocus]);
+
+  const handleDeleteModule = (moduleId) => {
+    setLoading(true);
+    setModules(modules.filter(item => item.key !== moduleId))
+    wrapper(() => deleteModule(userId, moduleId),
+      response => setLoading(false))
+  }
 
   // handle actions
   //---------------------------------
@@ -37,7 +39,7 @@ export default function ProgressTracker({ navigation }) {
       }, {
         text: "OK",
         style: 'destructive',
-        onPress: () => handleDelete(item)
+        onPress: () => handleDeleteModule(item.key)
       }], { cancelable: false }
     );
   }
@@ -48,7 +50,7 @@ export default function ProgressTracker({ navigation }) {
   // --------------------------------
   const renderItem = data => (
     <TouchableHighlight
-      onPress={() => navigation.navigate('Module', { name: data.item.text })}
+      onPress={() => navigation.navigate('Module', { name: data.item.text, moduleId: data.item.key })}
     >
       <View style={styles.rowFront}>
         <Text>{data.item.text}</Text>
@@ -71,9 +73,12 @@ export default function ProgressTracker({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
+        <Spinner
+          visible={loading}
+        />
         {/*list of all modules*/}
         <SwipeListView
-          data={tasks}
+          data={modules}
           renderItem={renderItem}
           renderHiddenItem={renderHiddenItem}
 

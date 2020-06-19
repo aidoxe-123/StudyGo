@@ -10,13 +10,17 @@
   "dependencies": {
     "@react-native-community/datetimepicker": "^2.2.2",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-firebase/firestore": "^7.1.7",
     "@react-navigation/bottom-tabs": "^5.5.2",
     "@react-navigation/drawer": "^5.8.0",
     "@react-navigation/native": "^5.4.2",
     "@react-navigation/stack": "^5.3.9",
+    "@redux-offline/redux-offline": "^2.6.0-native.0",
+    "base-64": "^0.1.0",
     "eslint-import-resolver-babel-module": "^5.1.2",
     "eslint-plugin-import": "^2.21.2",
     "expo": "~37.0.3",
+    "firebase": "7.9.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
@@ -30,7 +34,8 @@
     "react-native-screens": "^2.7.0",
     "react-native-swipe-list-view": "^3.1.1",
     "react-native-web": "~0.11.7",
-    "react-navigation": "^4.3.9"
+    "react-navigation": "^4.3.9",
+    "redux": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
