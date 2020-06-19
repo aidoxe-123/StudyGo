@@ -13,11 +13,10 @@ export default function ProgressTracker({ navigation }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (isFocus) {
-      setLoading(true);
-      return wrapper(() => getModules(userId),
-        response => { setModules(response.data); setLoading(false) })
-    };
+    setLoading(true);
+    return wrapper(() => getModules(userId),
+      response => { setModules(response.data.sort((o1, o2) => (o1.key > o2.key) ? 1 : -1)); setLoading(false) })
+
   }, [isFocus]);
 
   const handleDeleteModule = (moduleId) => {
@@ -53,7 +52,8 @@ export default function ProgressTracker({ navigation }) {
       onPress={() => navigation.navigate('Module', { name: data.item.text, moduleId: data.item.key })}
     >
       <View style={styles.rowFront}>
-        <Text>{data.item.text}</Text>
+        <Text style={{ fontSize: 18 }}>{data.item.key}</Text>
+        <Text style={{ fontSize: 13 }}>{data.item.text}</Text>
       </View>
     </TouchableHighlight>
   );

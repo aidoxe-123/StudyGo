@@ -54,17 +54,3 @@ TaskPT:
 		_completed
 
 
-
-personal:
-need all modules (modules screen)
-need all task in one module (finish/unfinished tasks screen)
-need status of that task (same)
-
-aggregate:
-need all modules (add module)
-for each module:
-	_need number of students (add module, stat)
-	_need all tasks (add task)
-	
-for each task: number of student for each status (stat)
-

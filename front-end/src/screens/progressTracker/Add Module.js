@@ -1,22 +1,28 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput, UserIdContext } from '../../components/index'
-import { addModule } from '../../utils/data-fetchers/ProgressTracker'
-import { useIsFocused } from "@react-navigation/native"
+import { SuggestInput, PrettyTextInput, UserIdContext } from '../../components/index'
+import { addModule, updateModulesData, getModulesData } from '../../utils/data-fetchers/ProgressTracker'
+import { Searchbar } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../../style/TodoStyles.js'
+import wrapper from '../../utils/data-fetchers/fetchingWrapper';
 
 export default function Finished({ navigation }) {
     const userId = useContext(UserIdContext);
-    const [module, setModule] = useState();
-    const handleTextInput = (text) => { setModule(text); }
     const [loading, setLoading] = useState(false)
+    const [data, setData] = useState([]);
 
-    const handleAdd = (moduleId) => {
+    useEffect(() => {
+        wrapper(async () => {
+            await updateModulesData();
+            return await getModulesData();
+        }, data => { setData(data); });
+    }, [])
+
+    const handleAdd = (moduleCode) => {
         setLoading(true);
-        addModule(userId, moduleId).then(() => setLoading(false)).catch(error => console.log(error));
-        Alert.alert("", "Added " + moduleId + "!");
-        navigation.goBack();
+        let title = data.filter(item => item.moduleCode === moduleCode)[0].title;
+        addModule(userId, moduleCode, title).then(() => setLoading(false)).then(() => navigation.goBack()).catch(error => console.log(error));
     };
 
     return (
@@ -29,20 +35,15 @@ export default function Finished({ navigation }) {
                 />
                 {/*Add title textbox*/}
                 <View style={styles.InputWithTitle}>
-                    <PrettyTextInput
-                        onChangeText={text => handleTextInput(text)}
-                        value={module}
-                        placeholder="Module (e.g. CS2030, CS2040S,..."
+                    <SuggestInput
+                        allOptions={data}
+                        onChoose={(choice) => handleAdd(choice)}
+                        keyExtractor={item => item.moduleCode}
+                        dataExtractor={item => item.moduleCode + " - " + item.title}
+                        renderOption={(item) => (<Text>{item.moduleCode} - {item.title}</Text>)}
                     />
-                    <Text>Title</Text>
                 </View>
 
-                {/*Add button*/}
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => handleAdd(module)} style={styles.DoneButton}>
-                        <Text style={{ color: "white" }}>Done</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         </TouchableWithoutFeedback>
 

@@ -6,8 +6,10 @@ import DrawerSlider from './DrawerSlider'
 import DatePicker from './DatePicker'
 import Header from './Header'
 import Spinner from './Spin'
+import SuggestInput from './SuggestInput'
 
 export {
+  SuggestInput,
   Spinner,
   FloatingAdd,
   PrettyTextInput,
