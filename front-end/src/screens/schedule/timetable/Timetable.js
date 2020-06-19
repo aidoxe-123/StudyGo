@@ -5,9 +5,9 @@ import {
 } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Ionicons, AntDesign } from '@expo/vector-icons'
-import { YellowLine } from '../../../style/yellowLine'
-import { TimetableStyles } from '../../../style/TimetableStyles'
-import { UserIdContext } from '../../components/index'
+import { YellowLine } from '../../../../style/yellowLine'
+import { TimetableStyles } from '../../../../style/TimetableStyles'
+import { UserIdContext } from '../../../components/index'
 import TimetableHourColumn from './TimetableHourColumn'
 import TimetableColumn from './TimetableColumn'
 import TimetableEditModal from './TimetableEditModal'
@@ -15,7 +15,7 @@ import TimetableEmptyColumn from './TimetableEmptyColumn'
 import TimetableAddModal from './TimetableAddModal'
 
 
-export default function Timetable() {
+export default function Timetable({navigation}) {
   const userId = useContext(UserIdContext)
 
   const [loading, setLoading] = useState(true)
@@ -170,7 +170,10 @@ export default function Timetable() {
         />
         <View style={YellowLine.header}>
           <Text h1 style={YellowLine.headerText}>Timetable</Text>
-          <TouchableOpacity style={YellowLine.rightWhiteButton}>
+          <TouchableOpacity 
+            style={YellowLine.rightWhiteButton} 
+            onPress={() => navigation.navigate('Calendar')}
+          >
               <View style={YellowLine.insideWhiteButton}>
                   <Text style={YellowLine.whiteButtonText}>Calendar</Text>
                   <Ionicons name='ios-arrow-forward' size={18} style={YellowLine.whiteButtonIcon}/>

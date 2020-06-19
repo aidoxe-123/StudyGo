@@ -28,7 +28,7 @@ export default function MainDrawer({ route }) {
                 }}
             >
                 <Drawer.Screen
-                    name='Timetable'
+                    name='Schedule'
                     component={TimetableStack}
                     options={{
                         drawerIcon: ({ focused, size, color }) => (
