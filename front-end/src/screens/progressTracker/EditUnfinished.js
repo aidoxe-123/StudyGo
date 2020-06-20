@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native'
 import { PrettyTextInput, UserIdContext, Spinner } from '../../components/index'
-import { updateTask } from '../../utils/data-fetchers/ProgressTracker';
+import { updateTask, addTask } from '../../utils/data-fetchers/ProgressTracker';
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
 
 export default function Finished({ navigation, route }) {
-    const { title, taskId, details } = route.params;
+    const { title, taskId, details, isAdd, moduleId } = route.params;
     const [newTitle, setTitle] = useState(title);
     const [newProgress, setProgress] = useState(details);
     const userId = useContext(UserIdContext);
@@ -18,9 +18,11 @@ export default function Finished({ navigation, route }) {
         if (newTitle === "") Alert.alert("", "Please input the title!");
         else {
             setLoading(true);
-            console.log(newProgress);
-            wrapper(() => updateTask(userId, taskId, newTitle, false, newProgress),
-                response => { setLoading(false); navigation.goBack(); });
+
+            wrapper(() => isAdd
+                ? addTask(userId, moduleId, newTitle, false, newProgress)
+                : updateTask(userId, taskId, newTitle, false, newProgress),
+                response => { setLoading(false); navigation.goBack(); })
         }
     }
 
@@ -34,7 +36,7 @@ export default function Finished({ navigation, route }) {
                 <View style={styles.InputWithTitle}>
                     <PrettyTextInput
                         onChangeText={text => handleTitleInput(text)}
-                        value={title}
+                        value={newTitle}
                         placeholder="What have yet to finished?"
                     />
                     <Text>Title</Text>

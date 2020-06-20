@@ -4,7 +4,7 @@ import ProgressTracker from '../screens/progressTracker/ProgressTracker'
 import Module from './ProgressTrackerBottomTab';
 import AddModule from '../screens/progressTracker/Add Module';
 import AddFinished from '../screens/progressTracker/Add Finished';
-import AddUnfinished from '../screens/progressTracker/Add Unfinished';
+//import AddUnfinished from '../screens/progressTracker/Add Unfinished';
 import EditFinished from '../screens/progressTracker/EditFinished';
 import EditUnfinished from '../screens/progressTracker/EditUnfinished';
 import { Header } from '../components/index'
@@ -37,7 +37,7 @@ export default function ProgressTrackerStack() {
         component={Module}
         options={({ navigation, route }) => {
           return {
-            headerTitle: () => <Header title={route.params.name} navigation={navigation} />
+            headerTitle: () => <Header title={route.params.moduleId} navigation={navigation} />
           }
         }}
       />
@@ -62,7 +62,7 @@ export default function ProgressTrackerStack() {
         }}
       />
 
-      <Stack.Screen
+      {/* <Stack.Screen
         name='Add Unfinished'
         component={AddUnfinished}
         options={({ navigation }) => {
@@ -70,7 +70,7 @@ export default function ProgressTrackerStack() {
             headerTitle: () => <Header title='New tasks' navigation={navigation} />
           }
         }}
-      />
+      /> */}
 
       <Stack.Screen
         name='Edit Finished'
@@ -85,9 +85,9 @@ export default function ProgressTrackerStack() {
       <Stack.Screen
         name='Edit Unfinished'
         component={EditUnfinished}
-        options={({ navigation }) => {
+        options={({ navigation, route }) => {
           return {
-            headerTitle: () => <Header title='Edit' navigation={navigation} />
+            headerTitle: () => <Header title={route.params.isAdd ? 'Add task' : 'Edit task'} navigation={navigation} />
           }
         }}
       />

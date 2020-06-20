@@ -19,7 +19,7 @@ router.post('/progress-tracker/modules/admin', wrapper(async (req, res, next) =>
     }
     let batch = db.batch();
     batch.update(moduleRef, { [moduleId]: title });
-    batch.set(db.collection('Modules').doc(moduleId), { studentN: 0, tasks: [] });
+    batch.set(db.collection('Modules').doc(moduleId), { studentN: 0 });
     await batch.commit();
     res.send(success({}))
 }))
@@ -35,10 +35,9 @@ router.post('/progress-tracker/modules', wrapper(async (req, res, next) => {
         throw new Error("Invalid ID");
     }
 
-    let moduleDoc = await db.collection("Modules").doc("allModules").get();
+    let moduleDoc = await db.collection("Modules").doc(moduleId).get();
 
-    let title = moduleDoc.get(moduleId);
-    if (title === undefined) {
+    if (!moduleDoc.exists) {
         res.status(404);
         throw new Error("Invalid module");
     }
@@ -73,7 +72,7 @@ router.post('/progress-tracker/modules/all', wrapper(async (req, res, next) => {
     }
 
     let modules = idDoc.get("modules");
-
+    if (modules === null) modules = {};
     res.send(success({ modules: modules }));
 }))
 
@@ -190,6 +189,35 @@ router.delete('/progress-tracker/tasks', wrapper(async (req, res, next) => {
     res.send(success({}));
 }))
 
+// link user's task to a public one
+// (userId, taskId, moduleId, refId) => ()
+router.post('/progress-tracker/tasks/ref', wrapper(async (req, res, next) => {
+    const { userId, taskId, moduleId, refId } = req.body;
+    // check user id
+    let idDoc = await db.collection('users').doc(userId).get();
+    if (!idDoc.exists) {
+        res.status(404);
+        throw new Error("Invalid user ID");
+    }
+    let taskDoc = await idDoc.ref.collection("ProgressTracker").doc(taskId).get();
+    if (!taskDoc.exists) {
+        res.status(404);
+        throw new Error("Invalid task ID");
+    }
+
+    let refDoc = await db.collection('Modules').doc(moduleId).collection('Tasks').doc(refId).get();
+    if (!refDoc.exists) {
+        res.status(404);
+        throw new Error("Invalid public task ID");
+    }
+
+    await idDoc.ref.collection("ProgressTracker").doc(taskId).update({
+        reference: refId
+    })
+
+    res.send(success({}));
+}))
+
 // get all tasks (either finished or unfinished)
 // (userId, moduleId, isFinished) => (tasks)
 router.post('/progress-tracker/tasks/all', wrapper(async (req, res, next) => {
@@ -215,7 +243,7 @@ router.post('/progress-tracker/tasks/all', wrapper(async (req, res, next) => {
 
 // add new task to server
 // (moduleId, title) => (taskId)
-router.post('/progress-tracker/tasks/addTask/admin', wrapper(async (req, res, next) => {
+router.post('/progress-tracker/tasks/admin', wrapper(async (req, res, next) => {
     const { moduleId, title } = req.body;
 
     let moduleDoc = await db.collection("Modules").doc(moduleId).get();
@@ -225,18 +253,82 @@ router.post('/progress-tracker/tasks/addTask/admin', wrapper(async (req, res, ne
         throw new Error("Invalid module");
     }
 
-    let names = moduleDoc.get("tasks");
-
+    let tasksRef = moduleDoc.ref.collection("Tasks");
+    let existId = (await tasksRef.get()).docs.map(doc => doc.id);
     let taskId;
-    do { taskId = v4() } while (names.includes(taskId));
+    do { taskId = v4(); } while (existId.includes(taskId));
 
-    let batch = db.batch();
-    batch.set(db.collection("TaskPT").doc(taskId),
-        { moduleId: moduleId, title: title, registered: 0, completed: 0 });
-    batch.update(db.collection("Modules").doc(moduleId),
-        { tasks: firebase.firestore.FieldValue.arrayUnion(taskId) })
-
-    await batch.commit();
+    await tasksRef.doc(taskId).set({ title: title, registered: 0, completed: 0 });
     res.send(success({ taskId: taskId }))
+}))
+
+// edit task title on server
+// (moduleId, taskId, newTitle) => ()
+router.put('/progress-tracker/tasks/admin/title', wrapper(async (req, res, next) => {
+    const { moduleId, taskId, newTitle } = req.body;
+
+    let moduleDoc = await db.collection("Modules").doc(moduleId).get();
+
+    if (!moduleDoc.exists) {
+        res.status(404);
+        throw new Error("Invalid module");
+    }
+
+    let taskRef = moduleDoc.ref.collection("Tasks").doc(taskId);
+    if (!(await taskRef.get()).exists) {
+        res.status(404);
+        throw new Error("Invalid task ID");
+    }
+
+    await taskRef.update({ title: newTitle });
+    res.send(success({}));
+}))
+
+// update statistic of a task on server
+// (moduleId, taskId, newRegistered, newCompleted) => ()
+router.put('/progress-tracker/tasks/admin/stat', wrapper(async (req, res, next) => {
+    const { moduleId, taskId, newRegistered, newCompleted } = req.body;
+
+    let moduleDoc = await db.collection("Modules").doc(moduleId).get();
+
+    if (!moduleDoc.exists) {
+        res.status(404);
+        throw new Error("Invalid module");
+    }
+
+    let taskRef = moduleDoc.ref.collection("Tasks").doc(taskId);
+    if (!(await taskRef.get()).exists) {
+        res.status(404);
+        throw new Error("Invalid task ID");
+    }
+
+    if (![-1, 0, 1].includes(newRegistered) || ![-1, 0, 1].includes(newCompleted)) {
+        res.status(422);
+        throw new Error("Invalid parameter(s)");
+    }
+
+    await taskRef.update({
+        registered: firebase.firestore.FieldValue.increment(newRegistered),
+        completed: firebase.firestore.FieldValue.increment(newCompleted)
+    })
+
+    res.send(success({}));
+
+}))
+
+// get all tasks on server
+// (moduleId) => (allTasks)
+router.post('/progress-tracker/tasks/admin/all', wrapper(async (req, res, next) => {
+    const { moduleId } = req.body;
+
+    let moduleDoc = await db.collection("Modules").doc(moduleId).get();
+
+    if (!moduleDoc.exists) {
+        res.status(404);
+        throw new Error("Invalid module");
+    }
+
+    let allTasks = (await moduleDoc.ref.collection("Tasks").get()).docs.map(doc => doc.data());
+    res.send(success({ allTasks: allTasks }));
 }))
 

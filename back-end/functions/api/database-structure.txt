@@ -30,6 +30,7 @@ Users
 				_moduleId:
 				_isFinished:
 				_details:
+				_reference:
 
 
 Timetable
@@ -43,14 +44,12 @@ Modules:
 	allModules:
 		_moduleId: title
 	moduleId
-		_studentN
-		_tasks
+		_studentN: <number>
+		Tasks:
+			taskId:
+				_title
+				_registered
+				_completed
 
-TaskPT:
-	taskId:
-		_moduleId
-		_title
-		_registered
-		_completed
 
 

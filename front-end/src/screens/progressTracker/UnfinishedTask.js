@@ -24,7 +24,7 @@ export default function Unfinished({ navigation, route }) {
 
     const renderItem = ({ item }) => (
         <View style={styles.item}>
-            <TouchableOpacity onPress={() => navigation.navigate('Edit Unfinished', item)}>
+            <TouchableOpacity onPress={() => navigation.navigate('Edit Unfinished', { ...item, moduleId: moduleId, isAdd: false })}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <View>
                         <Text>{item.title}</Text>
@@ -50,7 +50,7 @@ export default function Unfinished({ navigation, route }) {
                     renderItem={renderItem}
                 />
 
-                <FloatingAdd onPress={() => navigation.navigate("Add Unfinished", { moduleId: moduleId })} />
+                <FloatingAdd onPress={() => navigation.navigate("Edit Unfinished", { moduleId: moduleId, title: "", taskId: "", details: "", isAdd: true })} />
             </View>
         </TouchableWithoutFeedback >
     )
