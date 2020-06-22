@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { SuggestInput, PrettyTextInput, UserIdContext } from '../../components/index'
+import { SuggestInput, PrettyTextInput, UserIdContext, YellowHeader } from '../../components/index'
 import { addModule, updateModulesData, getModulesData } from '../../utils/data-fetchers/ProgressTracker'
 import { Searchbar } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -28,6 +28,7 @@ export default function Finished({ navigation }) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
             <View style={{ flex: 1 }}>
+                <YellowHeader title="New module" onPressBack={() => navigation.pop()} />
                 <Spinner
                     visible={loading}
                     textContent='Loading...'

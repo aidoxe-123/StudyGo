@@ -7,6 +7,7 @@ import AddFinished from '../screens/progressTracker/Add Finished';
 //import AddUnfinished from '../screens/progressTracker/Add Unfinished';
 import EditFinished from '../screens/progressTracker/EditFinished';
 import EditUnfinished from '../screens/progressTracker/EditUnfinished';
+import LinkTask from '../screens/progressTracker/Link';
 import { Header } from '../components/index'
 
 const Stack = createStackNavigator()
@@ -20,6 +21,7 @@ export default function ProgressTrackerStack() {
           color: '#fff'
         },
         headerTintColor: '#fff',
+        headerLeft: null
       }}
     >
       <Stack.Screen
@@ -27,7 +29,7 @@ export default function ProgressTrackerStack() {
         component={ProgressTracker}
         options={({ navigation }) => {
           return {
-            headerTitle: () => <Header title='Modules' navigation={navigation} />
+            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
           }
         }}
       />
@@ -37,7 +39,7 @@ export default function ProgressTrackerStack() {
         component={Module}
         options={({ navigation, route }) => {
           return {
-            headerTitle: () => <Header title={route.params.moduleId} navigation={navigation} />
+            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
           }
         }}
       />
@@ -47,7 +49,7 @@ export default function ProgressTrackerStack() {
         component={AddModule}
         options={({ navigation }) => {
           return {
-            headerTitle: () => <Header title='New module' navigation={navigation} />
+            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
           }
         }}
       />
@@ -57,7 +59,7 @@ export default function ProgressTrackerStack() {
         component={AddFinished}
         options={({ navigation }) => {
           return {
-            headerTitle: () => <Header title='New tasks' navigation={navigation} />
+            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
           }
         }}
       />
@@ -77,7 +79,7 @@ export default function ProgressTrackerStack() {
         component={EditFinished}
         options={({ navigation }) => {
           return {
-            headerTitle: () => <Header title='Edit' navigation={navigation} />
+            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
           }
         }}
       />
@@ -87,7 +89,17 @@ export default function ProgressTrackerStack() {
         component={EditUnfinished}
         options={({ navigation, route }) => {
           return {
-            headerTitle: () => <Header title={route.params.isAdd ? 'Add task' : 'Edit task'} navigation={navigation} />
+            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
+          }
+        }}
+      />
+
+      <Stack.Screen
+        name="Link"
+        component={LinkTask}
+        options={({ navigation }) => {
+          return {
+            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
           }
         }}
       />

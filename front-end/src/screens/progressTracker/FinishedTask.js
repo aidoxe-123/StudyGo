@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
 import { getTasks } from '../../utils/data-fetchers/ProgressTracker';
-import { FloatingAdd, UserIdContext } from '../../components/index'
+import { FloatingAdd, UserIdContext, YellowHeader } from '../../components/index'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../../style/TodoStyles.js'
 import wrapper from '../../utils/data-fetchers/fetchingWrapper'
@@ -36,6 +36,7 @@ export default function Finished({ navigation, route }) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
+                <YellowHeader title={moduleId} onPressBack={() => navigation.pop()} />
                 <Spinner
                     visible={loading}
                     textContent='Loading...'

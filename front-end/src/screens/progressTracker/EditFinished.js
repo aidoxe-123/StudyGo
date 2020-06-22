@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput, RadioButtons, UserIdContext, Spinner } from '../../components/index'
+import { PrettyTextInput, RadioButtons, UserIdContext, Spinner, YellowHeader } from '../../components/index'
 import { updateTask } from '../../utils/data-fetchers/ProgressTracker';
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
 
@@ -39,6 +39,7 @@ export default function Finished({ navigation, route }) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
             <View style={{ flex: 1 }}>
+                <YellowHeader title="Edit task" onPressBack={() => navigation.pop()} />
                 {/*Title input text box*/}
                 <Spinner
                     visible={loading}

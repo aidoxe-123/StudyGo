@@ -35,9 +35,10 @@ router.post('/progress-tracker/modules', wrapper(async (req, res, next) => {
         throw new Error("Invalid ID");
     }
 
-    let moduleDoc = await db.collection("Modules").doc(moduleId).get();
+    let moduleDoc = await db.collection("Modules").doc("allModules").get();
 
-    if (!moduleDoc.exists) {
+    let title = moduleDoc.get(moduleId);
+    if (title === undefined) {
         res.status(404);
         throw new Error("Invalid module");
     }
@@ -139,7 +140,9 @@ router.post('/progress-tracker/tasks', wrapper(async (req, res, next) => {
         moduleId: moduleId,
         title: title,
         isFinished: isFinished,
-        details: details
+        details: details,
+        isHost: false,
+        reference: ""
     })
     res.send(success({ taskId: taskId }));
 }))
@@ -189,10 +192,10 @@ router.delete('/progress-tracker/tasks', wrapper(async (req, res, next) => {
     res.send(success({}));
 }))
 
-// link user's task to a public one
-// (userId, taskId, moduleId, refId) => ()
+// link user's task to a public one or link to nothing.
+// (userId, taskId, moduleId, refId, isHost) => ()
 router.post('/progress-tracker/tasks/ref', wrapper(async (req, res, next) => {
-    const { userId, taskId, moduleId, refId } = req.body;
+    const { isHost, userId, taskId, moduleId, refId } = req.body;
     // check user id
     let idDoc = await db.collection('users').doc(userId).get();
     if (!idDoc.exists) {
@@ -205,14 +208,17 @@ router.post('/progress-tracker/tasks/ref', wrapper(async (req, res, next) => {
         throw new Error("Invalid task ID");
     }
 
-    let refDoc = await db.collection('Modules').doc(moduleId).collection('Tasks').doc(refId).get();
-    if (!refDoc.exists) {
-        res.status(404);
-        throw new Error("Invalid public task ID");
+    if (refId !== "") {
+        let refDoc = await db.collection('Modules').doc(moduleId).collection('Tasks').doc(refId).get();
+        if (!refDoc.exists) {
+            res.status(404);
+            throw new Error("Invalid public task ID");
+        }
     }
 
     await idDoc.ref.collection("ProgressTracker").doc(taskId).update({
-        reference: refId
+        reference: refId,
+        isHost: isHost
     })
 
     res.send(success({}));
@@ -242,9 +248,15 @@ router.post('/progress-tracker/tasks/all', wrapper(async (req, res, next) => {
 }))
 
 // add new task to server
-// (moduleId, title) => (taskId)
+// (moduleId, title, userId) => (taskId)
 router.post('/progress-tracker/tasks/admin', wrapper(async (req, res, next) => {
-    const { moduleId, title } = req.body;
+    const { moduleId, title, userId } = req.body;
+
+    let idDoc = await db.collection('users').doc(userId).get();
+    if (!idDoc.exists) {
+        res.status(404);
+        throw new Error("Invalid user ID");
+    }
 
     let moduleDoc = await db.collection("Modules").doc(moduleId).get();
 
@@ -258,14 +270,14 @@ router.post('/progress-tracker/tasks/admin', wrapper(async (req, res, next) => {
     let taskId;
     do { taskId = v4(); } while (existId.includes(taskId));
 
-    await tasksRef.doc(taskId).set({ title: title, registered: 0, completed: 0 });
+    await tasksRef.doc(taskId).set({ host: userId, title: title, registered: 0, completed: 0 });
     res.send(success({ taskId: taskId }))
 }))
 
 // edit task title on server
-// (moduleId, taskId, newTitle) => ()
+// (userId, moduleId, taskId, newTitle) => ()
 router.put('/progress-tracker/tasks/admin/title', wrapper(async (req, res, next) => {
-    const { moduleId, taskId, newTitle } = req.body;
+    const { userId, moduleId, taskId, newTitle } = req.body;
 
     let moduleDoc = await db.collection("Modules").doc(moduleId).get();
 
@@ -274,13 +286,18 @@ router.put('/progress-tracker/tasks/admin/title', wrapper(async (req, res, next)
         throw new Error("Invalid module");
     }
 
-    let taskRef = moduleDoc.ref.collection("Tasks").doc(taskId);
-    if (!(await taskRef.get()).exists) {
+    let taskDoc = await moduleDoc.ref.collection("Tasks").doc(taskId).get();
+    if (!taskDoc.exists) {
         res.status(404);
         throw new Error("Invalid task ID");
     }
 
-    await taskRef.update({ title: newTitle });
+    if (taskDoc.get("host") !== userId) {
+        res.status(401);
+        throw new Error("Unauthorized");
+    }
+
+    await taskDoc.ref.update({ title: newTitle });
     res.send(success({}));
 }))
 
@@ -328,7 +345,7 @@ router.post('/progress-tracker/tasks/admin/all', wrapper(async (req, res, next) 
         throw new Error("Invalid module");
     }
 
-    let allTasks = (await moduleDoc.ref.collection("Tasks").get()).docs.map(doc => doc.data());
+    let allTasks = (await moduleDoc.ref.collection("Tasks").get()).docs.map(doc => { let out = doc.data(); out.taskId = doc.id; return out; });
     res.send(success({ allTasks: allTasks }));
 }))
 

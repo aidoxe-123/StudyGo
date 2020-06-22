@@ -7,8 +7,10 @@ import DatePicker from './DatePicker'
 import Header from './Header'
 import Spinner from './Spin'
 import SuggestInput from './SuggestInput'
+import YellowHeader from './YellowLine'
 
 export {
+  YellowHeader,
   SuggestInput,
   Spinner,
   FloatingAdd,

@@ -10,8 +10,8 @@ import { View, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native
 
 export default function (props) {
     const [suggest, setSuggest] = useState([]);
-    const { allOptions, dataExtractor, renderOption, onChoose, keyExtractor } = props;
-    const [text, setText] = useState("")
+    const { allOptions, dataExtractor, renderOption, onChoose, keyExtractor, initialText } = props;
+    const [text, setText] = useState(initialText !== undefined ? initialText : "")
 
     const onChangeSearch = (query) => {
         setText(query);
@@ -28,6 +28,7 @@ export default function (props) {
             <Searchbar
                 onChangeText={onChangeSearch}
                 value={text}
+                defaultValue={text}
             />
 
             <FlatList

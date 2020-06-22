@@ -110,7 +110,8 @@ export const addTask = async (userId, moduleId, title, isFinished, details) => {
             details: details
         })
     }
-    let res = await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/tasks', requestOption)
+    let res = await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/tasks', requestOption).then(res => res.json());
+    return res.taskId;
 }
 
 export const updateTask = async (userId, taskId, title, isFinished, details) => {
@@ -128,7 +129,7 @@ export const updateTask = async (userId, taskId, title, isFinished, details) => 
     let res = await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/tasks', requestOption)
 }
 
-export const deleteTasks = async (userId, taskId) => {
+export const deleteTask = async (userId, taskId) => {
     let requestOption = {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -138,4 +139,73 @@ export const deleteTasks = async (userId, taskId) => {
         })
     }
     await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/tasks', requestOption)
+}
+
+export const hostTask = async (moduleId, title, userId) => {
+    let requestOption = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            moduleId: moduleId,
+            title: title,
+            userId: userId
+        })
+    }
+    let res = await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/tasks/admin', requestOption).then(res => res.json());
+    return res.taskId;
+}
+
+export const linkTask = async (userId, taskId, moduleId, refId, isHost) => {
+    let requestOption = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            moduleId: moduleId,
+            taskId: taskId,
+            refId: refId,
+            isHost: isHost,
+            userId: userId
+        })
+    }
+    await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/tasks/ref', requestOption);
+}
+
+export const editTitle = async (userId, moduleId, taskId, newTitle) => {
+    let requestOption = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            userId: userId,
+            moduleId: moduleId,
+            taskId: taskId,
+            newTitle: newTitle
+        })
+    }
+    await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/tasks/admin/title', requestOption);
+}
+
+export const editStat = async (moduleId, taskId, newRegistered, newCompleted) => {
+    let requestOption = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            moduleId: moduleId,
+            taskId: taskId,
+            newRegistered: newRegistered,
+            newCompleted: newCompleted
+        })
+    }
+    await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/tasks/admin/stat', requestOption);
+}
+
+export const getPublicTasks = async (moduleId) => {
+    let requestOption = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            moduleId: moduleId,
+        })
+    }
+    let res = await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/tasks/admin/all', requestOption).then(res => res.json());
+    return res.allTasks;
 }

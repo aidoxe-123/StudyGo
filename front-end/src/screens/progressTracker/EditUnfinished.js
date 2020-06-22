@@ -1,41 +1,83 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput, UserIdContext, Spinner } from '../../components/index'
-import { updateTask, addTask } from '../../utils/data-fetchers/ProgressTracker';
+import { PrettyTextInput, UserIdContext, Spinner, YellowHeader } from '../../components/index'
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
+import { addOrEdit, link, deleteT, completeTask } from '../../utils/progress-tracker-task-handler';
 
 export default function Finished({ navigation, route }) {
-    const { title, taskId, details, isAdd, moduleId } = route.params;
-    const [newTitle, setTitle] = useState(title);
-    const [newProgress, setProgress] = useState(details);
+    let { title, taskId, details, isAdd, moduleId, reference, newRefId, isHost, willHost, data } = route.params;
     const userId = useContext(UserIdContext);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
 
-    const handleTitleInput = (text) => { setTitle(text); }
-    const handleProgressInput = (text) => { setProgress(text); }
+    const [newTitle, setTitle] = useState(title);
+    const [newDetails, setDetails] = useState(details);
+
+    useEffect(() => {
+        console.log(route.params);
+    }, []);
 
     const handleAdd = () => {
+        console.log(route.params);
         if (newTitle === "") Alert.alert("", "Please input the title!");
         else {
             setLoading(true);
 
-            wrapper(() => isAdd
-                ? addTask(userId, moduleId, newTitle, false, newProgress)
-                : updateTask(userId, taskId, newTitle, false, newProgress),
+            let callback = async () => {
+                let newTaskId = await addOrEdit(isAdd, userId, moduleId, taskId, newTitle, false, newDetails);
+
+                if (willHost || newRefId !== "") await link(userId, moduleId, newTaskId, newTitle, false, reference, newRefId)
+            }
+
+            wrapper(callback,
                 response => { setLoading(false); navigation.goBack(); })
+        }
+    }
+
+    const handleDelete = () => {
+        setLoading(true);
+        wrapper(() => deleteT(userId, taskId, false, reference, moduleId), response => { setLoading(false); navigation.goBack(); })
+    }
+
+    const handleFinish = () => {
+        setLoading(true);
+        wrapper(() => completeTask(userId, moduleId, title, taskId, reference, true), response => { setLoading(false); navigation.goBack(); })
+    }
+
+    const OptionalDelete = () => {
+        if (!isAdd) {
+            return (
+                < View style={{ flex: 1, alignItems: 'center' }}>
+                    <TouchableOpacity onPress={handleDelete} style={styles.DoneButton}>
+                        <Text style={{ color: "white" }}>Delete</Text>
+                    </TouchableOpacity>
+                </View >
+            )
+        }
+    }
+
+    const OptionalFinish = () => {
+        if (!isAdd) {
+            return (
+                <View style={{ flex: 1, alignItems: 'center' }}>
+                    <TouchableOpacity onPress={handleFinish} style={styles.DoneButton}>
+                        <Text style={{ color: "white" }}>Complete</Text>
+                    </TouchableOpacity>
+                </View>
+            )
         }
     }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
             <View style={{ flex: 1 }}>
+                <YellowHeader title={isAdd ? "Add task" : "Edit task"} onPressBack={() => navigation.pop()} />
                 <Spinner
                     visible={loading}
                 />
                 {/*Title input*/}
                 <View style={styles.InputWithTitle}>
                     <PrettyTextInput
-                        onChangeText={text => handleTitleInput(text)}
+                        onChangeText={setTitle}
                         value={newTitle}
                         placeholder="What have yet to finished?"
                     />
@@ -45,12 +87,27 @@ export default function Finished({ navigation, route }) {
                 {/*Progress percentage input*/}
                 <View style={styles.InputWithTitle} >
                     <PrettyTextInput
-                        onChangeText={text => handleProgressInput(text)}
-                        value={newProgress}
+                        onChangeText={setDetails}
+                        value={newDetails}
                         placeholder="How much have you done?"
                     />
                     <Text>Progress</Text>
                 </View>
+
+                <View style={{ flex: 1, alignItems: 'center' }}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Link', { moduleId: moduleId, refId: reference, isHost: isHost, data: data })}
+                        style={styles.DoneButton}>
+
+                        <Text style={{ color: "white" }}>Link option</Text>
+
+                    </TouchableOpacity>
+                    <Text>{willHost ? "host a task" : (newRefId !== "" ? "linked to a public task" : "")}</Text>
+                </View>
+
+                {OptionalFinish()}
+
+                {OptionalDelete()}
 
                 {/*Add button*/}
                 <View style={{ flex: 1, alignItems: 'center' }}>
@@ -58,6 +115,8 @@ export default function Finished({ navigation, route }) {
                         <Text style={{ color: "white" }}>Done</Text>
                     </TouchableOpacity>
                 </View>
+
+
             </View>
         </TouchableWithoutFeedback>
 
