@@ -44,10 +44,11 @@ const styles = StyleSheet.create({
     marginLeft: 14,
   },
   dot: {
-    borderRadius: 25,
     width: 50, 
     height: 50, 
-    marginRight: 7
+    borderRadius: 25,
+    marginRight: 7,
+    overflow: 'hidden'
   },
   red: {
     backgroundColor: '#dc143c'
