@@ -93,7 +93,7 @@ export default function AddEventModal({onFinishAdding, refetchData, dateString})
               </TouchableOpacity>
             </View>
             <View style={styles.content}>
-              <RadioButtons onPressIndex={handleChoice} initialChoice={choice}>
+              <RadioButtons onPressIndex={handleChoice}>
                   {/*Choice 1*/}
                   <Text>Deadline</Text>
                   {/*Choice 2*/}
