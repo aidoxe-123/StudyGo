@@ -5,16 +5,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../../style/TodoStyles.js'
 import TodoItem from './TodoItem.js'
 import { UserIdContext } from '../../components/index'
-
-/* features that are not yet implemented:
-+ still cannot store the task locally by date 
-  -> every time a change is made, we have to wait for the data
-  -> when add/edit/delete, have to post to the api the add/edit/delete request 
-    and then fetch back all the tasks from the api to display
-  -> plan to have a local data base on the front end to store the tasks,
-   only upload the changes to the api once to minimize loading time
-+ still cannot work with out the internet
-*/
+import { allTasks } from './DataFetcher'
 
 export default function TodoList({ navigation }) {
   const isFocused = useIsFocused()
@@ -31,25 +22,9 @@ export default function TodoList({ navigation }) {
   useEffect(() => {
     if (isFocused) {
       setLoading(true)
-      const requestOptions = {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          id: userId
-        })
-      }
-      fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list/all', requestOptions)
-        .then(res => res.json())
-        .then(data => data.tasks)
-        .then(tasksArr => tasksArr.map(task => {
-          return {
-            ...task,
-            date: new Date(Date.parse(task.date))
-          }
-        }))
-        .then(tasksWithCorrectDateFormat => setTodos(tasksWithCorrectDateFormat))
-        .then(() => setLoading(false))
-        .catch(error => console.log(error))
+      allTasks(userId)
+      .then(tasksWithCorrectDateFormat => setTodos(tasksWithCorrectDateFormat))
+      .then(() => setLoading(false))
     }
   }, [isFocused])
 
@@ -72,7 +47,7 @@ export default function TodoList({ navigation }) {
               <TouchableOpacity onPress={() => navigation.navigate('EditDeadline', {
                 itemId: item.id,
                 itemTask: item.task,
-                itemDate: item.date.toDateString()
+                itemDate: item.date.toString()
               })} >
                 <TodoItem item={item} />
               </TouchableOpacity>

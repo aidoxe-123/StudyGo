@@ -1,43 +1,45 @@
 import React, { useState, useContext } from 'react'
 import { View, TextInput, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import { Fontisto, Ionicons } from '@expo/vector-icons'
+import { Fontisto, Ionicons, Feather } from '@expo/vector-icons'
 import { AddTodoStyles } from '../../../style/AddTodoStyles'
 import { YellowLine } from '../../../style/yellowLine'
 import { UserIdContext, DatePicker } from '../../components/index'
+import { addTask } from './DataFetcher'
 
 export default function AddTodo({navigation}) {
     const userId = useContext(UserIdContext)
     const [text, setText] = useState('')
     const [date, setDate] = useState(new Date())
     const [editDate, setEditDate] = useState(false)
+    const [editTime, setEditTime] = useState(false)
 
-    var dateString = date.getDate() + '/' + date.getMonth() + '/' + (date.getYear() + 1900)
+    var dateString = date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getYear() + 1900)
+    var timeString = toTwoDigitString(date.getHours()) + ":" + toTwoDigitString(date.getMinutes())
+
+    function toTwoDigitString(num) {
+      return num >= 10 ? "" + num : "0" + num
+    }
 
     function handleSubmit() {
-        if (text.length >= 1) {
-            const requestOptions = {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({
-                id: userId,
-                task: {
-                  title: text,
-                  date: date,
-                }
-              })
-            }
-            fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list', requestOptions)
-              .then(() => {
+        if (text.length >= 1) {     
+            addTask(userId, text, date)
+            .then(() => {
                 setText('')
                 setDate(new Date())
                 navigation.navigate('Deadlines')
-              })
-              .catch(error => console.log(error))      
+            })
         }        
     }
 
-    function handleChangeDateTimePicker(event, date) {
+    function handleChangeDatePicker(event, date) {
         setEditDate(false)
+        if (typeof date !== 'undefined') {
+            setDate(date)
+        }
+    }
+
+    function handleChangeTimePicker(event, date) {
+        setEditTime(false)
         if (typeof date !== 'undefined') {
             setDate(date)
         }
@@ -63,12 +65,32 @@ export default function AddTodo({navigation}) {
                         onChangeText={(value) => setText(value)}
                         value={text}
                     />
-                    
-                    <Text style={AddTodoStyles.label}>{"\n"}Add date:</Text>
-                    <View style={AddTodoStyles.dateView}>
-                        <Text style={AddTodoStyles.dateBox}>{dateString}</Text>
-                        <Fontisto name='date' size={28} color='#333' onPress={() => setEditDate(true)}/>
-                        <DatePicker showDatePicker={editDate} date={date} handleChange={handleChangeDateTimePicker}/>
+                    <View style={{flexDirection: 'row', marginTop: 20}}>
+                        <View>
+                            <Text style={AddTodoStyles.label}>{"\n"}Date:</Text>
+                            <View style={AddTodoStyles.dateView}>
+                                <Text style={AddTodoStyles.dateBox}>{dateString}</Text>
+                                <Fontisto name='date' size={28} color='#333' onPress={() => setEditDate(true)}/>
+                                <DatePicker 
+                                    showDatePicker={editDate} 
+                                    value={date} 
+                                    handleChange={handleChangeDatePicker}
+                                />
+                            </View>
+                        </View>
+                        <View style={{marginLeft: 20}}>
+                            <Text style={AddTodoStyles.label}>Time:</Text>
+                            <View style={AddTodoStyles.dateView}>
+                            <Text style={AddTodoStyles.dateBox}>{timeString}</Text>
+                            <Feather name='clock' size={28} color='#333' onPress={() => setEditTime(true)}/>
+                            <DatePicker 
+                                showDatePicker={editTime} 
+                                value={date}  
+                                handleChange={handleChangeTimePicker}
+                                mode='time'
+                            />
+                            </View>
+                        </View>
                     </View>
                 </View>
                 <View style={AddTodoStyles.bottomRow}>
