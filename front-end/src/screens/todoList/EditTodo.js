@@ -8,6 +8,7 @@ import { AddTodoStyles } from '../../../style/AddTodoStyles'
 import { YellowLine } from '../../../style/yellowLine'
 import { UserIdContext, DatePicker } from '../../components/index'
 import { deleteTask, editTask } from './DataFetcher'
+import { Notifications } from 'expo'
 
 export default function EditTodo({ route, navigation }) {
     const userId = useContext(UserIdContext)
@@ -51,10 +52,24 @@ export default function EditTodo({ route, navigation }) {
     }
 
     function handleNotify() {
+      if (date - new Date() > 3600 * 1000) {
+        const notification1HourBefore = {
+          title: 'Deadline notification',
+          body: task + 'will happen in one hour'
+        }
+        Notifications.scheduleLocalNotificationAsync(
+          notification1HourBefore,
+          {time: date - 3600 * 1000}
+        )
+      }
       const notification = {
         title: 'Deadline notification',
-        body: 'The event will happen in one hour'
+        body: 'It is now the deadline of ' + task
       }
+      Notifications.scheduleLocalNotificationAsync(
+        notification,
+        {time: date}
+      )
     }
 
     return (
@@ -71,12 +86,15 @@ export default function EditTodo({ route, navigation }) {
               </View> 
             </TouchableOpacity>
             <Text h1 style={YellowLine.headerText}>Task Info</Text>
-            <TouchableOpacity style={YellowLine.rightWhiteButton}>
-              <View style={[YellowLine.insideWhiteButton, {paddingHorizontal: 5}]}>
-                <Text>Notify me</Text>
-                <Feather name="bell" size={24} color="black" />
-              </View> 
-            </TouchableOpacity>
+            {
+              date > new Date() &&
+              <TouchableOpacity style={YellowLine.rightWhiteButton} onPress={handleNotify}>
+                <View style={[YellowLine.insideWhiteButton, {paddingHorizontal: 5}]}>
+                  <Text>Notify me</Text>
+                  <Feather name="bell" size={24} color="black" />
+                </View> 
+              </TouchableOpacity>
+            }  
           </View>
           <View style={AddTodoStyles.form}>
             <Text style={AddTodoStyles.label}>Task name:</Text>

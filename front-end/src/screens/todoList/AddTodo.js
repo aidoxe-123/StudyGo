@@ -67,7 +67,7 @@ export default function AddTodo({navigation}) {
                     />
                     <View style={{flexDirection: 'row', marginTop: 20}}>
                         <View>
-                            <Text style={AddTodoStyles.label}>{"\n"}Date:</Text>
+                            <Text style={AddTodoStyles.label}>Date:</Text>
                             <View style={AddTodoStyles.dateView}>
                                 <Text style={AddTodoStyles.dateBox}>{dateString}</Text>
                                 <Fontisto name='date' size={28} color='#333' onPress={() => setEditDate(true)}/>
