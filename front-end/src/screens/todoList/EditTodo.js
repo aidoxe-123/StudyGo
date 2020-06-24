@@ -42,7 +42,7 @@ export default function EditTodo({ route, navigation }) {
       if (task.length > 0) {
         var hasNoti = false
         Object.keys(notiIds).forEach(key => {
-          if (date - parseInt(keys) > new Date() && notiIds[key] !== '') hasNoti = true
+          if (date - parseInt(key) > new Date() && notiIds[key] !== '') hasNoti = true
         })
         if (hasNoti) {
           Alert.alert("Alert", 
