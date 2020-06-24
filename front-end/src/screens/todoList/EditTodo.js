@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { 
   View, Text, TextInput, TouchableOpacity, 
   TouchableWithoutFeedback, Keyboard, Alert 
@@ -18,20 +18,31 @@ export default function EditTodo({ route, navigation }) {
     const [date, setDate] = useState(new Date(Date.parse(itemDate)))
     const [editDate, setEditDate] = useState(false)
     const [editTime, setEditTime] = useState(false)
-    const initialDate = useState(date)[0]
     
-    const [notiIds, setNotiIds] = useState(itemNoti)
+    const [notiList, setNotiList] = useState({})
     const [openNotiSetting, setOpenNotiSetting] = useState(false)
+
+    const message = {
+      '600000': 'ten minutes',
+      '1800000': 'half an hour',
+      '3600000': 'one hour',
+      '86400000': 'one day'
+    }
 
     var dateString = date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getYear() + 1900)
     var timeString = toTwoDigitString(date.getHours()) + ":" + toTwoDigitString(date.getMinutes())
 
+    useEffect(() => {
+      var currNotiList = {}
+      Object.keys(itemNoti).forEach(key => currNotiList[key] = true)
+      setNotiList(currNotiList)
+    }, [])
     function toTwoDigitString(num) {
       return num >= 10 ? "" + num : "0" + num
     }
 
     function handleDelete() {
-      Object.values(notiIds).forEach(value => { // cancel all notification
+      Object.values(itemNoti).forEach(value => { // cancel all notification
         if (value !== '') Notifications.cancelScheduledNotificationAsync(value)
       })
       deleteTask(userId, itemId)
@@ -39,31 +50,85 @@ export default function EditTodo({ route, navigation }) {
     }
 
     function handleSubmit() {
+      // if (task.length > 0) {
+      //   var hasNoti = false
+      //   Object.keys(notiIds).forEach(key => {
+      //     if (date - parseInt(key) > new Date() && notiIds[key] !== '') hasNoti = true
+      //   })
+      //   if (hasNoti) {
+      //     Alert.alert("Alert", 
+      //       "If you edit this task, all notifications related to your task's old version will be canceled",
+      //       [
+      //         {text: 'Cancel'}, 
+      //         {
+      //           text: 'Proceed', 
+      //           onPress: () => {
+      //             Object.values(notiIds).forEach(value => {
+      //               if (value !== '') Notifications.cancelScheduledNotificationAsync(value)
+      //             })
+      //             editTask(userId, itemId, task, date, {})
+      //               .then(() => navigation.navigate('Deadlines'))
+      //           }
+      //         }
+      //       ]
+      //     )
+      //   } else {
+      //     editTask(userId, itemId, task, date, {})  
+      //     .then(() => navigation.navigate('Deadlines'))
+      //   }
+      // }
       if (task.length > 0) {
-        var hasNoti = false
-        Object.keys(notiIds).forEach(key => {
-          if (date - parseInt(key) > new Date() && notiIds[key] !== '') hasNoti = true
-        })
-        if (hasNoti) {
-          Alert.alert("Alert", 
-            "If you edit this task, all notifications related to your task's old version will be canceled",
-            [
-              {text: 'Cancel'}, 
-              {
-                text: 'Proceed', 
-                onPress: () => {
-                  Object.values(notiIds).forEach(value => {
-                    if (value !== '') Notifications.cancelScheduledNotificationAsync(value)
-                  })
-                  editTask(userId, itemId, task, date, {})
-                    .then(() => navigation.navigate('Deadlines'))
-                }
+        if (date !== itemDate || task !== itemTask) { // if item details are changed
+          // delete all notification of the old version
+          Object.values(itemNoti).forEach(value => {
+            Notifications.cancelScheduledNotificationAsync(value) 
+          })
+          // make new notification
+          var newNotiIds = {}
+          var promises = []
+          Object.keys(notiList).forEach(key => {
+            if (notiList[key] === true) {
+              const notification = {
+                title: 'Deadline notification',
+                body: task + ' will happen in ' + message[key]
               }
-            ]
-          )
-        } else {
-          editTask(userId, itemId, task, date, {})  
-          .then(() => navigation.navigate('Deadlines'))
+              promises.push(Notifications.scheduleLocalNotificationAsync(
+                notification,
+                {time: date - parseInt(key)}
+              ).then(id => {newNotiIds[key] = id}))
+            }
+          })
+          // update api
+          Promise.all(promises)
+          .then(() => {
+            editTask(userId, itemId, task, date, newNotiIds) 
+            navigation.navigate('Deadlines')
+          })
+        } else { // if item details are unchanged
+          var newNotiIds = {}
+          var promises = []
+          Object.keys(notiList).forEach(key => {
+            if (typeof itemNoti[key] !== 'undefined') {
+              // inherit the old notifications
+              newNotiIds[key] = itemNoti[key] 
+            } else if (notiList[key] === true) {
+              // create new notifications
+              const notification = {
+                title: 'Deadline notification',
+                body: task + ' will happen in ' + message[key]
+              }
+              promises.push(Notifications.scheduleLocalNotificationAsync(
+                notification,
+                {time: date - parseInt(key)}
+              ).then(id => {newNotiIds[key] = id}))
+            }
+          })
+          // update api
+          Promise.all(promises)
+          .then(() => {
+            editTask(userId, itemId, task, date, newNotiIds) 
+            navigation.navigate('Deadlines')
+          })
         }
       }
     }
@@ -82,40 +147,8 @@ export default function EditTodo({ route, navigation }) {
       }
     }
 
-    // pass down to the notification setting
-    // handle creating new notifications
-    // duration: number in milisecons, timeMess: string
-    // ------------------------------------------------------------------
-    function handleNotify(duration, timeMess) {
-      if (typeof notiIds[duration.toString()] === 'undefined') { 
-      // if this item has not been notified before
-        if (date - new Date() > duration) {
-          const notification = {
-            title: 'Deadline notification',
-            body: task + ' will happen in ' + timeMess
-          }
-          Notifications.scheduleLocalNotificationAsync(
-            notification,
-            {time: date - duration}
-          ).then(notiId => {
-            var newNotiIds = {
-              ...notiIds,
-              [duration.toString()]: notiId
-            }
-            editTask(userId, itemId, task, date, newNotiIds) 
-            setNotiIds(newNotiIds)
-          })
-          Alert.alert('Success', 'Notification set', [{text: 'OK'}])
-        } else {
-          Alert.alert('Alert',
-            'It is less than ' + timeMess + ' until ' + task,
-            [{text: 'OK'}])
-        }   
-      } else {
-        Alert.alert('Already have notification', 
-            'The notification has been set before', 
-            [{text: 'OK'}])
-      }
+    function handleNotify(duration, state) {
+      notiList[duration.toString()] = state
     }
 
     function openCloseNotificationSetting() {
@@ -137,9 +170,9 @@ export default function EditTodo({ route, navigation }) {
             </TouchableOpacity>
             <Text h1 style={YellowLine.headerText}>Task Info</Text>
             <TouchableOpacity 
-              style={[YellowLine.rightWhiteButton, initialDate < new Date() && {backgroundColor: '#00000080'}]} 
+              style={[YellowLine.rightWhiteButton, date < new Date() && {backgroundColor: '#00000080'}]} 
               onPress={openCloseNotificationSetting}
-              disabled={initialDate < new Date()}
+              disabled={date < new Date()}
             >
               <View style={[YellowLine.insideWhiteButton, {paddingHorizontal: 5}]}>
                 <Text>Notify me</Text>
@@ -198,6 +231,7 @@ export default function EditTodo({ route, navigation }) {
             <NotificationSettings 
               closeModal={openCloseNotificationSetting}
               handleNotify={handleNotify}
+              notiList={notiList}
             />
           }
         </View>

@@ -1,27 +1,43 @@
 import React, { useState } from 'react'
 import { Modal, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
-import { RadioButtons } from '../../components/index'
+import CheckBox from '@react-native-community/checkbox'
 
-export default function NotificationSettings({closeModal, handleNotify}) {
-  // the map variable is for visualization only
-  const map = { tenMin: 0, halfHour: 1, oneHour: 2, oneDay: 3}
-  
-  const [choice, setChoice] = useState()
-  const durationAndMessage = [
-    {duration: 10 * 60 * 1000, mess: 'ten minutes'},
-    {duration: 30 * 60 * 1000, mess: 'half an hour'},
-    {duration: 60 * 60 * 1000, mess: 'one hour'},
-    {duration: 24 * 60 * 60 * 1000, mess: 'one day'}
+export default function NotificationSettings({closeModal, handleNotify, notiList}) {
+  const duration = [
+    10 * 60 * 1000, // 10 mins
+    30 * 60 * 1000, // 30 mins
+    60 * 60 * 1000, // 1 hour
+    24 * 60 * 1000, // one day
   ]
+  
+  const [toggleCheckBox1, setToggleCheckBox1] = useState(
+    typeof notiList[duration[0].toString()] === 'undefined'
+    ? false
+    : notiList[duration[0].toString()]
+  )
+  const [toggleCheckBox2, setToggleCheckBox2] = useState(
+    typeof notiList[duration[1].toString()] === 'undefined'
+    ? false
+    : notiList[duration[1].toString()]
+  )
+  const [toggleCheckBox3, setToggleCheckBox3] = useState(
+    typeof notiList[duration[2].toString()] === 'undefined'
+    ? false
+    : notiList[duration[2].toString()]
+  )
+  const [toggleCheckBox4, setToggleCheckBox4] = useState(
+    typeof notiList[duration[3].toString()] === 'undefined'
+    ? false
+    : notiList[duration[3].toString()]
+  )
 
-  function handleChoice(index) {
-    setChoice(index)
-  }
+  const toggleStates = [toggleCheckBox1, toggleCheckBox2, toggleCheckBox3, toggleCheckBox4]
 
   function handleSet() {
-    handleNotify(durationAndMessage[choice].duration,
-      durationAndMessage[choice].mess)
     closeModal()
+    for (var i = 0; i < 4; i++) {
+      handleNotify(duration[i], toggleStates[i])
+    }
   }
 
   return (
@@ -29,16 +45,38 @@ export default function NotificationSettings({closeModal, handleNotify}) {
         <View style={styles.container}>
           <View style={styles.whiteBox}>
             <Text style={styles.headerText}>Notify me in advance: </Text>
-            <RadioButtons onPressIndex={handleChoice}>
-              {/*Choice 1*/}
-              <Text>10 mins</Text>
-              {/*Choice 2*/}
-              <Text>30 mins</Text>
-              {/*Choice 3*/}
-              <Text>1 hour</Text>
-              {/*Choice 4*/}
-              <Text>1 day</Text>
-            </RadioButtons>
+            <View style={styles.checkboxRow}>
+              <CheckBox
+                disabled={false}
+                value={toggleCheckBox1}
+                onValueChange={() => toggleCheckBox1 ? setToggleCheckBox1(false) : setToggleCheckBox1(true)}
+              />
+              <Text style={styles.choice}>10 Minutes</Text>
+            </View>
+            <View style={styles.checkboxRow}>
+              <CheckBox
+                disabled={false}
+                value={toggleCheckBox2}
+                onValueChange={() => toggleCheckBox2 ? setToggleCheckBox2(false) : setToggleCheckBox2(true)}
+              />
+              <Text style={styles.choice}>30 Minutes</Text>
+            </View>
+            <View style={styles.checkboxRow}>
+              <CheckBox
+                disabled={false}
+                value={toggleCheckBox3}
+                onValueChange={() => toggleCheckBox3 ? setToggleCheckBox3(false) : setToggleCheckBox3(true)}
+              />
+              <Text style={styles.choice}>1 Hour</Text>
+            </View>
+            <View style={styles.checkboxRow}>
+              <CheckBox
+                disabled={false}
+                value={toggleCheckBox4}
+                onValueChange={() => toggleCheckBox4 ? setToggleCheckBox4(false) : setToggleCheckBox4(true)}
+              />
+              <Text style={styles.choice}>1 Day</Text>
+            </View>
             <View style={styles.bottomRow}>
               <TouchableOpacity style={{marginRight: 20}} onPress={closeModal}>
                 <Text>Cancel</Text>
@@ -75,5 +113,13 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
     flexDirection: 'row',
+  },
+  checkboxRow: {
+    marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  choice: {
+    fontSize: 20
   }
 })
