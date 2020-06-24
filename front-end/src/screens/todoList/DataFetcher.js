@@ -1,6 +1,6 @@
 // change task detail in the database
 // ------------------------------------------------------
-export async function editTask(userId, itemId, task, date) {
+export async function editTask(userId, itemId, task, date, noti) {
   const requestOptions = {
     method: 'PUT',
     headers: {'Content-Type': 'application/json'},
@@ -8,7 +8,8 @@ export async function editTask(userId, itemId, task, date) {
       userId: userId,
       taskId: itemId,
       newTitle: task,
-      newDate: date
+      newDate: date,
+      newNoti: noti
     })
   }
   return fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/to-do-list', requestOptions)
@@ -66,6 +67,7 @@ export async function addTask(userId, text, date) {
       task: {
         title: text,
         date: date,
+        noti: {}
       }
     })
   }

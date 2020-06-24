@@ -52,7 +52,7 @@ export default function AddTodo({navigation}) {
                     <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
                         <View style={YellowLine.insideWhiteButton}>
                             <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
-                            <Text style={YellowLine.whiteButtonText}>Cancel</Text>
+                            <Text style={YellowLine.whiteButtonText}>Back</Text>
                         </View> 
                     </TouchableOpacity>
                     <Text h1 style={YellowLine.headerText}>Add Task</Text>

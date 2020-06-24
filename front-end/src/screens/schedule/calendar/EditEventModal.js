@@ -112,11 +112,12 @@ export default function EditEventModal({onFinishEditing, task, refetchData, date
     </Modal>
   )
 }
+////////////////////////////////////////////////////////////////////////////
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00000050',
+    backgroundColor: '#00000080',
     justifyContent: 'center',
     alignItems: 'center'
   },

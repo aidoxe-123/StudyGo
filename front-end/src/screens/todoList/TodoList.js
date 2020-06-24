@@ -47,7 +47,8 @@ export default function TodoList({ navigation }) {
               <TouchableOpacity onPress={() => navigation.navigate('EditDeadline', {
                 itemId: item.id,
                 itemTask: item.task,
-                itemDate: item.date.toString()
+                itemDate: item.date.toString(),
+                itemNoti: typeof item.noti === 'undefined' ? {} : item.noti
               })} >
                 <TodoItem item={item} />
               </TouchableOpacity>
