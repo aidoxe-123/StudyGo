@@ -15,7 +15,8 @@ Users
 		Todolist
 			task
 				_title
-				_deadline
+				_date
+				_noti
 		Calendar
 			month-year	
 				_1

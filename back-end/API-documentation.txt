@@ -33,13 +33,13 @@ POST /users
 
 // add a new task into the to do list
 POST /to-do-list
-    req: id (string (this one is user id)), task (object: { title (string), date (date) })
+    req: id (string (this one is user id)), task (object: { title (string), date (date), noti (boolean) })
     res: taskId (string)
     code:  404 = Invalid user ID
 
 // update an exist task in the to do list
 PUT /to-do-list
-    req: userId (string), taskId (string), newTitle (string), newDate (date)
+    req: userId (string), taskId (string), newTitle (string), newDate (date), newNoti
     res: 
     code:  404 = Invalid user ID or task ID
 
@@ -112,12 +112,13 @@ DELETE /timetable
 // return all registered modules of user
 POST /progress-tracker/modules/all
     req: userId (string)
+    res: modules
 
 // add new module to server
 POST /progress-tracker/modules/admin
     req: moduleId (string), title (string)
 
-// add new module
+// register new module
 POST /progress-tracker/modules
     req: userId (string), moduleId (string)
 
@@ -129,22 +130,43 @@ DELETE /progress-tracker/modules
 POST /progress-tracker/tasks/list
     req: userId (string), moduleId (string), isFinished (boolean)
 
-// add new unfinished task
-POST /progress-tracker/tasks/addUnfinished
-    req: userId (string), moduleId(string), title(string), progress(string)
+// add new task
+POST /progress-tracker/tasks
+    req: userId, moduleId, title, isFinished, details
+    res: taskId
 
-//  add new finished task
-POST /progress-tracker/tasks/addFinished
-    req: userId (string), details (object)
-
-// edit a finished task
-PUT /progress-tracker/tasks/updateFinished
-    req: userId (string), taskId (string), details (object)
-
-// edit an unfinished task
-PUT /progress-tracker/tasks/updateUnfinished
-    req: userId (string), taskId (string), details (object)
+// update a task
+PUT /progress-tracker/tasks
+    req: userId, taskId, title, isFinished, details
 
 // delete a task
 DELETE /progress-tracker/tasks
     req: userId (string), taskId (string)
+
+// link user's task to a public one or link to nothing
+POST /progress-tracker/tasks/ref
+    req: userId, taskId, moduleId, refId, isHost
+
+// get all tasks (either finished or unfinished)
+POST /progress-tracker/tasks/all
+    req: userId, moduleId, isFinished
+    res: tasks
+
+// create a new task on the server
+POST /progress-tracker/tasks/admin
+    req: moduleId, title, userId
+    res: taskId
+
+// edit the task title on server
+PUT /progress-tracker/tasks/admin/title
+    req: userId, moduleId, taskId, newTitle
+
+// update stat of a task on server
+PUT /progress-tracker/tasks/admin/stat
+    req: moduleId, taskId, newRegistered (-1, 0, 1), newCompleted (-1, 0, 1)
+
+// get all tasks on server of a module
+POST /progress-tracker/tasks/admin/all
+    req: moduleId
+    res: allTasks
+

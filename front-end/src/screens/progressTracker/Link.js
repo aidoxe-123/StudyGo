@@ -48,7 +48,7 @@ export default function Finished({ navigation, route }) {
                     {/*Choice 2*/}
                     <Text>Make it public</Text>
                     {/*Choice 3*/}
-                    <Text>Link with existed:</Text>
+                    <Text>Link with existing:</Text>
                 </RadioButtons>
 
                 <View style={styles.InputWithTitle}>
