@@ -10,17 +10,19 @@ import DateTimePicker from '@react-native-community/datetimepicker'
     This function will be called when the user close the DatePicker
   @return: A custom DatePicker component to replace DateTimePicker of @react-native-community/datetimepicker
 */
-export default function DatePicker({ showDatePicker, date, handleChange }) {
+export default function DatePicker({ showDatePicker, value, handleChange, mode }) {
   return (Platform.OS ==='ios'
     ? <Modal visible={showDatePicker}>
         <DateTimePicker
-            value={date}
+            value={value}
             onChange={handleChange}
+            mode={typeof mode === 'undefined' ? 'date' : mode}
         />
     </Modal>
     : showDatePicker && <DateTimePicker
-        value={date}
+        value={value}
         onChange={handleChange}
+        mode={typeof mode === 'undefined' ? 'date' : mode}
     />
   )
 }

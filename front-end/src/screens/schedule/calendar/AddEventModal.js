@@ -118,7 +118,7 @@ export default function AddEventModal({onFinishAdding, refetchData, dateString})
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00000050',
+    backgroundColor: '#00000080',
     justifyContent: 'center',
     alignItems: 'center'
   },

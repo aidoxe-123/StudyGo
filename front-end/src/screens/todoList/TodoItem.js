@@ -4,8 +4,12 @@ import { Ionicons } from '@expo/vector-icons'
 import { TodoItemStyles } from '../../../style/TodoItemStyles.js'
 
 export default function TodoItem({ item }) {
-    var dateString = item.date.getDate() + '/' + item.date.getMonth() + '/' + (item.date.getYear() + 1900)
+    var dateString = item.date.getDate() + '/' + (item.date.getMonth() + 1) + '/' + (item.date.getYear() + 1900)
+        + ' ' + toTwoDigitString(item.date.getHours()) + ':' + toTwoDigitString(item.date.getMinutes())
 
+    function toTwoDigitString(num) {
+        return num >= 10 ? "" + num : "0" + num
+    }
     return (
         <View style={TodoItemStyles.task}>
             <View>
