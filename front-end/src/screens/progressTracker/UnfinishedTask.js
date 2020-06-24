@@ -32,9 +32,11 @@ export default function Unfinished({ navigation, route }) {
     }, [isFocus])
 
     const stat = (item) => {
-        let i = data.filter(itemm => itemm.taskId === item.reference)[0];
-        const { completed, registered } = i;
-        return completed + ' out of ' + registered + ' other(s) completed this'
+        if (item.reference !== "") {
+            let i = data.filter(itemm => itemm.taskId === item.reference)[0];
+            const { completed, registered } = i;
+            return completed + ' out of ' + registered + ' other(s) completed this'
+        } else return "Personal task"
     }
 
     const renderItem = ({ item }) => (

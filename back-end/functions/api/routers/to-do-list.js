@@ -21,7 +21,8 @@ router.post('/to-do-list/all', wrapper(async (req, res) => {
         tasks.push({
             id: docc.id,
             date: docc.get('date'),
-            task: docc.get('title')
+            task: docc.get('title'),
+            noti: docc.get('noti')
         })
     }
     tasks.sort((task1, task2) => (task1.date < task2.date) ? -1 : 1);
@@ -30,7 +31,7 @@ router.post('/to-do-list/all', wrapper(async (req, res) => {
 }));
 
 //given the user id, add the task
-//(id, task) -> (taskId) (task = {title, date})
+//(id, task) -> (taskId) (task = {title, date, noti})
 router.post('/to-do-list', wrapper(async (req, res) => {
     const { task, id } = req.body;
     let doc = await db.collection('users').doc(id).get();
@@ -42,16 +43,17 @@ router.post('/to-do-list', wrapper(async (req, res) => {
 
     doc.ref.collection('to_do_list').add({
         title: task.title,
-        date: task.date
+        date: task.date,
+        noti: task.noti
     }).then(ref =>
         res.send(success({ taskId: ref.id }))
     )
 }));
 
 // given the user id and task id, change the task (either name or date or both)
-// (userId, taskId, newTitle, newDate) -> ()
+// (userId, taskId, newTitle, newDate, newNoti) -> ()
 router.put('/to-do-list', wrapper(async (req, res) => {
-    const { userId, taskId, newTitle, newDate } = req.body;
+    const { userId, taskId, newTitle, newDate, newNoti } = req.body;
 
     let doc = await db.collection('users').doc(userId).get();
 
@@ -67,7 +69,7 @@ router.put('/to-do-list', wrapper(async (req, res) => {
         throw new Error("Invalid task ID");
     }
 
-    await task.ref.set({ title: newTitle, date: newDate });
+    await task.ref.set({ title: newTitle, date: newDate, noti: newNoti });
 
     res.send(success({}));
 }));

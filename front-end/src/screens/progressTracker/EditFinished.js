@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
 import { PrettyTextInput, RadioButtons, UserIdContext, Spinner, YellowHeader } from '../../components/index'
-import { updateTask } from '../../utils/data-fetchers/ProgressTracker';
+import { updateTask, deleteTask } from '../../utils/data-fetchers/ProgressTracker';
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
 
 
@@ -33,7 +33,12 @@ export default function Finished({ navigation, route }) {
         }
         setLoading(true);
         wrapper(() => updateTask(userId, taskId, newTitle, true, details), response => { setLoading(false); navigation.goBack(); });
+    }
 
+    const handleDelete = () => {
+        setLoading(true);
+        wrapper(() => deleteTask(userId, taskId),
+            response => { setLoading(false); navigation.goBack(); })
     }
 
     return (
@@ -65,6 +70,12 @@ export default function Finished({ navigation, route }) {
                         placeholder="Mark (e.g. 38)"
                     />
                 </RadioButtons>
+
+                < View style={{ flex: 1, alignItems: 'center' }}>
+                    <TouchableOpacity onPress={handleDelete} style={styles.DoneButton}>
+                        <Text style={{ color: "white" }}>Delete</Text>
+                    </TouchableOpacity>
+                </View >
 
 
                 <View style={{ flex: 1, alignItems: 'center' }}>

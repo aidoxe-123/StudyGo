@@ -22,7 +22,7 @@ const pretestChecker = (req, res, next) => {
         'POST /api/v1/users': ['id'],
         // to-do-list.js
         'POST /api/v1/to-do-list': ['id', 'task'],
-        'PUT /api/v1/to-do-list': ['userId', 'taskId', 'newTitle', 'newDate'],
+        'PUT /api/v1/to-do-list': ['userId', 'taskId', 'newTitle', 'newDate', 'newNoti'],
         'POST /api/v1/to-do-list/all': ['id'],
         'DELETE /api/v1/to-do-list': ['userId', 'taskId'],
         // calendar.js
