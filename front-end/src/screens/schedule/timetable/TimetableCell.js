@@ -2,9 +2,9 @@ import React, {useState, useRef} from 'react'
 import { TouchableOpacity, Text, View, Modal } from 'react-native'
 import { TimetableStyles } from '../../../../style/TimetableStyles'
 
-export default function TimetableCell({lesson, openModal}) {
+export default function TimetableCell({lesson, openModal, colHeight}) {
   const thisCell = useRef(null)
-  const rowUnit = 530 / 25.5
+  const rowUnit = colHeight / 25.5
   const { name, start, end, description } = lesson
 
   const startHour = (Math.floor(start / 60) < 10 ? "0" + Math.floor(start / 60) : Math.floor(start / 60)) 

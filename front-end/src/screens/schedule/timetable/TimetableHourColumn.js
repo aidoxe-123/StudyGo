@@ -1,6 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
-import { TimetableStyles } from '../../../../style/TimetableStyles'
+import { View, Text, StyleSheet } from 'react-native'
 
 export default function TimetableHourColumn() {
   const timeArray = []
@@ -10,13 +9,27 @@ export default function TimetableHourColumn() {
       : i + ':00' 
   }
   return (
-    <View style={TimetableStyles.hourColumn}>
-        <View style={TimetableStyles.substituteRow}></View>
+    <View style={styles.hourColumn}>
+        <View style={styles.substituteRow}></View>
         {
           timeArray.map(hour => {
-            return <Text style={TimetableStyles.hourText} key={hour}>{hour}</Text>
+            return <Text style={styles.hourText} key={hour}>{hour}</Text>
           })
         }
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  hourColumn: {
+    height: '100%',
+    width: '20%',
+  },
+  hourText: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  substituteRow: {
+    flex: 0.5,
+  },
+})
