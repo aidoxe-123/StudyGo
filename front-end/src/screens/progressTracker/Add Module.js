@@ -40,7 +40,7 @@ export default function Finished({ navigation }) {
                         allOptions={data}
                         onChoose={(choice) => handleAdd(choice)}
                         keyExtractor={item => item.moduleCode}
-                        dataExtractor={item => item.moduleCode + " - " + item.title}
+                        dataExtractor={item => item.moduleCode}
                         renderOption={(item) => (<Text>{item.moduleCode} - {item.title}</Text>)}
                     />
                 </View>

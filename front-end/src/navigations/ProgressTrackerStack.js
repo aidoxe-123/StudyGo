@@ -29,7 +29,7 @@ export default function ProgressTrackerStack() {
         component={ProgressTracker}
         options={({ navigation }) => {
           return {
-            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
+            headerTitle: () => <Header title='Progress' navigation={navigation} />
           }
         }}
       />
@@ -39,7 +39,7 @@ export default function ProgressTrackerStack() {
         component={Module}
         options={({ navigation, route }) => {
           return {
-            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
+            headerTitle: () => <Header title='Progress' navigation={navigation} />
           }
         }}
       />
@@ -49,7 +49,7 @@ export default function ProgressTrackerStack() {
         component={AddModule}
         options={({ navigation }) => {
           return {
-            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
+            headerTitle: () => <Header title='Progress' navigation={navigation} />
           }
         }}
       />
@@ -59,7 +59,7 @@ export default function ProgressTrackerStack() {
         component={AddFinished}
         options={({ navigation }) => {
           return {
-            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
+            headerTitle: () => <Header title='Progress' navigation={navigation} />
           }
         }}
       />
@@ -79,7 +79,7 @@ export default function ProgressTrackerStack() {
         component={EditFinished}
         options={({ navigation }) => {
           return {
-            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
+            headerTitle: () => <Header title='Progress' navigation={navigation} />
           }
         }}
       />
@@ -89,7 +89,7 @@ export default function ProgressTrackerStack() {
         component={EditUnfinished}
         options={({ navigation, route }) => {
           return {
-            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
+            headerTitle: () => <Header title='Progress' navigation={navigation} />
           }
         }}
       />
@@ -99,7 +99,7 @@ export default function ProgressTrackerStack() {
         component={LinkTask}
         options={({ navigation }) => {
           return {
-            headerTitle: () => <Header title='Progress Tracker' navigation={navigation} />
+            headerTitle: () => <Header title='Progress' navigation={navigation} />
           }
         }}
       />
