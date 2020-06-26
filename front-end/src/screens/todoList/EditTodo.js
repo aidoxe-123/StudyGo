@@ -50,33 +50,6 @@ export default function EditTodo({ route, navigation }) {
     }
 
     function handleSubmit() {
-      // if (task.length > 0) {
-      //   var hasNoti = false
-      //   Object.keys(notiIds).forEach(key => {
-      //     if (date - parseInt(key) > new Date() && notiIds[key] !== '') hasNoti = true
-      //   })
-      //   if (hasNoti) {
-      //     Alert.alert("Alert", 
-      //       "If you edit this task, all notifications related to your task's old version will be canceled",
-      //       [
-      //         {text: 'Cancel'}, 
-      //         {
-      //           text: 'Proceed', 
-      //           onPress: () => {
-      //             Object.values(notiIds).forEach(value => {
-      //               if (value !== '') Notifications.cancelScheduledNotificationAsync(value)
-      //             })
-      //             editTask(userId, itemId, task, date, {})
-      //               .then(() => navigation.navigate('Deadlines'))
-      //           }
-      //         }
-      //       ]
-      //     )
-      //   } else {
-      //     editTask(userId, itemId, task, date, {})  
-      //     .then(() => navigation.navigate('Deadlines'))
-      //   }
-      // }
       if (task.length > 0) {
         if (date !== itemDate || task !== itemTask) { // if item details are changed
           // delete all notification of the old version
@@ -88,14 +61,18 @@ export default function EditTodo({ route, navigation }) {
           var promises = []
           Object.keys(notiList).forEach(key => {
             if (notiList[key] === true) {
-              const notification = {
-                title: 'Deadline notification',
-                body: task + ' will happen in ' + message[key]
+              if (date - parseInt(key) > new Date()) {
+                const notification = {
+                  title: 'Deadline notification',
+                  body: task + ' will happen in ' + message[key]
+                }
+                promises.push(Notifications.scheduleLocalNotificationAsync(
+                  notification,
+                  {time: date - parseInt(key)}
+                ).then(id => {newNotiIds[key] = id}))
+              } else {
+                newNotiIds[key] = 'some random id'
               }
-              promises.push(Notifications.scheduleLocalNotificationAsync(
-                notification,
-                {time: date - parseInt(key)}
-              ).then(id => {newNotiIds[key] = id}))
             }
           })
           // update api
@@ -108,19 +85,23 @@ export default function EditTodo({ route, navigation }) {
           var newNotiIds = {}
           var promises = []
           Object.keys(notiList).forEach(key => {
-            if (typeof itemNoti[key] !== 'undefined') {
-              // inherit the old notifications
-              newNotiIds[key] = itemNoti[key] 
-            } else if (notiList[key] === true) {
-              // create new notifications
-              const notification = {
-                title: 'Deadline notification',
-                body: task + ' will happen in ' + message[key]
+            if (notiList[key] === true) {
+              if (typeof itemNoti[key] !== 'undefined') {
+                //inherit the old notifications
+                newNotiIds[key] = itemNoti[key]
+              } else if (date - parseInt(key) > new Date()) {
+                // create new notifications
+                const notification = {
+                  title: 'Deadline notification',
+                  body: task + ' will happen in ' + message[key]
+                }
+                promises.push(Notifications.scheduleLocalNotificationAsync(
+                  notification,
+                  {time: date - parseInt(key)}
+                ).then(id => {newNotiIds[key] = id}))
+              } else {
+                newNotiIds[key] = 'some random id'
               }
-              promises.push(Notifications.scheduleLocalNotificationAsync(
-                notification,
-                {time: date - parseInt(key)}
-              ).then(id => {newNotiIds[key] = id}))
             }
           })
           // update api
