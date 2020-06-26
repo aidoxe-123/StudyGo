@@ -38,7 +38,7 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
     {dayName: 'monday'},
     {dayName: 'tuesday'},
     {dayName: 'wednesday'},
-    {dayName: 'thurday'},
+    {dayName: 'thursday'},
     {dayName: 'friday'},
   ])[0]
 

@@ -50,33 +50,6 @@ export default function EditTodo({ route, navigation }) {
     }
 
     function handleSubmit() {
-      // if (task.length > 0) {
-      //   var hasNoti = false
-      //   Object.keys(notiIds).forEach(key => {
-      //     if (date - parseInt(key) > new Date() && notiIds[key] !== '') hasNoti = true
-      //   })
-      //   if (hasNoti) {
-      //     Alert.alert("Alert", 
-      //       "If you edit this task, all notifications related to your task's old version will be canceled",
-      //       [
-      //         {text: 'Cancel'}, 
-      //         {
-      //           text: 'Proceed', 
-      //           onPress: () => {
-      //             Object.values(notiIds).forEach(value => {
-      //               if (value !== '') Notifications.cancelScheduledNotificationAsync(value)
-      //             })
-      //             editTask(userId, itemId, task, date, {})
-      //               .then(() => navigation.navigate('Deadlines'))
-      //           }
-      //         }
-      //       ]
-      //     )
-      //   } else {
-      //     editTask(userId, itemId, task, date, {})  
-      //     .then(() => navigation.navigate('Deadlines'))
-      //   }
-      // }
       if (task.length > 0) {
         if (date !== itemDate || task !== itemTask) { // if item details are changed
           // delete all notification of the old version
