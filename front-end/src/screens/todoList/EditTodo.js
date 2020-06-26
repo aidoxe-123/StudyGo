@@ -61,14 +61,18 @@ export default function EditTodo({ route, navigation }) {
           var promises = []
           Object.keys(notiList).forEach(key => {
             if (notiList[key] === true) {
-              const notification = {
-                title: 'Deadline notification',
-                body: task + ' will happen in ' + message[key]
+              if (date - parseInt(key) > new Date()) {
+                const notification = {
+                  title: 'Deadline notification',
+                  body: task + ' will happen in ' + message[key]
+                }
+                promises.push(Notifications.scheduleLocalNotificationAsync(
+                  notification,
+                  {time: date - parseInt(key)}
+                ).then(id => {newNotiIds[key] = id}))
+              } else {
+                newNotiIds[key] = 'some random id'
               }
-              promises.push(Notifications.scheduleLocalNotificationAsync(
-                notification,
-                {time: date - parseInt(key)}
-              ).then(id => {newNotiIds[key] = id}))
             }
           })
           // update api
@@ -81,19 +85,23 @@ export default function EditTodo({ route, navigation }) {
           var newNotiIds = {}
           var promises = []
           Object.keys(notiList).forEach(key => {
-            if (typeof itemNoti[key] !== 'undefined') {
-              // inherit the old notifications
-              newNotiIds[key] = itemNoti[key] 
-            } else if (notiList[key] === true) {
-              // create new notifications
-              const notification = {
-                title: 'Deadline notification',
-                body: task + ' will happen in ' + message[key]
+            if (notiList[key] === true) {
+              if (typeof itemNoti[key] !== 'undefined') {
+                //inherit the old notifications
+                newNotiIds[key] = itemNoti[key]
+              } else if (date - parseInt(key) > new Date()) {
+                // create new notifications
+                const notification = {
+                  title: 'Deadline notification',
+                  body: task + ' will happen in ' + message[key]
+                }
+                promises.push(Notifications.scheduleLocalNotificationAsync(
+                  notification,
+                  {time: date - parseInt(key)}
+                ).then(id => {newNotiIds[key] = id}))
+              } else {
+                newNotiIds[key] = 'some random id'
               }
-              promises.push(Notifications.scheduleLocalNotificationAsync(
-                notification,
-                {time: date - parseInt(key)}
-              ).then(id => {newNotiIds[key] = id}))
             }
           })
           // update api
