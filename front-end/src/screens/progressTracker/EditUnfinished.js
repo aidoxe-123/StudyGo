@@ -12,12 +12,7 @@ export default function Finished({ navigation, route }) {
     const [newTitle, setTitle] = useState(title);
     const [newDetails, setDetails] = useState(details);
 
-    useEffect(() => {
-        console.log(route.params);
-    }, []);
-
     const handleAdd = () => {
-        console.log(route.params);
         if (newTitle === "") Alert.alert("", "Please input the title!");
         else {
             setLoading(true);
