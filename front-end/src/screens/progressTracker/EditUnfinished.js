@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native'
+import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import { PrettyTextInput, UserIdContext, Spinner, YellowHeader } from '../../components/index'
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
 import { addOrEdit, link, deleteT, completeTask } from '../../utils/progress-tracker-task-handler';
@@ -12,12 +12,7 @@ export default function Finished({ navigation, route }) {
     const [newTitle, setTitle] = useState(title);
     const [newDetails, setDetails] = useState(details);
 
-    useEffect(() => {
-        console.log(route.params);
-    }, []);
-
     const handleAdd = () => {
-        console.log(route.params);
         if (newTitle === "") Alert.alert("", "Please input the title!");
         else {
             setLoading(true);
@@ -46,7 +41,7 @@ export default function Finished({ navigation, route }) {
     const OptionalDelete = () => {
         if (!isAdd) {
             return (
-                < View style={{ flex: 1, alignItems: 'center' }}>
+                < View style={{ alignItems: 'center', padding: 10 }}>
                     <TouchableOpacity onPress={handleDelete} style={styles.DoneButton}>
                         <Text style={{ color: "white" }}>Delete</Text>
                     </TouchableOpacity>
@@ -58,7 +53,7 @@ export default function Finished({ navigation, route }) {
     const OptionalFinish = () => {
         if (!isAdd) {
             return (
-                <View style={{ flex: 1, alignItems: 'center' }}>
+                <View style={{ alignItems: 'center', padding: 10 }}>
                     <TouchableOpacity onPress={handleFinish} style={styles.DoneButton}>
                         <Text style={{ color: "white" }}>Complete</Text>
                     </TouchableOpacity>
@@ -68,8 +63,9 @@ export default function Finished({ navigation, route }) {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={{ flex: 1 }}>
+
                 <YellowHeader title={isAdd ? "Add task" : "Edit task"} onPressBack={() => navigation.pop()} />
                 <Spinner
                     visible={loading}
@@ -94,7 +90,7 @@ export default function Finished({ navigation, route }) {
                     <Text>Progress</Text>
                 </View>
 
-                <View style={{ flex: 1, alignItems: 'center' }}>
+                <View style={{ alignItems: 'center', padding: 10 }}>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('Link', { moduleId: moduleId, refId: reference, isHost: isHost, data: data })}
                         style={styles.DoneButton}>
@@ -110,16 +106,13 @@ export default function Finished({ navigation, route }) {
                 {OptionalDelete()}
 
                 {/*Add button*/}
-                <View style={{ flex: 1, alignItems: 'center' }}>
+                <View style={{ alignItems: 'center', padding: 10 }}>
                     <TouchableOpacity onPress={() => handleAdd()} style={styles.DoneButton}>
                         <Text style={{ color: "white" }}>Done</Text>
                     </TouchableOpacity>
                 </View>
-
-
             </View>
         </TouchableWithoutFeedback>
-
     )
 }
 
