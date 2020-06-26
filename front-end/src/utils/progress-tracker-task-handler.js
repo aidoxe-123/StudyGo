@@ -77,7 +77,6 @@ export const completeTask = async (userId, moduleId, title, taskId, reference, i
 
 // deal with public tasks
 export const link = async (userId, moduleId, taskId, title, isFinished, prevId, curId) => {
-    console.log("called");
     let same = (prevId === curId);
     let havePrevId = (prevId != "");
     let haveCurId = (curId != "");
@@ -105,13 +104,20 @@ export const link = async (userId, moduleId, taskId, title, isFinished, prevId, 
         await editStat(moduleId, newId + curId, 1, finish);
     }
 
-    console.log(same);
-    console.log(havePrevId);
-    console.log(title);
-
     if (same && havePrevId) {
         await editTitle(userId, moduleId, newId + curId, title);
     }
+}
+
+// miss the case link but not host -> host
+export const link2 = async (userId, moduleId, taskId, title, isFinished, prevId) => {
+    let finish = isFinished ? 1 : 0;
+    let newId = await hostTask(moduleId, title, userId);
+    await Promise.all([
+        editStat(moduleId, prevId, -1, -finish),
+        linkTask(userId, taskId, moduleId, newId, true),
+        editStat(moduleId, newId, 1, finish)
+    ])
 }
 
 
