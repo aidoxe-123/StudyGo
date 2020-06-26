@@ -1,23 +1,11 @@
 import { StyleSheet } from 'react-native'
 
-const timetableHeight = 530
-
 export const TimetableStyles = StyleSheet.create({
   content: {
     marginTop: 10,
     flexDirection: 'row',
     alignSelf: 'stretch',
-    height: timetableHeight,
-  },
-  substituteRow: {
-    flex: 0.5,
-  },
-  hourColumn: {
-    width: '20%',
-  },
-  hourText: {
-    flex: 1,
-    textAlign: 'center',
+    flex: 1
   },
   column: {
     width: 100

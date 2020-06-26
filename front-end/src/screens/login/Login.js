@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native'
+import { 
+  View, Text, TextInput, TouchableWithoutFeedback, 
+  Keyboard, TouchableOpacity, Platform 
+} from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { LoginStyles } from '../../../style/LoginStyles.js'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('')
@@ -68,56 +72,77 @@ export default function Login({ navigation }) {
     }
   }
 
-  return (
-    // still not able to put them in scroll view yet
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={LoginStyles.container}>
-        <Spinner
-          visible={loading}
-          textContent='Loading...'
-          textStyle={LoginStyles.spinner}
+  function form() {
+    return (
+      <View style={LoginStyles.whitePanel}>
+        <Text h2 style={LoginStyles.heading}>LOGIN</Text>
+        {
+          !isValid &&
+          <Text style={LoginStyles.invalidLogin}>Email or password was incorrect, please try again</Text>
+        } 
+        <TextInput 
+          style={LoginStyles.input} 
+          placeholder='Email'
+          value={email}
+          onChangeText={handleInputEmail}
         />
-        <View style={LoginStyles.whitePanel}>
-          <Text h2 style={LoginStyles.heading}>LOGIN</Text>
-          {
-            !isValid &&
-            <Text style={LoginStyles.invalidLogin}>Email or password was incorrect, please try again</Text>
-          } 
-          <TextInput 
-            style={LoginStyles.input} 
-            placeholder='Email'
-            value={email}
-            onChangeText={handleInputEmail}
-          />
-          { 
-            emptyEmail &&
-            <Text style={LoginStyles.wrongInputAlert}>
-              Please enter email
-            </Text>
-          }
-          <TextInput 
-            secureTextEntry={true} 
-            style={LoginStyles.input} 
-            placeholder='Password'
-            value={password}
-            onChangeText={handleInputPassword}
-          />
-          { 
-            emptyPassword &&
-            <Text style={LoginStyles.wrongInputAlert}>
-              Please enter password
-            </Text>
-          }
-          <View style={LoginStyles.bottomRow}>
-            <TouchableOpacity onPress={moveToRegister}>
-              <Text style={LoginStyles.link}>Register</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={LoginStyles.button} onPress={handleLogin}>
-              <Text style={LoginStyles.buttonText}>Login</Text>
-            </TouchableOpacity>
-          </View>
+        { 
+          emptyEmail &&
+          <Text style={LoginStyles.wrongInputAlert}>
+            Please enter email
+          </Text>
+        }
+        <TextInput 
+          secureTextEntry={true} 
+          style={LoginStyles.input} 
+          placeholder='Password'
+          value={password}
+          onChangeText={handleInputPassword}
+        />
+        { 
+          emptyPassword &&
+          <Text style={LoginStyles.wrongInputAlert}>
+            Please enter password
+          </Text>
+        }
+        <View style={LoginStyles.bottomRow}>
+          <TouchableOpacity onPress={moveToRegister}>
+            <Text style={LoginStyles.link}>Register</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={LoginStyles.button} onPress={handleLogin}>
+            <Text style={LoginStyles.buttonText}>Login</Text>
+          </TouchableOpacity>
         </View>
       </View>
+    )
+  }
+
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      {
+        Platform.OS ==='ios'
+        ? <KeyboardAwareScrollView 
+            style={{backgroundColor: 'coral'}}
+            resetScrollToCoords={{x: 0, y: 0}}
+            contentContainerStyle={LoginStyles.container}
+            scrollEnabled={true}
+          >
+            <Spinner
+              visible={loading}
+              textContent='Loading...'
+              textStyle={LoginStyles.spinner}
+            />
+            {form()}
+          </KeyboardAwareScrollView>
+        : <View style={LoginStyles.container}>
+            <Spinner
+              visible={loading}
+              textContent='Loading...'
+              textStyle={LoginStyles.spinner}
+            />
+            {form()}
+          </View>
+      }
     </TouchableWithoutFeedback>
   )
 }
