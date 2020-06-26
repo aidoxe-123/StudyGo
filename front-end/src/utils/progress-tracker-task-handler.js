@@ -1,4 +1,4 @@
-import { addTask, updateTask, hostTask, linkTask, editStat, editTitle, deleteTask } from "./data-fetchers/ProgressTracker";
+import { addTask, updateTask, hostTask, linkTask, editStat, editTitle, deleteTask, getTasks, deleteModule } from "./data-fetchers/ProgressTracker";
 
 // deal with personal task
 export const addOrEdit = async (isAdd, userId, moduleId, taskId, title, isFinished, details) => {
@@ -9,6 +9,14 @@ export const addOrEdit = async (isAdd, userId, moduleId, taskId, title, isFinish
         await updateTask(userId, taskId, title, isFinished, details);
         return taskId;
     }
+}
+
+export const deleteModuleRecursive = async (userId, moduleId) => {
+    let arr = [];
+    arr = arr.concat((await getTasks(userId, moduleId, true)));
+    arr = arr.concat((await getTasks(userId, moduleId, false)));
+    await Promise.all(arr.map(item => deleteT(userId, item.taskId, item.isFinished, item.reference, moduleId)));
+    deleteModule(userId, moduleId);
 }
 
 export const deleteT = async (userId, taskId, isFinished, reference, moduleId, unregister = true) => {

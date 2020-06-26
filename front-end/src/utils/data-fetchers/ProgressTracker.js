@@ -44,6 +44,7 @@ export const getModules = async (userId) => {
     let res = await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/progress-tracker/modules/all', requestOption)
     res = await res.json();
     res = res.modules;
+    if (res == undefined) res = {}
     let output = Object.keys(res).map(key => ({ key: key, text: res[key] }));
     return { data: output };
 }

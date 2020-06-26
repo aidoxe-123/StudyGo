@@ -3,8 +3,9 @@ import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Touch
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useIsFocused } from '@react-navigation/native'
 import { FloatingAdd, UserIdContext, Spinner } from '../../components/index'
-import { getModules, deleteModule } from '../../utils/data-fetchers/ProgressTracker'
+import { getModules } from '../../utils/data-fetchers/ProgressTracker'
 import wrapper from '../../utils/data-fetchers/fetchingWrapper'
+import { deleteModuleRecursive } from "../../utils/progress-tracker-task-handler";
 
 export default function ProgressTracker({ navigation }) {
   const userId = useContext(UserIdContext)
@@ -22,7 +23,7 @@ export default function ProgressTracker({ navigation }) {
   const handleDeleteModule = (moduleId) => {
     setLoading(true);
     setModules(modules.filter(item => item.key !== moduleId))
-    wrapper(() => deleteModule(userId, moduleId),
+    wrapper(() => deleteModuleRecursive(userId, moduleId),
       response => setLoading(false))
   }
 
