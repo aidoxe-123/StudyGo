@@ -14,8 +14,11 @@ export default function Finished({ navigation, route }) {
     const handleMarkInput = (text) => { setMark(text); }
     const handleAdd = () => {
         let details = "";
-        if (title === "") Alert.alert("", "Please input the title!");
-        else switch (choice) {
+        if (title === "") {
+            Alert.alert("", "Please input the title!");
+            return;
+        }
+        switch (choice) {
             case 0: details = "Not graded yet";
                 break;
             case 1: details = "Ungraded";

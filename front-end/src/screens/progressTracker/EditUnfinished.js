@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import { PrettyTextInput, UserIdContext, Spinner, YellowHeader } from '../../components/index'
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
-import { addOrEdit, link, deleteT, completeTask } from '../../utils/progress-tracker-task-handler';
+import { addOrEdit, link, deleteT, completeTask, link2 } from '../../utils/progress-tracker-task-handler';
 
 export default function Finished({ navigation, route }) {
     let { title, taskId, details, isAdd, moduleId, reference, newRefId, isHost, willHost, data } = route.params;
@@ -20,8 +20,8 @@ export default function Finished({ navigation, route }) {
 
             let callback = async () => {
                 let newTaskId = await addOrEdit(isAdd, userId, moduleId, taskId, newTitle, false, newDetails);
-
-                if (willHost || newRefId !== "") await link(userId, moduleId, newTaskId, newTitle, false, reference, newRefId)
+                if (willHost && !isHost && reference !== "") await link2(userId, moduleId, taskId, newTitle, false, reference);
+                else if (willHost || isHost || newRefId !== reference) await link(userId, moduleId, newTaskId, newTitle, false, reference, newRefId)
             }
 
             wrapper(callback,
