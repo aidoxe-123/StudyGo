@@ -73,7 +73,9 @@ export const TimetableEditStyles = StyleSheet.create({
       {scaleY: 16/14}, 
       {translateX: 5}, 
       {translateY: -9}
-    ]
+    ],
+    height: 50,
+    width: 100
   },
   deleteButton: {
     position: 'absolute',
