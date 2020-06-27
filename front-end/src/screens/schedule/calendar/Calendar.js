@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Text, View, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { Calendar as RNCalendar} from 'react-native-calendars'
+import Spinner from 'react-native-loading-spinner-overlay';
 import { Ionicons } from '@expo/vector-icons'
 import { YellowLine } from '../../../../style/yellowLine'
 import { UserIdContext } from '../../../components/index'
@@ -10,6 +11,8 @@ import AddEventModal from './AddEventModal'
 
 export default function Calendar({navigation}) {
   const userId = useContext(UserIdContext)
+
+  const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState()
 
   const [tasks, setTasks] = useState([]) // tasks in one date
@@ -28,7 +31,10 @@ export default function Calendar({navigation}) {
   useEffect(() => {
     const currMonth = new Date().getMonth() + 1
     const currYear = new Date().getFullYear()
-    getEvents(userId, currMonth, currYear).then(data => setEvents(data))
+    getEvents(userId, currMonth, currYear).then(data => {
+      setEvents(data)
+      setLoading(false)
+    })
   }, [])
   ///////////////////////////////////////////////////////////////////////////
 
@@ -65,10 +71,14 @@ export default function Calendar({navigation}) {
   // re-fetch the data
   // ----------------------------------------------------
   function refetchData(dateString) {
+    setLoading(true)
     let date = new Date(Date.parse(dateString))
     let month = date.getMonth() + 1
     let year = date.getFullYear()
-    getEvents(userId, month, year).then(data => setEvents(data))
+    getEvents(userId, month, year).then(data => {
+      setEvents(data)
+      setLoading(false)
+    })
   }
   //////////////////////////////////////////////////////
 
@@ -83,9 +93,13 @@ export default function Calendar({navigation}) {
   // re-fetch the data every time the month is changed
   // ------------------------------------------------
   function handleMonthChange(month) {
+    setLoading(true)
     setTasks([])
     setSelected(null)
-    getEvents(userId, month.month, month.year).then(data => setEvents(data))
+    getEvents(userId, month.month, month.year).then(data => {
+      setEvents(data)
+      setLoading(false)
+    })
   }
   /////////////////////////////////////////////////////
 
@@ -110,6 +124,11 @@ export default function Calendar({navigation}) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
       <View style={{flex: 1}}>
+        <Spinner
+          visible={loading}
+          textContent='Loading...'
+          textStyle={{color: "#fff"}}
+        />
         <View style={YellowLine.header}>
           <Text h1 style={YellowLine.headerText}>Calendar</Text>
           <TouchableOpacity 

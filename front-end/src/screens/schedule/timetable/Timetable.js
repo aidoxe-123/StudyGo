@@ -197,7 +197,6 @@ export default function Timetable({navigation}) {
           <ScrollView 
             horizontal={true} 
             showsHorizontalScrollIndicator={false} 
-            scrollEventThrottle={16}
             style={{width: '80%'}}
           >
             <TimetableColumn dateName='monday' lessons={lessons.monday} openModal={openEditModal}/>
