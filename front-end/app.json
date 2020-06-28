@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "myproject",
-    "slug": "myproject",
+    "name": "Study Go",
+    "slug": "study-go",
     "platforms": [
       "ios",
       "android",
@@ -22,7 +22,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.DnP.StudyGo",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.DnP.StudyGo",
+      "versionCode": 1
     }
   }
 }

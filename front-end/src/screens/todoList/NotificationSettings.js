@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { Modal, View, StyleSheet, Text, TouchableOpacity, Switch } from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
 
 export default function NotificationSettings({closeModal, handleNotify, notiList}) {
@@ -46,36 +46,32 @@ export default function NotificationSettings({closeModal, handleNotify, notiList
           <View style={styles.whiteBox}>
             <Text style={styles.headerText}>Notify me in advance: </Text>
             <View style={styles.checkboxRow}>
-              <CheckBox
-                disabled={false}
+              <Text style={styles.choice}>10 Minutes</Text>
+              <Switch
                 value={toggleCheckBox1}
                 onValueChange={() => toggleCheckBox1 ? setToggleCheckBox1(false) : setToggleCheckBox1(true)}
               />
-              <Text style={styles.choice}>10 Minutes</Text>
             </View>
             <View style={styles.checkboxRow}>
-              <CheckBox
-                disabled={false}
+              <Text style={styles.choice}>30 Minutes</Text>
+              <Switch
                 value={toggleCheckBox2}
                 onValueChange={() => toggleCheckBox2 ? setToggleCheckBox2(false) : setToggleCheckBox2(true)}
               />
-              <Text style={styles.choice}>30 Minutes</Text>
             </View>
             <View style={styles.checkboxRow}>
-              <CheckBox
-                disabled={false}
+              <Text style={styles.choice}>1 Hour</Text>
+              <Switch
                 value={toggleCheckBox3}
                 onValueChange={() => toggleCheckBox3 ? setToggleCheckBox3(false) : setToggleCheckBox3(true)}
               />
-              <Text style={styles.choice}>1 Hour</Text>
             </View>
             <View style={styles.checkboxRow}>
-              <CheckBox
-                disabled={false}
+              <Text style={styles.choice}>1 Day</Text>
+              <Switch
                 value={toggleCheckBox4}
                 onValueChange={() => toggleCheckBox4 ? setToggleCheckBox4(false) : setToggleCheckBox4(true)}
               />
-              <Text style={styles.choice}>1 Day</Text>
             </View>
             <View style={styles.bottomRow}>
               <TouchableOpacity style={{marginRight: 20}} onPress={closeModal}>
@@ -117,7 +113,8 @@ const styles = StyleSheet.create({
   checkboxRow: {
     marginTop: 20,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   choice: {
     fontSize: 20
