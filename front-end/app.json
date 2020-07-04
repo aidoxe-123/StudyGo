@@ -28,6 +28,13 @@
     "android": {
       "package": "com.DnP.StudyGo",
       "versionCode": 2
+    },
+    "notification": {
+      "icon": "./assets/app icon.png",
+      "color": "#000000",
+      "iosDisplayInForeground": true,
+      "androidMode": "default",
+      "androidCollapsedTitle": "You have new notifications"
     }
   }
 }
