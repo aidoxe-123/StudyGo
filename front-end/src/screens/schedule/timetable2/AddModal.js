@@ -1,25 +1,23 @@
 import React, {useState, useEffect } from 'react'
 import { View, Animated, Modal, Text, 
   Dimensions, TouchableOpacity, TextInput, StyleSheet,
-  TouchableWithoutFeedback, Keyboard, Picker,
+  TouchableWithoutFeedback, Keyboard, Picker, Alert
 } from 'react-native'
+import { DatePicker } from '../../../components/index'
 import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons'; 
-import { TimetableStyles } from '../../../../style/TimetableStyles'
-import { TimetableEditStyles } from '../../../../style/TimetableEditStyles'
 
-export default function TimetableEditModal({height, width, x, y, handleClose, handleAdd}) {
+export default function EditModal({height, width, x, y, handleClose, handleAdd}) {
   const SCREEN_WIDTH = Dimensions.get('window').width
   const SCREEN_HEIGHT = Dimensions.get('window').height
 
-  const [tempName, setTempName] = useState('') // to be used in edit form
-  const [tempDes, setTempDes] = useState('') // to be used in edit form
-  const [tempDay, setTempDay] = useState('monday') // to be used in edit form
-  const [tempStartHour, setTempStartHour] = useState('00')
-  const [tempStartMinute, setTempStartMinute] = useState('00')
-  const [tempEndHour, setTempEndHour] = useState('00')
-  const [tempEndMinute, setTempEndMinute] = useState('00')
+  const [start, setStart] = useState(0)
+  const [end, setEnd] = useState(0)
+  const [name, setName] = useState('')
+  const [day, setDay] = useState('monday')
+  const [description, setDescription] = useState()
 
-  const [validHour, setValidHour] = useState(true)
+  const [editingStart, setEditingStart] = useState(false)
+  const [editingEnd, setEditingEnd] = useState(false)
 
   const modalCoordinate = useState(new Animated.ValueXY({x: x, y: y}))[0]
   const modalHeight = useState(new Animated.Value(height))[0]
@@ -30,28 +28,42 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
     {dayName: 'monday'},
     {dayName: 'tuesday'},
     {dayName: 'wednesday'},
-    {dayName: 'thurday'},
+    {dayName: 'thursday'},
     {dayName: 'friday'},
   ])[0]
 
-  function toMinuteSinceMidnight(hourStr, minuteStr) {
-    return (hourStr === '' ? 0 : Number.parseInt(hourStr) * 60)
-      + (minuteStr === '' ? 0 : Number.parseInt(minuteStr))
+  function toTwoDigitString(number) {
+    return number < 10 ? '0' + number : '' + number
   }
 
-  function handleTimeChange(value, prevValue, threshold) {
-    setValidHour(true)
-    if ((value.length > 2 && value.charAt(0) !== '0') || value.includes(',') || value.includes('.')) {
-      return prevValue
-    } else if (value === '') {
-      return ''
-    } else {
-      var shortenStr = value.length > 2 ? value.slice(1) : value
-      if (Number.parseInt(shortenStr) < threshold) {
-        return shortenStr
-      } else {
-        return prevValue
-      }
+  function toHourString(timeFromMidnight) {
+    return toTwoDigitString(Math.floor(timeFromMidnight / 60))  + ':' 
+    + toTwoDigitString(timeFromMidnight % 60)
+  } 
+
+  function makeTimeString(start, end, day) {
+    const startHour = toHourString(start)
+    const endHour = toHourString(end)
+    const timeString = day.charAt(0).toUpperCase() + day.slice(1) + ', ' + startHour + ' - ' + endHour 
+    // Day of week, hh:mm-hh:mm
+    return timeString
+  }
+
+  function handleChangeStartTime(event, date) {
+    setEditingStart(false)
+    if (typeof date !== 'undefined') {
+      var hour = date.getHours()
+      var minute = date.getMinutes()
+      setStart(hour * 60 + minute)
+    }
+  }
+
+  function handleChangeEndTime(event, date) {
+    setEditingEnd(false)
+    if (typeof date !== 'undefined') {
+      var hour = date.getHours()
+      var minute = date.getMinutes()
+      setEnd(hour * 60 + minute)
     }
   }
 
@@ -68,12 +80,12 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
     const changeWidth = Animated.timing(modalWidth, {
       toValue: SCREEN_WIDTH / 4 * 3,
       duration: duration,
-      useNativeDriver: false,
+      useNativeDriver: false
     })
     const changeHeight = Animated.timing(modalHeight, {
       toValue: SCREEN_HEIGHT / 4 * 3,
       duration: duration,
-      useNativeDriver: false,
+      useNativeDriver: false
     })
     const changeWhiteBoxFlex = Animated.timing(whiteBoxFlex, {
       toValue: 4,
@@ -89,26 +101,30 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
   }, [])
 
   function handleSubmit() {
-    var newStart = toMinuteSinceMidnight(tempStartHour, tempStartMinute)
-    var newEnd = toMinuteSinceMidnight(tempEndHour, tempEndMinute)
-    
-    if (newStart > newEnd) {
-      setValidHour(false)
+    if (name === '') {
+      Alert.alert('Missing name', 'Class name cannot be empty', 
+        [{text: 'ok'}]
+      )
       return
     }
-    
-    if (tempName === '') return
 
-    var lesson = {
-      day: tempDay,
-      start: newStart,
-      end: newEnd,
-      name: tempName,
-      description: tempDes,
+    if (end <= start) {
+      Alert.alert('Invalid time interval', 'End time must be after start time',
+        [{text: 'ok'}]
+      )
+      return 
     }
-    handleAdd(lesson)
-  }
 
+    var newLesson = {
+      day: day,
+      start: start,
+      end: end,
+      name: name,
+      description: description,
+    }
+    handleAdd(newLesson)
+  }
+  
   return (
     <Modal visible={true} transparent={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -122,7 +138,7 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
               overflow: 'hidden'
             }, modalCoordinate.getLayout()]}
           >
-            <View style={styles.insideBlueBox}>  
+            <View style={styles.insideBlueBox}>
               <View>
                 <View style={{flexDirection: 'row'}}>
                   <View style={{flex: 4, height: 30}}>
@@ -130,9 +146,8 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
                       itemStyle={{}}
                       mode="dropdown"
                       style={styles.dayDropdown}
-                      itemStyle={{fontFamily: 'raleway-medium'}}
-                      selectedValue={tempDay}
-                      onValueChange={value => setTempDay(value)}
+                      selectedValue={day}
+                      onValueChange={value => setDay(value)}
                     >
                       {days.map((day, index) => (
                         <Picker.Item
@@ -145,44 +160,24 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
                       ))}
                     </Picker>
                   </View>
-                  <View style={{flex: 6, flexDirection: 'row'}}>
-                    <TextInput 
-                      style={[styles.duration, !validHour && {color: 'red'}]} 
-                      value={tempStartHour.toString()}
-                      keyboardType='numeric'
-                      onChangeText={value => setTempStartHour(handleTimeChange(value, tempStartHour, 24))}
-                    />
-                    <Text style={[styles.duration, !validHour && {color: 'red'}]}>:</Text>
-                    <TextInput 
-                      style={[styles.duration, !validHour && {color: 'red'}]} 
-                      value={tempStartMinute.toString()}
-                      keyboardType='numeric'
-                      onChangeText={value => setTempStartMinute(handleTimeChange(value, tempStartMinute, 60))}
-                    />
-                    <Text style={[styles.duration, !validHour && {color: 'red'}]}> - </Text>
-                    <TextInput 
-                      style={[styles.duration, !validHour && {color: 'red'}]} 
-                      value={tempEndHour.toString()}
-                      keyboardType='numeric'
-                      onChangeText={value => setTempEndHour(handleTimeChange(value, tempEndHour, 24))}
-                    />
-                    <Text style={[TimetableEditStyles.duration, !validHour && {color: 'red'}]}>:</Text>
-                    <TextInput 
-                      style={[TimetableEditStyles.duration, !validHour && {color: 'red'}]} 
-                      value={tempEndMinute.toString()}
-                      keyboardType='numeric'
-                      onChangeText={value => setTempEndMinute(handleTimeChange(value, tempEndMinute, 60))}
-                    />
+                  <View style={styles.hourContainer}>
+                    <TouchableOpacity onPress={() => setEditingStart(true)}>
+                      <Text style={styles.duration}>{toHourString(start)}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.duration}> - </Text>
+                    <TouchableOpacity onPress={() => setEditingEnd(true)}>
+                      <Text style={styles.duration}>{toHourString(end)}</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
                 <TextInput 
                   style={[styles.name, 
                     {borderBottomWidth: 1, borderColor: 'white'}
                   ]}
-                  value={tempName}
-                  onChangeText={text => setTempName(text)}
+                  value={name}
+                  onChangeText={text => setName(text)}
                   placeholder='Class name'
-                  placeholderTextColor='#ffffff'
+                  placeholderTextColor='#00000030'
                 />
               </View>
               <TouchableOpacity 
@@ -197,18 +192,17 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
                 flex: whiteBoxFlex, 
                 backgroundColor: 'white',
                 padding: 10,
-              }}
-            >
+              }}>
               <View style={styles.editDescriptionBox} >
                 <TextInput
                   style={styles.editDescriptionInput}
                   underlineColorAndroid="transparent"
                   placeholder="Type the description of the class"
-                  placeholderTextColor="grey"
+                  placeholderTextColor="#00000030"
                   numberOfLines={10}
                   multiline={true}
-                  value={tempDes}
-                  onChangeText={text => setTempDes(text)}
+                  value={description}
+                  onChangeText={text => setDescription(text)}
                 />
               </View>
               <TouchableOpacity 
@@ -219,6 +213,18 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
               </TouchableOpacity>
             </Animated.View>
           </Animated.View>
+          <DatePicker 
+            showDatePicker={editingStart} 
+            value={new Date(2020, 1, 1, Math.floor(start / 60), start % 60)}  
+            handleChange={handleChangeStartTime}
+            mode='time'
+          />
+          <DatePicker 
+            showDatePicker={editingEnd} 
+            value={new Date(2020, 1, 1, Math.floor(end / 60), end % 60)}  
+            handleChange={handleChangeEndTime}
+            mode='time'
+          />
         </View>
       </TouchableWithoutFeedback>
     </Modal>
@@ -312,5 +318,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#e76f51',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  hourContainer: {
+    flex: 6, 
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 })

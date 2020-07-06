@@ -1,14 +1,9 @@
-import React, {useRef, useState} from 'react'
-import { View, Text, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import React, {useRef} from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 
 export default function DayNameColumn() {
-  const [height, setHeight] = useState(0)
-  const col = useRef(null)
   return (
-      <KeyboardAvoidingView style={styles.dayColumn} ref={col} onLayout={event => {
-        setHeight(event.nativeEvent.layout.height)
-        console.log(event.nativeEvent.layout.height)
-      }} behavior={null}>
+      <View style={styles.dayColumn} >
         <View style={styles.substituteRow}></View>
         <View style={styles.day}>
           <Text style={styles.dayName}>Mon</Text>
@@ -25,7 +20,7 @@ export default function DayNameColumn() {
         <View style={styles.day}>
           <Text style={styles.dayName}>Fri</Text>
         </View>    
-    </KeyboardAvoidingView>
+    </View>
   )
 }
 

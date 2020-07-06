@@ -8,6 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
     -date: the value represent on the DatePicker
     -handleChange: f(event, date) a function that takes in an event and a date to do something.
     This function will be called when the user close the DatePicker
+    -mode: choose between 'date' (default) or 'time'
   @return: A custom DatePicker component to replace DateTimePicker of @react-native-community/datetimepicker
 */
 export default function DatePicker({ showDatePicker, value, handleChange, mode }) {

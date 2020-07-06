@@ -16,15 +16,8 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
   const [day, setDay] = useState(lesson.day)
   const [description, setDescription] = useState(lesson.description)
 
-  const [tempName, setTempName] = useState(lesson.name) // to be used in edit form
-  const [tempDes, setTempDes] = useState(lesson.description) // to be used in edit form
-  const [tempDay, setTempDay] = useState(day) // to be used in edit form
-  const [tempStartHour, setTempStartHour] = useState(toTwoDigitString(Math.floor(start / 60)))
-  const [tempStartMinute, setTempStartMinute] = useState(toTwoDigitString(start % 60))
-  const [tempEndHour, setTempEndHour] = useState(toTwoDigitString(Math.floor(end / 60)))
-  const [tempEndMinute, setTempEndMinute] = useState(toTwoDigitString(end % 60))
-
-  const [validHour, setValidHour] = useState(true)
+  const [editingStart, setEditingStart] = useState(false)
+  const [editingEnd, setEditingEnd] = useState(false)
 
   const modalCoordinate = useState(new Animated.ValueXY({x: x, y: y}))[0]
   const modalHeight = useState(new Animated.Value(height))[0]
@@ -45,34 +38,34 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
     return number < 10 ? '0' + number : '' + number
   }
 
-  function toMinuteSinceMidnight(hourStr, minuteStr) {
-    return (hourStr === '' ? 0 : Number.parseInt(hourStr) * 60)
-      + (minuteStr === '' ? 0 : Number.parseInt(minuteStr))
-  }
+  function toHourString(timeFromMidnight) {
+    return toTwoDigitString(Math.floor(timeFromMidnight / 60))  + ':' 
+    + toTwoDigitString(timeFromMidnight % 60)
+  } 
 
   function makeTimeString(start, end, day) {
-    const startHour = toTwoDigitString(Math.floor(start / 60))  + ':' 
-                    + toTwoDigitString(start % 60)
-    const endHour = toTwoDigitString(Math.floor(end / 60))  + ':' 
-                  + toTwoDigitString(end % 60)
+    const startHour = toHourString(start)
+    const endHour = toHourString(end)
     const timeString = day.charAt(0).toUpperCase() + day.slice(1) + ', ' + startHour + ' - ' + endHour 
     // Day of week, hh:mm-hh:mm
     return timeString
   }
 
-  function handleTimeChange(value, prevValue, threshold) {
-    setValidHour(true)
-    if ((value.length > 2 && value.charAt(0) !== '0') || value.includes(',') || value.includes('.')) {
-      return prevValue
-    } else if (value === '') {
-      return ''
-    } else {
-      var shortenStr = value.length > 2 ? value.slice(1) : value
-      if (Number.parseInt(shortenStr) < threshold) {
-        return shortenStr
-      } else {
-        return prevValue
-      }
+  function handleChangeStartTime(event, date) {
+    setEditingStart(false)
+    if (typeof date !== 'undefined') {
+      var hour = date.getHours()
+      var minute = date.getMinutes()
+      setStart(hour * 60 + minute)
+    }
+  }
+
+  function handleChangeEndTime(event, date) {
+    setEditingEnd(false)
+    if (typeof date !== 'undefined') {
+      var hour = date.getHours()
+      var minute = date.getMinutes()
+      setEnd(hour * 60 + minute)
     }
   }
 
@@ -110,38 +103,35 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
   }, [])
 
   function handlePenButtonClicked() {
-    setTempDes(description)
-    setTempName(name)
-    setTempStartHour(toTwoDigitString(Math.floor(start / 60)))
-    setTempStartMinute(toTwoDigitString(start % 60))
-    setTempEndHour(toTwoDigitString(Math.floor(end / 60)))
-    setTempEndMinute(toTwoDigitString(end % 60))
+    setDescription(lesson.description)
+    setDay(lesson.day)
+    setStart(lesson.start)
+    setEnd(lesson.end)
+    setName(lesson.name)
     setEdit(prevEdit => !prevEdit)
   }
 
   function handleSubmit() {
-    var newStart = toMinuteSinceMidnight(tempStartHour, tempStartMinute)
-    var newEnd = toMinuteSinceMidnight(tempEndHour, tempEndMinute)
-    
-    if (newStart > newEnd) {
-      setValidHour(false)
+    if (name === '') {
+      Alert.alert('Missing name', 'Class name cannot be empty', 
+        [{text: 'ok'}]
+      )
       return
     }
-    
-    if (tempName === '') return
-    
-    setStart(newStart)
-    setEnd(newEnd)
-    setDescription(tempDes)
-    setName(tempName)
-    setDay(tempDay)
+
+    if (end <= start) {
+      Alert.alert('Invalid time interval', 'End time must be after start time',
+        [{text: 'ok'}]
+      )
+      return 
+    }
 
     var newLesson = {
-      day: tempDay,
-      start: newStart,
-      end: newEnd,
-      name: tempName,
-      description: tempDes,
+      day: day,
+      start: start,
+      end: end,
+      name: name,
+      description: description,
     }
     handleEdit(newLesson, lesson.id)
     setEdit(false)
@@ -182,8 +172,8 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
                         itemStyle={{}}
                         mode="dropdown"
                         style={styles.dayDropdown}
-                        selectedValue={tempDay}
-                        onValueChange={value => setTempDay(value)}
+                        selectedValue={day}
+                        onValueChange={value => setDay(value)}
                       >
                         {days.map((day, index) => (
                           <Picker.Item
@@ -196,43 +186,24 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
                         ))}
                       </Picker>
                     </View>
-                    <View style={{flex: 6, flexDirection: 'row'}}>
-                      <TextInput 
-                        style={[styles.duration, !validHour && {color: 'red'}]} 
-                        value={tempStartHour.toString()}
-                        keyboardType='numeric'
-                        onChangeText={value => setTempStartHour(handleTimeChange(value, tempStartHour, 24))}
-                      />
-                      <Text style={[styles.duration, !validHour && {color: 'red'}]}>:</Text>
-                      <TextInput 
-                        style={[styles.duration, !validHour && {color: 'red'}]} 
-                        value={tempStartMinute.toString()}
-                        keyboardType='numeric'
-                        onChangeText={value => setTempStartMinute(handleTimeChange(value, tempStartMinute, 60))}
-                      />
-                      <Text style={[styles.duration, !validHour && {color: 'red'}]}> - </Text>
-                      <TextInput 
-                        style={[styles.duration, !validHour && {color: 'red'}]} 
-                        value={tempEndHour.toString()}
-                        keyboardType='numeric'
-                        onChangeText={value => setTempEndHour(handleTimeChange(value, tempEndHour, 24))}
-                      />
-                      <Text style={[styles.duration, !validHour && {color: 'red'}]}>:</Text>
-                      <TextInput 
-                        style={[styles.duration, !validHour && {color: 'red'}]} 
-                        value={tempEndMinute.toString()}
-                        keyboardType='numeric'
-                        onChangeText={value => setTempEndMinute(handleTimeChange(value, tempEndMinute, 60))}
-                      />
+                    <View style={styles.hourContainer}>
+                      <TouchableOpacity onPress={() => setEditingStart(true)}>
+                        <Text style={styles.duration}>{toHourString(start)}</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.duration}> - </Text>
+                      <TouchableOpacity onPress={() => setEditingEnd(true)}>
+                        <Text style={styles.duration}>{toHourString(end)}</Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
                   <TextInput 
                     style={[styles.name, 
                       {borderBottomWidth: 1, borderColor: 'white'}
                     ]}
-                    value={tempName}
-                    onChangeText={text => setTempName(text)}
+                    value={name}
+                    onChangeText={text => setName(text)}
                     placeholder='Class name'
+                    placeholderTextColor='#00000030'
                   />
                 </View>
                 )
@@ -259,11 +230,11 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
                     style={styles.editDescriptionInput}
                     underlineColorAndroid="transparent"
                     placeholder="Type the description of the class"
-                    placeholderTextColor="grey"
+                    placeholderTextColor="#00000030"
                     numberOfLines={10}
                     multiline={true}
-                    value={tempDes}
-                    onChangeText={text => setTempDes(text)}
+                    value={description}
+                    onChangeText={text => setDescription(text)}
                   />
                 </View>
               }
@@ -294,6 +265,18 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
               </TouchableOpacity>
             </Animated.View>
           </Animated.View>
+          <DatePicker 
+            showDatePicker={editingStart} 
+            value={new Date(2020, 1, 1, Math.floor(start / 60), start % 60)}  
+            handleChange={handleChangeStartTime}
+            mode='time'
+          />
+          <DatePicker 
+            showDatePicker={editingEnd} 
+            value={new Date(2020, 1, 1, Math.floor(end / 60), end % 60)}  
+            handleChange={handleChangeEndTime}
+            mode='time'
+          />
         </View>
       </TouchableWithoutFeedback>
     </Modal>
@@ -387,5 +370,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#e76f51',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  hourContainer: {
+    flex: 6, 
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 })
