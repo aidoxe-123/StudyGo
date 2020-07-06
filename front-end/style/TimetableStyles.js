@@ -27,19 +27,20 @@ export const TimetableStyles = StyleSheet.create({
   },
   blueCell: {
     position: "absolute",
-    backgroundColor: '#588093', 
+    backgroundColor: '#2a9d8f', 
     position: 'absolute', 
     left: 2,
     width: 98,
-    borderBottomWidth: 2,
+    borderBottomWidth: 0,
     borderColor: 'rgb(25,25,112)'
   },
   lessonDuration: {
-    color: 'rgba(255,255,255,0.7)'
+    color: 'rgba(255,255,255,0.7)',
+    fontFamily: 'sourcesanspro-regular'
   },
   lessonName: {
     color: 'white', 
-    fontWeight: 'bold'
+    fontFamily: 'sourcesanspro-semibold'
   },
   addButton: {
     position: 'absolute',

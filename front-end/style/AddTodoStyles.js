@@ -3,15 +3,18 @@ import { StyleSheet } from 'react-native'
 export const AddTodoStyles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff'
   },
   form: {
     margin: 20,
   },
   label: {
-    fontSize: 18,
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20,
   },
   input: {
-    fontSize: 16,
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20,
     padding: 5,
     borderBottomWidth: 1,
     borderColor: 'grey',
@@ -21,7 +24,8 @@ export const AddTodoStyles = StyleSheet.create({
     alignItems: 'center'
   },
   dateBox: {
-    fontSize: 18,
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20,
     padding: 5,
     borderWidth: 1,
     borderColor: 'grey',
@@ -34,11 +38,15 @@ export const AddTodoStyles = StyleSheet.create({
   button: {
     padding: 6,
     minWidth: '20%',
-    backgroundColor: 'coral',
+    backgroundColor: '#fff',
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#e76f51',
   },
   buttonText: {
-    fontSize: 16,
-    color: '#fff',
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20,
+    color: '#e76f51',
     textAlign: 'center'
   }
 })

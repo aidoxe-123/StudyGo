@@ -56,6 +56,14 @@ export default function AddTodo({navigation}) {
                         </View> 
                     </TouchableOpacity>
                     <Text h1 style={YellowLine.headerText}>Add Task</Text>
+                    <TouchableOpacity 
+                        style={YellowLine.rightWhiteButton} 
+                        onPress={handleSubmit}
+                    >
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Text style={YellowLine.whiteButtonText}>Save</Text>
+                        </View> 
+                    </TouchableOpacity>
                 </View>
                 <View style={AddTodoStyles.form}>
                     <Text style={AddTodoStyles.label}>Task name:</Text>
@@ -92,12 +100,7 @@ export default function AddTodo({navigation}) {
                             </View>
                         </View>
                     </View>
-                </View>
-                <View style={AddTodoStyles.bottomRow}>
-                    <TouchableOpacity style={AddTodoStyles.button} onPress={handleSubmit}> 
-                        <Text style={AddTodoStyles.buttonText}>Add</Text>
-                    </TouchableOpacity>
-                </View>               
+                </View>              
             </View>
         </TouchableWithoutFeedback>
     )

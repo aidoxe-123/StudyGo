@@ -13,12 +13,13 @@ export const TimetableEditStyles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute', 
-    right: 5, 
-    top: 5, 
+    right: 7, 
+    top: 7, 
     alignItems: 'center', 
     justifyContent: 'center'
   },
   viewDescription: {
+    fontFamily: 'sourcesanspro-regular',
     fontSize: 20, 
     padding: 6
   },
@@ -31,7 +32,8 @@ export const TimetableEditStyles = StyleSheet.create({
   editDescriptionInput: {
     textAlignVertical: 'top', 
     height: 150, 
-    fontSize: 20
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20,
   },
   doneButton: {
     position: 'absolute',

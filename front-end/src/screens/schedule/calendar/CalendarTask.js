@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(245,199,26)'
   },
   text: {
-    fontSize: 20
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 24
   }
 })

@@ -3,10 +3,10 @@ import { StyleSheet } from 'react-native'
 export const YellowLine = StyleSheet.create({
   header: {
     padding: 10,
-    backgroundColor: 'rgb(245,199,26)',
+    backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   leftWhiteButton: {
     borderRadius: 3,
@@ -26,15 +26,19 @@ export const YellowLine = StyleSheet.create({
     alignItems: 'center'
   },
   whiteButtonText: {
+    fontFamily: 'raleway-medium',
     fontSize: 16,
     paddingHorizontal: 5,
+    color: '#e76f51'
   },
   whiteButtonIcon: {
     paddingHorizontal: 5,
+    color: '#e76f51'
   },
   headerText: {
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'raleway-bold',
     fontSize: 20,
+    color: '#e76f51',
   },
 })

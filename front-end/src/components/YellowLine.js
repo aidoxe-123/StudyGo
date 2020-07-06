@@ -46,15 +46,17 @@ const YellowLine = StyleSheet.create({
         alignItems: 'center'
     },
     whiteButtonText: {
+        fontFamily: 'raleway-medium',
         fontSize: 16,
         paddingHorizontal: 5,
+        
     },
     whiteButtonIcon: {
         paddingHorizontal: 5,
     },
     headerText: {
+        fontFamily: 'raleway-bold',
         textAlign: 'center',
-        fontWeight: 'bold',
         fontSize: 20,
     },
 })

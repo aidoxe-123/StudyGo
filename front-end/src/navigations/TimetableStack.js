@@ -10,7 +10,7 @@ export default function TimetableStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: 'coral'},
+        headerStyle: { backgroundColor: '#e76f51'},
         headerTitleStyle: {
           color: '#fff'
         },

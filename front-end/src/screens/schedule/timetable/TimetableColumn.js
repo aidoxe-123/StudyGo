@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'sourcesanspro-semibold',
     borderWidth: 1,
     borderRightWidth: 0,
     borderColor: '#dddddd'

@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerText: {
-    fontWeight: 'bold',
+    fontFamily: 'raleway-bold',
     fontSize: 20,
     color: '#fff',
     letterSpacing: 1,

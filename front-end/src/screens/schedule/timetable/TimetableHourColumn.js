@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   hourText: {
     flex: 1,
     textAlign: 'center',
+    fontFamily: 'sourcesanspro-regular'
   },
   substituteRow: {
     flex: 0.5,

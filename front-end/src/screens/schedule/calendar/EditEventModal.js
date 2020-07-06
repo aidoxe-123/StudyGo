@@ -93,11 +93,11 @@ export default function EditEventModal({onFinishEditing, task, refetchData, date
             <View style={styles.content}>
               <RadioButtons onPressIndex={handleChoice} initialChoice={choice}>
                   {/*Choice 1*/}
-                  <Text>Deadline</Text>
+                  <Text style={styles.choice}>Deadline</Text>
                   {/*Choice 2*/}
-                  <Text>Assessment</Text>
+                  <Text style={styles.choice}>Assessment</Text>
                   {/*Choice 3*/}
-                  <Text>Special Event</Text>
+                  <Text style={styles.choice}>Special Event</Text>
               </RadioButtons>
               <TouchableOpacity 
                 style={[styles.doneButton, {backgroundColor: headerColor}]}
@@ -125,13 +125,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: '70%',
     width: '70%',
-    minHeight: 350
+    minHeight: 350,
+    borderRadius: 10,
+    overflow: 'hidden'
   },
   header: {
     height: '30%',
     minHeight: 150,
     justifyContent: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   closeButton: {
     position: 'absolute',
@@ -139,14 +141,16 @@ const styles = StyleSheet.create({
     top: 5
   },
   title: {
-    fontSize: 25,
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 30,
     color: '#ffffff'
   },
   input: {
     borderBottomWidth: 1,
     borderColor: '#ffffff',
     color: '#ffffff',
-    fontSize: 15
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20
   },
   doneButton: {
     width: '100%',
@@ -161,5 +165,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1
+  },
+  choice: {
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20
   }
 })

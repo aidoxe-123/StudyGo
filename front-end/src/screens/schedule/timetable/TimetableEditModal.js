@@ -84,19 +84,23 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
         x: SCREEN_WIDTH / 8,
         y: SCREEN_HEIGHT / 8,
       },
-      duration: duration
+      duration: duration,
+      useNativeDriver: false
     })
     const changeWidth = Animated.timing(modalWidth, {
       toValue: SCREEN_WIDTH / 4 * 3,
-      duration: duration
+      duration: duration,
+      useNativeDriver: false
     })
     const changeHeight = Animated.timing(modalHeight, {
       toValue: SCREEN_HEIGHT / 4 * 3,
       duration: duration,
+      useNativeDriver: false
     })
     const changeWhiteBoxFlex = Animated.timing(whiteBoxFlex, {
       toValue: 4,
-      duration: duration
+      duration: duration,
+      useNativeDriver: false
     })
     Animated.parallel([
       changeCoordinate,
@@ -158,7 +162,9 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
             style={[{
               height: modalHeight,
               width: modalWidth,
-              backgroundColor: '#588093'
+              backgroundColor: '#588093',
+              borderRadius: 10,
+              overflow: 'hidden'
             }, modalCoordinate.getLayout()]}
           >
             <View style={TimetableEditStyles.insideBlueBox}>

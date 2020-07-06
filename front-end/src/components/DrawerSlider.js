@@ -27,15 +27,15 @@ export default function DrawerSlider(props) {
     <ScrollView contentContainerStyle={{flex: 1, marginTop: 25}}>
       <View style={styles.profileContainer}>
         <Image source={require('../../assets/person.png')} style={styles.profileImg}/>
-        <Text>{username}</Text>
+        <Text style={styles.username}>{username}</Text>
       </View>
       <SafeAreaView>
         <DrawerItemList {...props}/>
       </SafeAreaView>
-      <View style={{borderBottomColor: 'rgba(0,0,0,0.5)', borderBottomWidth: 1, margin: 10}} />
+      <View style={{borderBottomColor: '#696969', borderBottomWidth: 1, margin: 10}} />
       <TouchableOpacity style={styles.logoutButton} onPress={() => props.navigation.navigate('Login')}>
         <View style={styles.insideLogoutButton}>
-          <SimpleLineIcons name='logout' size={20} color='rgba(0,0,0,0.5)'/>
+          <SimpleLineIcons name='logout' size={20} color='#696969'/>
           <Text style={styles.logoutText}>Log out</Text>
         </View>
       </TouchableOpacity>
@@ -54,6 +54,9 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
   },
+  username: {
+    fontFamily: 'raleway-medium'
+  },
   logoutButton: {
     marginHorizontal: 20,
   }, 
@@ -64,6 +67,7 @@ const styles = StyleSheet.create({
   logoutText: {
     marginHorizontal: 31,
     fontSize: 16,
-    color: 'rgba(0, 0, 0, 0.5)'
+    color: '#696969',
+    fontFamily: 'raleway-medium'
   }
 })

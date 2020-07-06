@@ -169,7 +169,7 @@ export default function Timetable({navigation}) {
           textStyle={{color: "#fff"}}
         />
         <View style={YellowLine.header}>
-          <Text h1 style={YellowLine.headerText}>Timetable</Text>
+          <Text style={YellowLine.headerText}>Timetable</Text>
           <TouchableOpacity 
             style={YellowLine.rightWhiteButton} 
             onPress={() => navigation.navigate('Calendar')}

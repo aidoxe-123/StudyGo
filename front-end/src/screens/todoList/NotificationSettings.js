@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
-import { Modal, View, StyleSheet, Text, TouchableOpacity, Switch } from 'react-native'
-import CheckBox from '@react-native-community/checkbox'
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, Text, Switch } from 'react-native'
 
-export default function NotificationSettings({closeModal, handleNotify, notiList}) {
+export default function NotificationSettings({handleNotify, notiList}) {
   const duration = [
     10 * 60 * 1000, // 10 mins
     30 * 60 * 1000, // 30 mins
@@ -10,98 +9,72 @@ export default function NotificationSettings({closeModal, handleNotify, notiList
     24 * 60 * 60 * 1000, // one day
   ]
   
-  const [toggleCheckBox1, setToggleCheckBox1] = useState(
-    typeof notiList[duration[0].toString()] === 'undefined'
-    ? false
-    : notiList[duration[0].toString()]
-  )
-  const [toggleCheckBox2, setToggleCheckBox2] = useState(
-    typeof notiList[duration[1].toString()] === 'undefined'
-    ? false
-    : notiList[duration[1].toString()]
-  )
-  const [toggleCheckBox3, setToggleCheckBox3] = useState(
-    typeof notiList[duration[2].toString()] === 'undefined'
-    ? false
-    : notiList[duration[2].toString()]
-  )
-  const [toggleCheckBox4, setToggleCheckBox4] = useState(
-    typeof notiList[duration[3].toString()] === 'undefined'
-    ? false
-    : notiList[duration[3].toString()]
-  )
+  const [toggleCheckBox1, setToggleCheckBox1] = useState(false)
+  const [toggleCheckBox2, setToggleCheckBox2] = useState(false)
+  const [toggleCheckBox3, setToggleCheckBox3] = useState(false)
+  const [toggleCheckBox4, setToggleCheckBox4] = useState(false)
 
-  const toggleStates = [toggleCheckBox1, toggleCheckBox2, toggleCheckBox3, toggleCheckBox4]
-
-  function handleSet() {
-    closeModal()
-    for (var i = 0; i < 4; i++) {
-      handleNotify(duration[i], toggleStates[i])
-    }
-  }
+  useEffect(() => {
+    if (typeof notiList[duration[0].toString()] !== 'undefined') setToggleCheckBox1(true) 
+    if (typeof notiList[duration[1].toString()] !== 'undefined') setToggleCheckBox2(true)
+    if (typeof notiList[duration[2].toString()] !== 'undefined') setToggleCheckBox3(true)
+    if (typeof notiList[duration[3].toString()] !== 'undefined') setToggleCheckBox4(true)
+  }, [])
 
   return (
-    <Modal visible={true} transparent={true}>
-        <View style={styles.container}>
-          <View style={styles.whiteBox}>
-            <Text style={styles.headerText}>Notify me in advance: </Text>
-            <View style={styles.checkboxRow}>
-              <Text style={styles.choice}>10 Minutes</Text>
-              <Switch
-                value={toggleCheckBox1}
-                onValueChange={() => toggleCheckBox1 ? setToggleCheckBox1(false) : setToggleCheckBox1(true)}
-              />
-            </View>
-            <View style={styles.checkboxRow}>
-              <Text style={styles.choice}>30 Minutes</Text>
-              <Switch
-                value={toggleCheckBox2}
-                onValueChange={() => toggleCheckBox2 ? setToggleCheckBox2(false) : setToggleCheckBox2(true)}
-              />
-            </View>
-            <View style={styles.checkboxRow}>
-              <Text style={styles.choice}>1 Hour</Text>
-              <Switch
-                value={toggleCheckBox3}
-                onValueChange={() => toggleCheckBox3 ? setToggleCheckBox3(false) : setToggleCheckBox3(true)}
-              />
-            </View>
-            <View style={styles.checkboxRow}>
-              <Text style={styles.choice}>1 Day</Text>
-              <Switch
-                value={toggleCheckBox4}
-                onValueChange={() => toggleCheckBox4 ? setToggleCheckBox4(false) : setToggleCheckBox4(true)}
-              />
-            </View>
-            <View style={styles.bottomRow}>
-              <TouchableOpacity style={{marginRight: 20}} onPress={closeModal}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleSet}>
-                <Text>Set</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-    </Modal>
+    <View style={styles.whiteBox}>
+      <Text style={styles.headerText}>Notify me in advance: </Text>
+      <View style={styles.checkboxRow}>
+        <Text style={styles.choice}>10 Minutes</Text>
+        <Switch
+          value={toggleCheckBox1}
+          onValueChange={() => {
+            handleNotify(duration[0], !toggleCheckBox1)
+            toggleCheckBox1 ? setToggleCheckBox1(false) : setToggleCheckBox1(true)
+          }}
+        />
+      </View>
+      <View style={styles.checkboxRow}>
+        <Text style={styles.choice}>30 Minutes</Text>
+        <Switch
+          value={toggleCheckBox2}
+          onValueChange={() => {
+            handleNotify(duration[1], !toggleCheckBox2)
+            toggleCheckBox2 ? setToggleCheckBox2(false) : setToggleCheckBox2(true)
+          }}
+        />
+      </View>
+      <View style={styles.checkboxRow}>
+        <Text style={styles.choice}>1 Hour</Text>
+        <Switch
+          value={toggleCheckBox3}
+          onValueChange={() => {
+            handleNotify(duration[2], !toggleCheckBox3)
+            toggleCheckBox3 ? setToggleCheckBox3(false) : setToggleCheckBox3(true)
+          }}
+        />
+      </View>
+      <View style={styles.checkboxRow}>
+        <Text style={styles.choice}>1 Day</Text>
+        <Switch
+          value={toggleCheckBox4}
+          onValueChange={() => {
+            handleNotify(duration[3], !toggleCheckBox4)
+            toggleCheckBox4 ? setToggleCheckBox4(false) : setToggleCheckBox4(true)
+          }}
+        />
+      </View>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#00000080',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   whiteBox: {
-    backgroundColor: 'white',
-    height: '70%',
-    width: '70%',
-    minHeight: 350,
-    padding: 20
+    flex: 1,
+    padding: 20,
   },
   headerText: {
+    fontFamily: 'sourcesanspro-regular',
     fontSize: 30
   },
   bottomRow: {
@@ -117,6 +90,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   choice: {
+    fontFamily: 'sourcesanspro-regular',
     fontSize: 20
   }
 })
