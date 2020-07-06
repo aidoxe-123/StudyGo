@@ -51,13 +51,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   red: {
-    backgroundColor: '#dc143c'
+    backgroundColor: '#e76f51'
   },
   blue: {
-    backgroundColor: '#1e90ff'
+    backgroundColor: '#517ee7'
   },
   yellow: {
-    backgroundColor: 'rgb(245,199,26)'
+    backgroundColor: '#51e7ba'
   },
   text: {
     fontFamily: 'sourcesanspro-regular',

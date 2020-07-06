@@ -1,25 +1,23 @@
 import React, {useContext, useState, useEffect, useRef} from 'react'
 import { 
   View, Text, TouchableWithoutFeedback, Platform,
-  Keyboard, TouchableOpacity, ScrollView, StatusBar
+  Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet
 } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Ionicons, AntDesign } from '@expo/vector-icons'
 import { YellowLine } from '../../../../style/yellowLine'
-import { TimetableStyles } from '../../../../style/TimetableStyles'
 import { UserIdContext } from '../../../components/index'
-import TimetableHourColumn from './TimetableHourColumn'
-import TimetableColumn from './TimetableColumn'
-import TimetableEditModal from './TimetableEditModal'
-import TimetableEmptyColumn from './TimetableEmptyColumn'
-import TimetableAddModal from './TimetableAddModal'
-
+import DayNameColumn from './DayNameColumn'
+import HourTitle from './HourTitle'
+import DayRow from './DayRow'
+import EditModal from './EditModal'
+import AddModal from './AddModal'
+import {allClasses, editClass, deleteClass, addClass} from './DataFetcher.js'
 
 export default function Timetable({navigation}) {
   const userId = useContext(UserIdContext)
 
-  const [loading, setLoading] = useState(true)
-
+  const [loading, setLoading] = useState(false)
 
   // for the edit modal
   const [editModalVisible, setEditModalVisible] = useState(false)
@@ -38,63 +36,38 @@ export default function Timetable({navigation}) {
   const [addModalY, setAddModalY] = useState(null)
 
   const [lessons, setLessons] = useState({
-      monday: [],
-      tuesday: [],
-      wednesday: [],
-      thursday: [],
-      friday: []
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: []
   }) 
+
+  // when first mount
+  useEffect(fetchData, [])
 
   function fetchData() {
     setLoading(true)
-    const requestOptions = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        userId: userId
-      })
-    }
-    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/timetable/all', requestOptions)
-        .then(res => res.json())
-        .then(data => setLessons(data.timetable))
-        .then(() => setLoading(false))
-        .catch(error => console.log(error))
-  }
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  function handleEdit(lesson, id) {
-    const requestOptions = {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        userId: userId,
-        taskId: id,
-        newTask: lesson,
-        newDay: lesson.day        
-      })
-    }
-    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/timetable', requestOptions)
-      .catch(error => console.log(error))
-      .then(() => fetchData())
+    allClasses(userId).then(data => {
+      setLessons(data.timetable)
+      setLoading(false)
+    })
   }
 
-  function handleDelete(id) {
-    const requestOptions = {
-      method: 'DELETE',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        userId: userId,
-        taskId: id,
-      })
-    }
-    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/timetable', requestOptions)
-      .catch(error => console.log(error))
-      .then(() => fetchData())
-      .then(() => handleCloseEditModal())
+  function handleEdit(lesson, taskId) {
+    editClass(userId, taskId, lesson, lesson.day).then(fetchData)
   }
 
+  function handleDelete(taskId) {
+    deleteClass(userId, taskId).then(fetchData).then(handleCloseEditModal)
+  }
+
+  function handleAdd(lesson) {
+    addClass(userId, lesson.day, lesson).then(fetchData).then(handleCloseAddModal)
+  }
+
+  // for the opening and closure of edit modal
+  // -------------------------------------------------
   function openEditModal(height, width, x, y, lesson) {
     setEditModalHeight(height)
     setEditModalWidth(width)
@@ -119,7 +92,10 @@ export default function Timetable({navigation}) {
     setEditModalY(null)
     setEditedLesson(null)
   }
+  ///////////////////////////////////////////////////////////////////
 
+  // for opening and closure of add modal
+  // ---------------------------------------------------------------
   function openAddModal() {
     addButtonPos.current.measure((fx, fy, width, height, px, py) => {
       setAddModalHeight(height)
@@ -143,23 +119,8 @@ export default function Timetable({navigation}) {
     setAddModalX(null)
     setAddModalY(null)
   }
+  ///////////////////////////////////////////////////////////////////
 
-  function handleAdd(lesson) {
-    const requestOptions = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        userId: userId,
-        day: lesson.day,
-        task: lesson     
-      })
-    }
-    fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/timetable', requestOptions)
-      .then(() => fetchData())
-      .then(() => handleCloseAddModal())
-      .catch(error => console.log(error))
-  } 
-  
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -180,8 +141,33 @@ export default function Timetable({navigation}) {
               </View> 
           </TouchableOpacity>
         </View>
+        <View style={styles.content}>
+          <DayNameColumn/>
+          <ScrollView horizontal={true} style={{width: '85%'}}>
+            <View>
+              <HourTitle/>
+              <View style={{flexDirection: 'row'}}>
+                <View style={{width: 50}}/>
+                <View style={{width: 2400, borderBottomWidth: 1}}/>
+                <View style={{width: 50}}/>
+              </View>
+              <DayRow lessons={lessons.monday} openModal={openEditModal}/>
+              <DayRow lessons={lessons.tuesday} openModal={openEditModal}/>
+              <DayRow lessons={lessons.wednesday} openModal={openEditModal}/>
+              <DayRow lessons={lessons.thursday} openModal={openEditModal}/>
+              <DayRow lessons={lessons.friday} openModal={openEditModal}/>
+            </View>
+          </ScrollView>
+        </View>
+        <TouchableOpacity 
+          style={styles.addButton} 
+          onPress={openAddModal} 
+          ref={addButtonPos}
+        >
+          <AntDesign name="pluscircle" size={50} color='#e76f51'/>
+        </TouchableOpacity>
         { editModalVisible && 
-          <TimetableEditModal 
+          <EditModal 
             height={editModalHeight} 
             width={editModalWidth}
             x={editModalX}
@@ -192,24 +178,9 @@ export default function Timetable({navigation}) {
             lesson={editedLesson}
           />
         }
-        <View style={TimetableStyles.content}>
-          <TimetableHourColumn />
-          <ScrollView 
-            horizontal={true} 
-            showsHorizontalScrollIndicator={false} 
-            style={{width: '80%'}}
-          >
-            <TimetableColumn dateName='monday' lessons={lessons.monday} openModal={openEditModal}/>
-            <TimetableColumn dateName='tuesday' lessons={lessons.tuesday} openModal={openEditModal}/>
-            <TimetableColumn dateName='wednesday' lessons={lessons.wednesday} openModal={openEditModal}/>
-            <TimetableColumn dateName='thursday' lessons={lessons.thursday} openModal={openEditModal}/>
-            <TimetableColumn dateName='friday' lessons={lessons.friday} openModal={openEditModal}/>
-            <TimetableEmptyColumn />
-          </ScrollView>
-        </View>
         {
           addModalVisible && 
-          <TimetableAddModal
+          <AddModal
             height={addModalHeight}
             width={addModalWidth}
             x={addModalX}
@@ -218,10 +189,24 @@ export default function Timetable({navigation}) {
             handleAdd={handleAdd} 
           />
         }
-        <TouchableOpacity style={TimetableStyles.addButton} onPress={openAddModal} ref={addButtonPos}>
-          <AntDesign name="pluscircle" size={50} color='#e76f51'/>
-        </TouchableOpacity>
-      </View>
+      </View> 
     </TouchableWithoutFeedback>
   )
 }
+
+const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#ffffff',
+    alignSelf: 'stretch',
+    marginBottom: 10,
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 10, 
+    right: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})

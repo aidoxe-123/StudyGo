@@ -42,7 +42,7 @@ export const TimetableEditStyles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 25,
-    backgroundColor: 'rgb(60,179,113)',
+    backgroundColor: '#2a9d8f',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -53,7 +53,7 @@ export const TimetableEditStyles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 25,
-    backgroundColor: '#588093',
+    backgroundColor: '#51c9e7',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -86,7 +86,7 @@ export const TimetableEditStyles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 25,
-    backgroundColor: 'red',
+    backgroundColor: '#e76f51',
     alignItems: 'center',
     justifyContent: 'center'
   }

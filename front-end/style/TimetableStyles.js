@@ -27,7 +27,7 @@ export const TimetableStyles = StyleSheet.create({
   },
   blueCell: {
     position: "absolute",
-    backgroundColor: '#2a9d8f', 
+    backgroundColor: '#e76f51', 
     position: 'absolute', 
     left: 2,
     width: 98,

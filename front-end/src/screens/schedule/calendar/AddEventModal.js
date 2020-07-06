@@ -23,15 +23,15 @@ export default function AddEventModal({onFinishAdding, refetchData, dateString})
   useEffect(() => {
     switch (type) {
       case 'deadline':
-        setHeaderColor('#1e90ff') // blue
+        setHeaderColor('#517ee7') // blue
         setTitle('Deadline:')
         break
       case 'assessment':
-        setHeaderColor('rgb(245,199,26)') // yellow
+        setHeaderColor('#51e7ba') // yellow
         setTitle('Assessment: ')
         break
       case 'special':
-        setHeaderColor('#dc143c') // red
+        setHeaderColor('#e76f51') // red
         setTitle('Special: ')
         break
       default:

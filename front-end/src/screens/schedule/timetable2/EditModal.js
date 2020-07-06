@@ -1,13 +1,12 @@
 import React, {useState, useEffect } from 'react'
 import { View, Animated, Modal, Text, 
-  Dimensions, TouchableOpacity, TextInput,
+  Dimensions, TouchableOpacity, TextInput, StyleSheet,
   TouchableWithoutFeedback, Keyboard, Picker, Alert
 } from 'react-native'
+import { DatePicker } from '../../../components/index'
 import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons'; 
-import { TimetableStyles } from '../../../../style/TimetableStyles'
-import { TimetableEditStyles } from '../../../../style/TimetableEditStyles'
 
-export default function TimetableEditModal({height, width, x, y, handleClose, handleEdit, handleDelete, lesson}) {
+export default function EditModal({height, width, x, y, handleClose, handleEdit, handleDelete, lesson}) {
   const SCREEN_WIDTH = Dimensions.get('window').width
   const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -78,7 +77,7 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
   }
 
   useEffect(() => {
-    const duration = 300
+    const duration = 250
     const changeCoordinate = Animated.timing(modalCoordinate, {
       toValue: {
         x: SCREEN_WIDTH / 8,
@@ -157,7 +156,7 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
   return (
     <Modal visible={true} transparent={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={TimetableEditStyles.container}>
+        <View style={styles.container}>
           <Animated.View
             style={[{
               height: modalHeight,
@@ -167,22 +166,22 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
               overflow: 'hidden'
             }, modalCoordinate.getLayout()]}
           >
-            <View style={TimetableEditStyles.insideBlueBox}>
+            <View style={styles.insideBlueBox}>
               { !edit ? (
                 <View>
-                  <Text style={TimetableEditStyles.duration}>
+                  <Text style={styles.duration}>
                     {makeTimeString(start, end, day)}
                   </Text>
-                  <Text style={TimetableEditStyles.name}>{name}</Text>
+                  <Text style={styles.name}>{name}</Text>
                 </View>
                 ) : (
                 <View>
-                  <View style={[TimetableEditStyles.editDayTimeRow]}>
+                  <View style={{flexDirection: 'row'}}>
                     <View style={{flex: 4, height: 30}}>
                       <Picker
                         itemStyle={{}}
                         mode="dropdown"
-                        style={TimetableEditStyles.dayDropdown}
+                        style={styles.dayDropdown}
                         selectedValue={tempDay}
                         onValueChange={value => setTempDay(value)}
                       >
@@ -199,28 +198,28 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
                     </View>
                     <View style={{flex: 6, flexDirection: 'row'}}>
                       <TextInput 
-                        style={[TimetableEditStyles.duration, !validHour && {color: 'red'}]} 
+                        style={[styles.duration, !validHour && {color: 'red'}]} 
                         value={tempStartHour.toString()}
                         keyboardType='numeric'
                         onChangeText={value => setTempStartHour(handleTimeChange(value, tempStartHour, 24))}
                       />
-                      <Text style={[TimetableEditStyles.duration, !validHour && {color: 'red'}]}>:</Text>
+                      <Text style={[styles.duration, !validHour && {color: 'red'}]}>:</Text>
                       <TextInput 
-                        style={[TimetableEditStyles.duration, !validHour && {color: 'red'}]} 
+                        style={[styles.duration, !validHour && {color: 'red'}]} 
                         value={tempStartMinute.toString()}
                         keyboardType='numeric'
                         onChangeText={value => setTempStartMinute(handleTimeChange(value, tempStartMinute, 60))}
                       />
-                      <Text style={[TimetableEditStyles.duration, !validHour && {color: 'red'}]}> - </Text>
+                      <Text style={[styles.duration, !validHour && {color: 'red'}]}> - </Text>
                       <TextInput 
-                        style={[TimetableEditStyles.duration, !validHour && {color: 'red'}]} 
+                        style={[styles.duration, !validHour && {color: 'red'}]} 
                         value={tempEndHour.toString()}
                         keyboardType='numeric'
                         onChangeText={value => setTempEndHour(handleTimeChange(value, tempEndHour, 24))}
                       />
-                      <Text style={[TimetableEditStyles.duration, !validHour && {color: 'red'}]}>:</Text>
+                      <Text style={[styles.duration, !validHour && {color: 'red'}]}>:</Text>
                       <TextInput 
-                        style={[TimetableEditStyles.duration, !validHour && {color: 'red'}]} 
+                        style={[styles.duration, !validHour && {color: 'red'}]} 
                         value={tempEndMinute.toString()}
                         keyboardType='numeric'
                         onChangeText={value => setTempEndMinute(handleTimeChange(value, tempEndMinute, 60))}
@@ -228,8 +227,8 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
                     </View>
                   </View>
                   <TextInput 
-                    style={[TimetableStyles.lessonName, 
-                      {fontSize: 30, borderBottomWidth: 1, borderColor: 'white'}
+                    style={[styles.name, 
+                      {borderBottomWidth: 1, borderColor: 'white'}
                     ]}
                     value={tempName}
                     onChangeText={text => setTempName(text)}
@@ -241,7 +240,7 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
               
               <TouchableOpacity 
                 onPress={handleClose} 
-                style={TimetableEditStyles.closeButton}
+                style={styles.closeButton}
               >
                 <AntDesign name="close" size={30} color="#ffffff" />
               </TouchableOpacity>
@@ -254,10 +253,10 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
               }}>
               {
                 !edit 
-                ? <Text style={TimetableEditStyles.viewDescription}>{description}</Text> 
-                : <View style={TimetableEditStyles.editDescriptionBox} >
+                ? <Text style={styles.viewDescription}>{description}</Text> 
+                : <View style={styles.editDescriptionBox} >
                   <TextInput
-                    style={TimetableEditStyles.editDescriptionInput}
+                    style={styles.editDescriptionInput}
                     underlineColorAndroid="transparent"
                     placeholder="Type the description of the class"
                     placeholderTextColor="grey"
@@ -271,7 +270,7 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
               {
                 edit && 
                 <TouchableOpacity 
-                  style={TimetableEditStyles.doneButton}
+                  style={styles.doneButton}
                   onPress={handleSubmit}
                 >
                   <MaterialIcons name="done" size={24} color="white" />
@@ -280,7 +279,7 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
               {
                 edit &&
                 <TouchableOpacity
-                  style={TimetableEditStyles.deleteButton}
+                  style={styles.deleteButton}
                   onPress={handleDeleteClicked}
                 >
                   <AntDesign name="delete" size={24} color="white" />
@@ -288,7 +287,7 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
               }
               
               <TouchableOpacity
-                style={TimetableEditStyles.penButton}
+                style={styles.penButton}
                 onPress={handlePenButtonClicked}
               >
                   <Feather name="edit-2" size={24} color='white'/>
@@ -300,3 +299,93 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
     </Modal>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, 
+    backgroundColor: '#00000080'
+  },
+  insideBlueBox: {
+    flex: 1, 
+    paddingHorizontal: 10, 
+    paddingTop: 23
+  },
+  duration: {
+    color: 'rgba(255,255,255,0.7)',
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20,
+  },
+  name: {
+    color: 'white', 
+    fontFamily: 'sourcesanspro-semibold',
+    fontSize: 30
+  },
+  dayDropdown: {
+    color: 'rgba(255,255,255,0.7)', 
+    transform: [
+      {scaleX: 16/14}, 
+      {scaleY: 16/14}, 
+      {translateX: 5}, 
+      {translateY: -9}
+    ],
+    height: 50,
+    width: 100
+  },
+  closeButton: {
+    position: 'absolute', 
+    right: 7, 
+    top: 7, 
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
+  viewDescription: {
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20, 
+    padding: 6
+  },
+  editDescriptionBox: {
+    borderColor: 'grey', 
+    borderWidth: 1, 
+    padding: 5, 
+    height: 160
+  },
+  editDescriptionInput: {
+    textAlignVertical: 'top', 
+    height: 150, 
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 20,
+  },
+  doneButton: {
+    position: 'absolute',
+    bottom: 10,
+    right: 70,
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    backgroundColor: '#2a9d8f',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  penButton: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10, 
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    backgroundColor: '#51c9e7',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  deleteButton: {
+    position: 'absolute',
+    bottom: 10,
+    right: 130,
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    backgroundColor: '#e76f51',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+})

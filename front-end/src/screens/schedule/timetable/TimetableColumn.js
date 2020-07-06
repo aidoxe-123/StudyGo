@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     fontFamily: 'sourcesanspro-semibold',
     borderWidth: 1,
     borderRightWidth: 0,
-    borderColor: '#dddddd'
+    borderColor: '#dddddd',
   },
   backgroundCell: {
     flex: 1,

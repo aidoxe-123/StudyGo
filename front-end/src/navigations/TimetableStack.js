@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import Timetable from '../screens/schedule/timetable/Timetable'
+import Timetable from '../screens/schedule/timetable2/Timetable'
 import Calendar from '../screens/schedule/calendar/Calendar'
 import { Header } from '../components/index'
 

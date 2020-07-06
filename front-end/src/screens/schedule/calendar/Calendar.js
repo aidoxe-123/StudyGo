@@ -21,9 +21,9 @@ export default function Calendar({navigation}) {
   const [marked, setMarked] = useState({})
   // dot colors to be marked on calendars
   // --------------------------------------------------------------------------------------
-  const special = {key: 'special', color: '#dc143c', selectedDotColor: 'white'} // red
-  const deadline = {key: 'deadline', color: '#1e90ff', selectedDotColor: 'white'} // blue
-  const assessment = {key: 'assessment', color: 'rgb(245,199,26)', selectedDotColor: 'white'} // yellow
+  const special = {key: 'special', color: '#e76f51', selectedDotColor: 'white'} // red
+  const deadline = {key: 'deadline', color: '#517ee7', selectedDotColor: 'white'} // blue
+  const assessment = {key: 'assessment', color: '#51e7ba', selectedDotColor: 'white'} // yellow
   //////////////////////////////////////////////////////////////////////////////////////////////
   
   // get the data from the current month if the component is first fetched
@@ -155,6 +155,11 @@ export default function Calendar({navigation}) {
           monthFormat={'MM yyyy'}
           onMonthChange={handleMonthChange}
           firstDay={1}
+          theme={{
+            arrowColor: '#e76f51',
+            selectedDayBackgroundColor: '#e76f51',
+            todayTextColor: '#e76f51',
+          }}
         />
         <CalendarDayView tasks={tasks} dateString={selected} refetchData={refetchData}/>
         {
