@@ -1,8 +1,10 @@
 import React, {useState, useEffect } from 'react'
-import { View, Animated, Modal, Text, 
+import { View, Modal, Text, 
   Dimensions, TouchableOpacity, TextInput,
   TouchableWithoutFeedback, Keyboard, Picker, Alert
 } from 'react-native'
+import Animated from 'react-native-reanimated'
+import {useTransition, mix} from 'react-native-redash'
 import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons'; 
 import { TimetableStyles } from '../../../../style/TimetableStyles'
 import { TimetableEditStyles } from '../../../../style/TimetableEditStyles'
@@ -27,10 +29,13 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
 
   const [validHour, setValidHour] = useState(true)
 
-  const modalCoordinate = useState(new Animated.ValueXY({x: x, y: y}))[0]
-  const modalHeight = useState(new Animated.Value(height))[0]
-  const modalWidth = useState(new Animated.Value(width))[0]
-  const whiteBoxFlex = useState(new Animated.Value(0))[0]
+  const [toggled, setToggle] = useState(false)
+  const transition = useTransition(toggled, {duration: 250})
+  const translateX = mix(transition, 0, SCREEN_WIDTH / 8 - x)
+  const translateY = mix(transition, 0, SCREEN_HEIGHT / 8 - y)
+  const modalHeight = mix(transition, height, SCREEN_HEIGHT / 4 * 3)
+  const modalWidth = mix(transition, width, SCREEN_WIDTH / 4 * 3)
+  const whiteBoxFlex = mix(transition, 0, 4)
 
   const [edit, setEdit] = useState(false)
 
@@ -78,36 +83,7 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
   }
 
   useEffect(() => {
-    const duration = 300
-    const changeCoordinate = Animated.timing(modalCoordinate, {
-      toValue: {
-        x: SCREEN_WIDTH / 8,
-        y: SCREEN_HEIGHT / 8,
-      },
-      duration: duration,
-      useNativeDriver: false
-    })
-    const changeWidth = Animated.timing(modalWidth, {
-      toValue: SCREEN_WIDTH / 4 * 3,
-      duration: duration,
-      useNativeDriver: false
-    })
-    const changeHeight = Animated.timing(modalHeight, {
-      toValue: SCREEN_HEIGHT / 4 * 3,
-      duration: duration,
-      useNativeDriver: false
-    })
-    const changeWhiteBoxFlex = Animated.timing(whiteBoxFlex, {
-      toValue: 4,
-      duration: duration,
-      useNativeDriver: false
-    })
-    Animated.parallel([
-      changeCoordinate,
-      changeWidth,
-      changeHeight,  
-      changeWhiteBoxFlex
-    ]).start()
+    setToggle(true)
   }, [])
 
   function handlePenButtonClicked() {
@@ -159,13 +135,19 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={TimetableEditStyles.container}>
           <Animated.View
-            style={[{
+            style={{
+              top: y,
+              left: x,
               height: modalHeight,
               width: modalWidth,
               backgroundColor: '#51c9e7',
               borderRadius: 10,
-              overflow: 'hidden'
-            }, modalCoordinate.getLayout()]}
+              overflow: 'hidden',
+              transform: [
+                {translateX: translateX},
+                {translateY: translateY}
+              ]
+            }}
           >
             <View style={TimetableEditStyles.insideBlueBox}>
               { !edit ? (
@@ -240,7 +222,10 @@ export default function TimetableEditModal({height, width, x, y, handleClose, ha
               }
               
               <TouchableOpacity 
-                onPress={handleClose} 
+                onPress={() => {
+                  setToggle(false)
+                  handleClose()
+                }} 
                 style={TimetableEditStyles.closeButton}
               >
                 <AntDesign name="close" size={30} color="#ffffff" />

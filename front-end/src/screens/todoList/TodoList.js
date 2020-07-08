@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, FlatList, TouchableWithoutFeedback,
-  Keyboard, TouchableOpacity, Text, StyleSheet, Animated
+  Keyboard, TouchableOpacity, Text, StyleSheet,
 } from 'react-native'
+import Animated from 'react-native-reanimated'
+import {useTransition, mix} from 'react-native-redash'
 import {Notifications} from 'expo'
 import { useIsFocused } from '@react-navigation/native'
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -26,12 +28,10 @@ export default function TodoList({ navigation }) {
 
   const [notiToBeCanceled, setNotiToBeCanceled] = useState({})
 
-  const deleteTranslateY = useState(new Animated.Value(130))[0]
-  // translateY of the delete slider when long press an item
-
-  const viewUnderFlatListHeight = useState(new Animated.Value(20))[0]
-
   const [inDeleteMode, setInDeleteMode] = useState(false)
+  const transition = useTransition(inDeleteMode, {duration: 250})
+  const deleteTranslateY = mix(transition, 130, 0)
+  const viewUnderFlatListHeight = mix(transition, 20, 130)
 
   function changeDeleteState(itemId, state, notiList) {
     setToDelete(prev => {
@@ -59,40 +59,15 @@ export default function TodoList({ navigation }) {
 
   function openDeleteMode(itemId, notiList) {
     changeDeleteState(itemId, true, notiList)
-    setInDeleteMode(true),
-    slideIn()
+    setInDeleteMode(true)
   }
 
-  function slideIn() {
-    const a = Animated.timing(deleteTranslateY, {
-      toValue: 0,
-      duration: 250,
-      useNativeDriver: true,
-    })
-    const b = Animated.timing(viewUnderFlatListHeight, {
-      toValue: 130,
-      duration: 250,
-      useNativeDriver: false,
-    })
-    Animated.parallel([a, b]).start()
-  }
-
-  function slideOut() {
-    const a = Animated.timing(deleteTranslateY, {
-      toValue: 130,
-      duration: 250,
-      useNativeDriver: true
-    })
-    const b = Animated.timing(viewUnderFlatListHeight, {
-      toValue: 20,
-      duration: 250,
-      useNativeDriver: false
-    })
-    Animated.parallel([a, b]).start()
-    setToDelete({})
-    setNotiToBeCanceled({})
-    setInDeleteMode(false)
-  }
+  useEffect(() => {
+    if (inDeleteMode === false) {
+      setToDelete({})
+      setNotiToBeCanceled({})
+    }
+  }, [inDeleteMode])
 
   function handleDelete() {
     let deletePromises = []
@@ -112,7 +87,7 @@ export default function TodoList({ navigation }) {
       allTasks(userId)
       .then(tasksWithCorrectDateFormat => setTodos(tasksWithCorrectDateFormat))
       .then(() => {
-        slideOut()
+        setInDeleteMode(false)
         setLoading(false)
       })
     })
@@ -174,7 +149,7 @@ export default function TodoList({ navigation }) {
               <Text>Delete</Text>
           </TouchableOpacity>
           <View style={{height: 10}}></View>
-          <TouchableOpacity style={styles.deleteContainer2} onPress={slideOut}>
+          <TouchableOpacity style={styles.deleteContainer2} onPress={() => setInDeleteMode(false)}>
               <Text>Cancel</Text>
           </TouchableOpacity>
         </Animated.View>
