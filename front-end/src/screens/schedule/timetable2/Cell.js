@@ -30,7 +30,8 @@ export default function Cell({lesson, openModal}) {
   return (
     <TouchableOpacity style={[
         styles.cell,
-        {left: (start / 60 + 0.5) * 100, width: (end - start) / 60 * 100}
+        {left: (start / 60 + 0.5) * 100, width: (end - start) / 60 * 100},
+        end % 60 === 0 && end < 1440 && {borderRightWidth: 0}
       ]}
       ref = {thisCell}
       onPress={handleClick}
@@ -48,7 +49,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#51c9e7', 
     position: 'absolute', 
     height: '100%',
-    padding: 5,  
+    padding: 5,
+    borderWidth: 1,
+    borderTopWidth: 0  
   }, 
   time: {
     color: 'rgba(255,255,255,0.7)',

@@ -143,7 +143,8 @@ export default function Timetable({navigation}) {
         </View>
         <View style={styles.content}>
           <DayNameColumn/>
-          <ScrollView horizontal={true} style={{width: '85%'}}>
+          <View style={{flex: 1}} onStartShouldSetResponder={() => true}>
+          <ScrollView horizontal={true} contentContainerStyle={{flexGrow: 1}}>
             <View>
               <HourTitle/>
               <View style={{flexDirection: 'row'}}>
@@ -158,6 +159,7 @@ export default function Timetable({navigation}) {
               <DayRow lessons={lessons.friday} openModal={openEditModal}/>
             </View>
           </ScrollView>
+          </View>
         </View>
         <TouchableOpacity 
           style={styles.addButton} 
@@ -201,6 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignSelf: 'stretch',
     marginBottom: 10,
+    minHeight: 500,
   },
   addButton: {
     position: 'absolute',
