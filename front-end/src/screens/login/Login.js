@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { 
-  View, Text, TextInput, TouchableWithoutFeedback, 
-  Keyboard, TouchableOpacity, Platform 
+import {
+  View, Text, TextInput, TouchableWithoutFeedback,
+  Keyboard, TouchableOpacity, Platform
 } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { LoginStyles } from '../../../style/LoginStyles.js'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
+import { signInGoogle } from '../../utils/googleSignIn';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('')
@@ -55,7 +56,7 @@ export default function Login({ navigation }) {
       // send a post request to the api to check for email and password
       let requestOption = {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: email,
           password: password
@@ -72,6 +73,12 @@ export default function Login({ navigation }) {
     }
   }
 
+  function handleGoogleSignIn() {
+    signInGoogle()
+      .then(userId => navigation.navigate('MainDrawer', { userId: userId }))
+      .catch(error => console.log(error))
+  }
+
   function form() {
     return (
       <View style={LoginStyles.whitePanel}>
@@ -79,27 +86,27 @@ export default function Login({ navigation }) {
         {
           !isValid &&
           <Text style={LoginStyles.invalidLogin}>Email or password was incorrect, please try again</Text>
-        } 
-        <TextInput 
-          style={LoginStyles.input} 
+        }
+        <TextInput
+          style={LoginStyles.input}
           placeholder='Email'
           value={email}
           onChangeText={handleInputEmail}
         />
-        { 
+        {
           emptyEmail &&
           <Text style={LoginStyles.wrongInputAlert}>
             Please enter email
           </Text>
         }
-        <TextInput 
-          secureTextEntry={true} 
-          style={LoginStyles.input} 
+        <TextInput
+          secureTextEntry={true}
+          style={LoginStyles.input}
           placeholder='Password'
           value={password}
           onChangeText={handleInputPassword}
         />
-        { 
+        {
           emptyPassword &&
           <Text style={LoginStyles.wrongInputAlert}>
             Please enter password
@@ -112,7 +119,12 @@ export default function Login({ navigation }) {
           <TouchableOpacity style={LoginStyles.button} onPress={handleLogin}>
             <Text style={LoginStyles.buttonText}>Login</Text>
           </TouchableOpacity>
+
         </View>
+
+        <TouchableOpacity style={LoginStyles.button} onPress={handleGoogleSignIn}>
+          <Text style={LoginStyles.buttonText}>Sign in with Google</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -120,10 +132,10 @@ export default function Login({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       {
-        Platform.OS ==='ios'
-        ? <KeyboardAwareScrollView 
-            style={{backgroundColor: 'coral'}}
-            resetScrollToCoords={{x: 0, y: 0}}
+        Platform.OS === 'ios'
+          ? <KeyboardAwareScrollView
+            style={{ backgroundColor: 'coral' }}
+            resetScrollToCoords={{ x: 0, y: 0 }}
             contentContainerStyle={LoginStyles.container}
             scrollEnabled={true}
           >
@@ -134,7 +146,7 @@ export default function Login({ navigation }) {
             />
             {form()}
           </KeyboardAwareScrollView>
-        : <View style={LoginStyles.container}>
+          : <View style={LoginStyles.container}>
             <Spinner
               visible={loading}
               textContent='Loading...'
