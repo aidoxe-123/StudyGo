@@ -10,7 +10,7 @@ url: https://fir-tut2-82e4f.firebaseapp.com/api/v1
 ------------------------------------------------------LOG IN / REGISTER------------------------------------------------------------------
 // register an account with an email and password
 POST /register
-    req: email (string), password (string), uesrname (string)
+    req: email (string), password (string), uesrname (string), googleId (string (optional))
     res: 
     code:  409 = Email already registered
 

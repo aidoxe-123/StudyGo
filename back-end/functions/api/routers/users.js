@@ -32,9 +32,9 @@ router.post('/test', (req, res) => {
 
 
 // create new user (or not if the account with the given mail is exist)
-// (email, password, username) -> ()
+// (email, password, username, googleId) -> ()
 router.post('/register', wrapper(async (req, res) => {
-    const { email, password, username } = req.body;
+    const { email, password, username, googleId } = req.body;
 
     let doc = await db.collection('mails').doc(email).get();
 
@@ -44,6 +44,7 @@ router.post('/register', wrapper(async (req, res) => {
     }
 
     let newId = email + new Date().getTime();
+    if (googleId !== undefined) newId = googleId;
 
     await Promise.all([
         doc.ref.set({
