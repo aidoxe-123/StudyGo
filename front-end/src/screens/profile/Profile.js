@@ -1,11 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, ImageBackground,
   TouchableWithoutFeedback, Keyboard
 } from 'react-native'
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions'; 
 import { Feather } from '@expo/vector-icons';
 import { TextInput } from 'react-native-paper';
 
 export default function Profile() {
+  const [uri, setUri] = useState('../../../assets/user.png')
+  useEffect(() => {
+    getPermissionAsync()
+  }, [])
+
+  async function getPermissionAsync() {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  };
+  async function pickImage() {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setUri(result.uri)
+      }
+
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -20,11 +53,11 @@ export default function Profile() {
         <View style={styles.photoContainter1}>
           <TouchableOpacity style={styles.photoContainer2}>
             <ImageBackground 
-              source={require('../../../assets/user.png')} 
+              source={{uri: uri}} 
               style={styles.profileImg}
             >
               <View style={{flex: 2}}/>
-              <TouchableOpacity style={styles.changeImgBtn}>
+              <TouchableOpacity style={styles.changeImgBtn} onPress={pickImage}>
                 <Feather name="camera" size={24} color="#ffffff90" />
               </TouchableOpacity>
             </ImageBackground>
