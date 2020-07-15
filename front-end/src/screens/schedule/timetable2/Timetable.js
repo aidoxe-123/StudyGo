@@ -148,6 +148,7 @@ export default function Timetable({navigation}) {
           <DayNameColumn/>
           <View style={{flex: 1}} onStartShouldSetResponder={() => true}>
             <ScrollView horizontal={true} contentContainerStyle={{flexGrow: 1}}>
+              <TouchableWithoutFeedback>
               <View>
                 <HourTitle/>
                 <View style={{flexDirection: 'row'}}>
@@ -160,7 +161,8 @@ export default function Timetable({navigation}) {
                 <DayRow lessons={lessons.wednesday} openModal={openEditModal}/>
                 <DayRow lessons={lessons.thursday} openModal={openEditModal}/>
                 <DayRow lessons={lessons.friday} openModal={openEditModal}/>
-              </View>
+                </View>
+                </TouchableWithoutFeedback>
             </ScrollView>
           </View>
         </View>
