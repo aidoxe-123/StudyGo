@@ -25,8 +25,6 @@ export const signInGoogle = async () => {
 
             const { email, name, id } = result.user;
 
-
-
             let requestOption = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -39,7 +37,7 @@ export const signInGoogle = async () => {
             }
             await fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/register', requestOption);
 
-            return id;
+            return { success: true, id: id };
         } else {
             return { cancelled: true };
         }
