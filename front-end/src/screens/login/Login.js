@@ -76,7 +76,10 @@ export default function Login({ navigation }) {
 
   function handleGoogleSignIn() {
     signInGoogle()
-      .then(userId => navigation.navigate('MainDrawer', { userId: userId }))
+      .then(res => {
+        if (res.success) {
+          navigation.navigate('MainDrawer', { userId: res.id });
+        }})
       .catch(error => console.log(error))
   }
 
