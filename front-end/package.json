@@ -38,6 +38,7 @@
     "react-native-calendars": "^1.269.0",
     "react-native-dash": "0.0.11",
     "react-native-gesture-handler": "~1.6.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-loading-spinner-overlay": "^1.1.0",
     "react-native-paper": "^3.10.1",

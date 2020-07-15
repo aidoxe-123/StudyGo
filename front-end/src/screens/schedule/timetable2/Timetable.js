@@ -13,6 +13,7 @@ import DayRow from './DayRow'
 import EditModal from './EditModal'
 import AddModal from './AddModal'
 import {allClasses, editClass, deleteClass, addClass} from './DataFetcher.js'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function Timetable({navigation}) {
   const userId = useContext(UserIdContext)
@@ -129,6 +130,7 @@ export default function Timetable({navigation}) {
           textContent='Loading...'
           textStyle={{color: "#fff"}}
         />
+        {/* title */}
         <View style={YellowLine.header}>
           <Text style={YellowLine.headerText}>Timetable</Text>
           <TouchableOpacity 
@@ -141,6 +143,7 @@ export default function Timetable({navigation}) {
               </View> 
           </TouchableOpacity>
         </View>
+
         <View style={styles.content}>
           <DayNameColumn/>
           <View style={{flex: 1}} onStartShouldSetResponder={() => true}>
@@ -203,7 +206,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignSelf: 'stretch',
     marginBottom: 10,
-    minHeight: 500,
   },
   addButton: {
     position: 'absolute',
