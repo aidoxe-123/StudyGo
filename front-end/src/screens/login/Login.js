@@ -7,7 +7,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { LoginStyles } from '../../../style/LoginStyles.js'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { signInGoogle } from '../../utils/googleSignIn';
-import { AntDesign, MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, Entypo } from '@expo/vector-icons';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('')

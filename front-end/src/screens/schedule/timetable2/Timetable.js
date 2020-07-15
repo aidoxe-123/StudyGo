@@ -1,7 +1,7 @@
 import React, {useContext, useState, useEffect, useRef} from 'react'
 import { 
   View, Text, TouchableWithoutFeedback, Platform,
-  Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet
+  Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Dimensions
 } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Ionicons, AntDesign } from '@expo/vector-icons'
@@ -13,7 +13,6 @@ import DayRow from './DayRow'
 import EditModal from './EditModal'
 import AddModal from './AddModal'
 import {allClasses, editClass, deleteClass, addClass} from './DataFetcher.js'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function Timetable({navigation}) {
   const userId = useContext(UserIdContext)
@@ -201,6 +200,8 @@ export default function Timetable({navigation}) {
   )
 }
 
+const {height} = Dimensions.get('window')
+
 const styles = StyleSheet.create({
   content: {
     flex: 1,
@@ -208,6 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignSelf: 'stretch',
     marginBottom: 10,
+    minHeight: height * 70 / 100
   },
   addButton: {
     position: 'absolute',

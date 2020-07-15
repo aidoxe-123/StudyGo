@@ -115,6 +115,7 @@ export default class Register extends React.Component{
 
   form = () => (
     <View style={LoginStyles.container2}>
+        <KeyboardAwareScrollView enableOnAndroid={true}>
         {/* Logo */}
         <View style={LoginStyles.logoContainer}></View>
         <View style={LoginStyles.whitePanel}>
@@ -234,6 +235,7 @@ export default class Register extends React.Component{
             <Text style={{fontFamily: 'sourcesanspro-regular', textDecorationLine: 'underline'}}>Sign in</Text>
           </TouchableOpacity>
         </View>
+        </KeyboardAwareScrollView>
     </View>
   )
 
