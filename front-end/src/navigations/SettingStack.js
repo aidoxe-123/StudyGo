@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { Header } from '../components/index'
-import Profile from '../screens/profile/Profile'
+import Setting from '../screens/setting/Setting'
 
 const Stack = createStackNavigator()
 
@@ -17,11 +17,11 @@ export default function ProfileStack() {
       }}
     >
       <Stack.Screen 
-        name='Profile' 
-        component={Profile}
+        name='Setting' 
+        component={Setting}
         options = {({navigation}) => {
           return {
-            headerTitle: () => <Header title='Profile' navigation={navigation} />
+            headerTitle: () => <Header title='Setting' navigation={navigation} />
           }
         }} 
       />   

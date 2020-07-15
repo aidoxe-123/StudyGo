@@ -4,8 +4,8 @@ import { BackHandler } from 'react-native'
 import TimetableStack from './TimetableStack'
 import ProgressTrackerStack from './ProgressTrackerStack'
 import TodoStack from './TodoStack'
-import ProfileStack from './ProfileStack'
-import { MaterialCommunityIcons, Octicons, FontAwesome5, MaterialIcons } from '@expo/vector-icons'
+import SettingStack from './SettingStack'
+import { MaterialCommunityIcons, Octicons, FontAwesome5, AntDesign } from '@expo/vector-icons'
 import { UserIdContext, DrawerSlider } from '../components/index'
 
 const Drawer = createDrawerNavigator()
@@ -33,15 +33,6 @@ export default function MainDrawer({ route }) {
                 }}
             >
                 <Drawer.Screen
-                    name='Profile'
-                    component={ProfileStack}
-                    options={{
-                        drawerIcon: ({ focused, size, color }) => (
-                            <MaterialIcons name='person' size={24} color={color} />
-                        )
-                    }}
-                />
-                <Drawer.Screen
                     name='Schedule'
                     component={TimetableStack}
                     options={{
@@ -65,6 +56,15 @@ export default function MainDrawer({ route }) {
                     options={{
                         drawerIcon: ({ focused, size, color }) => (
                             <FontAwesome5 name='tasks' size={24} color={color} />
+                        )
+                    }}
+                />
+                <Drawer.Screen
+                    name='Settings'
+                    component={SettingStack}
+                    options={{
+                        drawerIcon: ({ focused, size, color }) => (
+                            <AntDesign name='setting' size={24} color={color} />
                         )
                     }}
                 />

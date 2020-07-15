@@ -26,7 +26,7 @@ export default function DrawerSlider(props) {
   return (
     <ScrollView contentContainerStyle={{flex: 1, marginTop: 25}}>
       <View style={styles.profileContainer}>
-        <Image source={require('../../assets/person.png')} style={styles.profileImg}/>
+        <Image source={require('../../assets/studygo6.png')} style={styles.profileImg}/>
         <Text style={styles.username}>{username}</Text>
       </View>
       <SafeAreaView>
