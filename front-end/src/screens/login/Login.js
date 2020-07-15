@@ -7,7 +7,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { LoginStyles } from '../../../style/LoginStyles.js'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { signInGoogle } from '../../utils/googleSignIn';
-import { AntDesign, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('')
@@ -82,51 +82,6 @@ export default function Login({ navigation }) {
 
   function form() {
     return (
-      // <View style={LoginStyles.whitePanel}>
-      //   <Text h2 style={LoginStyles.heading}>LOGIN</Text>
-      //   {
-      //     !isValid &&
-      //     <Text style={LoginStyles.invalidLogin}>Email or password was incorrect, please try again</Text>
-      //   }
-      //   <TextInput
-      //     style={LoginStyles.input}
-      //     placeholder='Email'
-      //     value={email}
-      //     onChangeText={handleInputEmail}
-      //   />
-      //   {
-      //     emptyEmail &&
-      //     <Text style={LoginStyles.wrongInputAlert}>
-      //       Please enter email
-      //     </Text>
-      //   }
-      //   <TextInput
-      //     secureTextEntry={true}
-      //     style={LoginStyles.input}
-      //     placeholder='Password'
-      //     value={password}
-      //     onChangeText={handleInputPassword}
-      //   />
-      //   {
-      //     emptyPassword &&
-      //     <Text style={LoginStyles.wrongInputAlert}>
-      //       Please enter password
-      //     </Text>
-      //   }
-      //   <View style={LoginStyles.bottomRow}>
-      //     <TouchableOpacity onPress={moveToRegister}>
-      //       <Text style={LoginStyles.link}>Register</Text>
-      //     </TouchableOpacity>
-      //     <TouchableOpacity style={LoginStyles.button} onPress={handleLogin}>
-      //       <Text style={LoginStyles.buttonText}>Login</Text>
-      //     </TouchableOpacity>
-
-      //   </View>
-
-      //   <TouchableOpacity style={LoginStyles.button} onPress={handleGoogleSignIn}>
-      //     <Text style={LoginStyles.buttonText}>Sign in with Google</Text>
-      //   </TouchableOpacity>
-      // </View>
       <View style={LoginStyles.container2}>
         {/* Logo */}
         <View style={LoginStyles.logoContainer}></View>
@@ -177,7 +132,7 @@ export default function Login({ navigation }) {
           {/* email input */}
           <View style={[LoginStyles.input, emptyEmail && {marginBottom: 0}]}>
             <View style={LoginStyles.inpIconContainer}>
-              <MaterialIcons name="person" size={24} color="black" />
+              <Entypo name="mail" size={24} color="black" />
             </View>
             <TextInput 
               style={LoginStyles.textInput}
@@ -200,6 +155,7 @@ export default function Login({ navigation }) {
               <FontAwesome name="lock" size={24} color="black" />
             </View>
             <TextInput 
+              secureTextEntry={true} 
               style={LoginStyles.textInput}
               placeholder='Password'
               value={password}
