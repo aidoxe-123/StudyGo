@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
 import { getTasks } from '../../utils/data-fetchers/ProgressTracker';
-import { FloatingAdd, UserIdContext, YellowHeader } from '../../components/index'
+import { FloatingAdd, UserIdContext } from '../../components/index'
+import {YellowLine} from '../../../style/yellowLine'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../../style/TodoStyles.js'
 import wrapper from '../../utils/data-fetchers/fetchingWrapper'
 import { useIsFocused } from '@react-navigation/native'
+import {Ionicons, Entypo} from '@expo/vector-icons'
 
 export default function Finished({ navigation, route }) {
     const [milestones, setMilestones] = useState([]);
@@ -26,8 +28,11 @@ export default function Finished({ navigation, route }) {
         <View style={styles.item}>
             <TouchableOpacity onPress={() => navigation.navigate('Edit Finished', item)}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text>{item.title}</Text>
-                    <Text style={{ fontSize: 15 }}>{item.details}</Text>
+                    <View style={{flexDirection: 'row',  justifyContent: 'center'}}>
+                        <Entypo name="dot-single" size={24} color="#e76f51" />
+                        <Text style={styles.text}>{item.title}</Text>
+                    </View>
+                    <Text style={styles.text}>{item.details}</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -36,7 +41,15 @@ export default function Finished({ navigation, route }) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
-                <YellowHeader title={moduleId} onPressBack={() => navigation.pop()} />
+                <View style={YellowLine.header}>
+                    <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Text style={YellowLine.whiteButtonText}>Back</Text>
+                        </View> 
+                    </TouchableOpacity>
+                    <Text h1 style={YellowLine.headerText}>{moduleId}</Text>
+                </View>
                 <Spinner
                     visible={loading}
                     textContent='Loading...'
@@ -57,13 +70,12 @@ export default function Finished({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignContent: "center"
+        alignContent: "center",
+        backgroundColor: '#fff'
     },
     item: {
         backgroundColor: 'white',
         padding: "3%",
-        borderColor: 'coral',
-        borderBottomWidth: 1
     },
     addButton: {
         backgroundColor: 'red',
@@ -71,5 +83,9 @@ const styles = StyleSheet.create({
     },
     stat: {
         color: 'coral'
+    },
+    text: {
+        fontFamily: 'sourcesanspro-regular',
+        fontSize: 18
     }
 });

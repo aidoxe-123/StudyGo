@@ -23,15 +23,27 @@ export default function Module({ navigation, route }) {
 
     const tabBarOptions = {
         activeTintColor: 'white',
-        activeBackgroundColor: 'coral',
-        inactiveTinColor: 'white',
-        inactiveBackgroundColor: 'lightgrey'
+        activeBackgroundColor: '#e76f51',
+        inactiveTintColor: '#e76f51',
+        inactiveBackgroundColor: 'white',
     }
 
     return (
-        <Tab.Navigator screenOptions={screenOptions} tabBarOptions={tabBarOptions} initialRouteName="Unfinished Tasks">
-            <Tab.Screen name="Unfinished Tasks" component={UnfinishedTasks} initialParams={{ moduleId: route.params.moduleId }} />
-            <Tab.Screen name="Finished Tasks" component={FinishedTasks} initialParams={{ moduleId: route.params.moduleId }} />
+        <Tab.Navigator 
+            screenOptions={screenOptions} 
+            tabBarOptions={tabBarOptions} 
+            initialRouteName="Unfinished Tasks"
+        >
+            <Tab.Screen 
+                name="Unfinished Tasks" 
+                component={UnfinishedTasks} 
+                initialParams={{ moduleId: route.params.moduleId }} 
+            />
+            <Tab.Screen 
+                name="Finished Tasks"  
+                component={FinishedTasks} 
+                initialParams={{ moduleId: route.params.moduleId }} 
+            />
         </Tab.Navigator>
     )
 }

@@ -144,21 +144,21 @@ export default function Timetable({navigation}) {
         <View style={styles.content}>
           <DayNameColumn/>
           <View style={{flex: 1}} onStartShouldSetResponder={() => true}>
-          <ScrollView horizontal={true} contentContainerStyle={{flexGrow: 1}}>
-            <View>
-              <HourTitle/>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{width: 50}}/>
-                <View style={{width: 2400, borderBottomWidth: 1}}/>
-                <View style={{width: 50}}/>
+            <ScrollView horizontal={true} contentContainerStyle={{flexGrow: 1}}>
+              <View>
+                <HourTitle/>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{width: 50}}/>
+                  <View style={{width: 2400, borderBottomWidth: 1}}/>
+                  <View style={{width: 50}}/>
+                </View>
+                <DayRow lessons={lessons.monday} openModal={openEditModal}/>
+                <DayRow lessons={lessons.tuesday} openModal={openEditModal}/>
+                <DayRow lessons={lessons.wednesday} openModal={openEditModal}/>
+                <DayRow lessons={lessons.thursday} openModal={openEditModal}/>
+                <DayRow lessons={lessons.friday} openModal={openEditModal}/>
               </View>
-              <DayRow lessons={lessons.monday} openModal={openEditModal}/>
-              <DayRow lessons={lessons.tuesday} openModal={openEditModal}/>
-              <DayRow lessons={lessons.wednesday} openModal={openEditModal}/>
-              <DayRow lessons={lessons.thursday} openModal={openEditModal}/>
-              <DayRow lessons={lessons.friday} openModal={openEditModal}/>
-            </View>
-          </ScrollView>
+            </ScrollView>
           </View>
         </View>
         <TouchableOpacity 

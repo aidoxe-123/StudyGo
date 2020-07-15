@@ -1,6 +1,10 @@
 import React, { useState, useContext } from 'react'
-import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput, RadioButtons, UserIdContext, Spinner, YellowHeader } from '../../components/index'
+import { View, Text, TouchableWithoutFeedback, 
+    Keyboard, TouchableOpacity, Alert, StyleSheet 
+} from 'react-native'
+import { YellowLine } from '../../../style/yellowLine'
+import { Ionicons } from '@expo/vector-icons'
+import { PrettyTextInput, RadioButtons, UserIdContext, Spinner } from '../../components/index'
 import { updateTask, deleteTask } from '../../utils/data-fetchers/ProgressTracker';
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
 
@@ -46,8 +50,21 @@ export default function Finished({ navigation, route }) {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-            <View style={{ flex: 1 }}>
-                <YellowHeader title="Edit task" onPressBack={() => navigation.pop()} />
+            <View style={{ flex: 1, backgroundColor: '#fff' }}>
+                <View style={YellowLine.header}>
+                    <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Text style={YellowLine.whiteButtonText}>Back</Text>
+                        </View> 
+                    </TouchableOpacity>
+                    <Text h1 style={YellowLine.headerText}>Edit task</Text>
+                    <TouchableOpacity style={YellowLine.rightWhiteButton} onPress={handleAdd}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Text style={YellowLine.whiteButtonText}>Save</Text>
+                        </View> 
+                    </TouchableOpacity>
+                </View>
                 {/*Title input text box*/}
                 <Spinner
                     visible={loading}
@@ -79,13 +96,6 @@ export default function Finished({ navigation, route }) {
                         <Text style={{ color: "white" }}>Delete</Text>
                     </TouchableOpacity>
                 </View >
-
-
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => handleAdd()} style={styles.DoneButton}>
-                        <Text style={{ color: "white" }}>Done</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         </TouchableWithoutFeedback>
 
@@ -98,10 +108,4 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: "5%"
     },
-    DoneButton: {
-        alignItems: "center",
-        aspectRatio: 5 / 2,
-        backgroundColor: "coral",
-        padding: 10
-    }
 })

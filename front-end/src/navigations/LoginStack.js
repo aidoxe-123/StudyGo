@@ -15,6 +15,7 @@ export default function LoginStack() {
           color: 'black'
         },
         headerLeft: null,
+        headerShown: false
       }}
     >
       <Stack.Screen name='Login' component={Login} />

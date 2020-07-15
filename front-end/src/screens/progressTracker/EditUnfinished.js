@@ -1,6 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, StyleSheet, KeyboardAvoidingView } from 'react-native'
-import { PrettyTextInput, UserIdContext, Spinner, YellowHeader } from '../../components/index'
+import { PrettyTextInput, UserIdContext, Spinner } from '../../components/index'
+import { YellowLine } from '../../../style/yellowLine'
+import {Ionicons, AntDesign} from '@expo/vector-icons'
+import Slider from '@react-native-community/slider'
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
 import { addOrEdit, link, deleteT, completeTask, link2 } from '../../utils/progress-tracker-task-handler';
 
@@ -43,8 +46,9 @@ export default function Finished({ navigation, route }) {
         if (!isAdd) {
             return (
                 < View style={{ alignItems: 'center', padding: 10 }}>
-                    <TouchableOpacity onPress={handleDelete} style={styles.DoneButton}>
-                        <Text style={{ color: "white" }}>Delete</Text>
+                    <TouchableOpacity onPress={handleDelete} style={styles.DeleteBtn}>
+                        <AntDesign name="delete" size={20} color="#d11a2a" />
+                        <Text style={[{ color: "#d11a2a", paddingLeft: 5}, styles.text]}>Delete</Text>              
                     </TouchableOpacity>
                 </View >
             )
@@ -55,62 +59,99 @@ export default function Finished({ navigation, route }) {
         if (!isAdd) {
             return (
                 <View style={{ alignItems: 'center', padding: 10 }}>
-                    <TouchableOpacity onPress={handleFinish} style={styles.DoneButton}>
-                        <Text style={{ color: "white" }}>Complete</Text>
+                    <TouchableOpacity onPress={handleFinish} style={styles.FinishBtn}>
+                        <Text style={[{ color: "white" }, styles.text]}>Marked as finished</Text>
                     </TouchableOpacity>
                 </View>
             )
         }
     }
 
+    const openAnnotate = () => {
+        Alert.alert('Link property', 
+            'Link property helps link similar task of different users together, ' +
+            'so that you can keep track of where you are compared to your peers',
+            [{text: 'Ok'}]
+        )
+    }
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={{ flex: 1 }}>
-
-                <YellowHeader title={isAdd ? "Add task" : "Edit task"} onPressBack={() => navigation.pop()} />
+            <View style={{ flex: 1, backgroundColor: '#fff' }}>
+                <View style={YellowLine.header}>
+                    <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Text style={YellowLine.whiteButtonText}>Back</Text>
+                        </View> 
+                    </TouchableOpacity>
+                    <TouchableOpacity style={YellowLine.rightWhiteButton} onPress={handleAdd}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Text style={YellowLine.whiteButtonText}>Save</Text>
+                        </View> 
+                    </TouchableOpacity>
+                    <Text h1 style={YellowLine.headerText}>
+                        {isAdd ? "Add unfinished task" : "Edit unfinished task"}
+                    </Text>
+                </View>
                 <Spinner
                     visible={loading}
                 />
                 {/*Title input*/}
                 <View style={styles.InputWithTitle}>
+                    <Text style={styles.text}>Title</Text>
                     <PrettyTextInput
                         onChangeText={setTitle}
                         value={newTitle}
                         placeholder="What have yet to finished?"
                     />
-                    <Text>Title</Text>
                 </View>
 
                 {/*Progress percentage input*/}
                 <View style={styles.InputWithTitle} >
-                    <PrettyTextInput
-                        onChangeText={setDetails}
-                        value={newDetails}
-                        placeholder="How much have you done?"
+                    <Text style={styles.text}>{'Progress: ' + newDetails}</Text>
+                    <Slider
+                        style={{width: '100%'}}
+                        minimumValue={0}
+                        maximumValue={100}
+                        step={1}
+                        value={parseInt(newDetails ? newDetails : 0)}
+                        onSlidingComplete={value => setDetails(value + '%')}
                     />
-                    <Text>Progress</Text>
                 </View>
 
-                <View style={{ alignItems: 'center', padding: 10 }}>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('Link', { moduleId: moduleId, refId: reference, isHost: isHost, data: data })}
-                        style={styles.DoneButton}>
-
-                        <Text style={{ color: "white" }}>Link option</Text>
-
-                    </TouchableOpacity>
-                    <Text>{willHost ? "host a task" : (newRefId !== "" ? "linked to a public task" : "")}</Text>
+                <View style={{padding: '5%'}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={styles.text}>Link property: </Text>
+                        <TouchableOpacity onPress={openAnnotate}>
+                            <AntDesign name="questioncircleo" size={20} color="#e76f51" />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <Text style={styles.text}>
+                            {
+                                willHost 
+                                ? "You will host this task" 
+                                : (newRefId !== "" 
+                                    ? "This task is linked to a public task" 
+                                    : "This task is private")
+                            }
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('Link', { 
+                                moduleId: moduleId, 
+                                refId: reference, 
+                                isHost: isHost, 
+                                data: data 
+                            })}
+                        >
+                            <Text style={[styles.text, {color: '#e76f51', fontSize: 18}]}>Change</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-
-                {OptionalFinish()}
-
-                {OptionalDelete()}
-
-                {/*Add button*/}
-                <View style={{ alignItems: 'center', padding: 10 }}>
-                    <TouchableOpacity onPress={() => handleAdd()} style={styles.DoneButton}>
-                        <Text style={{ color: "white" }}>Done</Text>
-                    </TouchableOpacity>
+                <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                    {OptionalDelete()}
+                    {OptionalFinish()}
                 </View>
             </View>
         </TouchableWithoutFeedback>
@@ -124,11 +165,24 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: "5%"
     },
-    DoneButton: {
+    DeleteBtn: {
+        flexDirection: 'row',
         alignItems: "center",
-        aspectRatio: 5 / 2,
-        backgroundColor: "coral",
-        padding: 10
+        backgroundColor: "#fff",
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#d11a2a',
+        borderRadius: 10,
+    },
+    text: {
+        fontFamily: 'sourcesanspro-regular',
+        fontSize: 20
+    },
+    FinishBtn: {
+        borderRadius: 10,
+        backgroundColor: '#51c9e7',
+        padding: 10,
+        alignItems: 'center'
     }
 }
 )

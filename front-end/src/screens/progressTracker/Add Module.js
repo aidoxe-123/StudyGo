@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { SuggestInput, PrettyTextInput, UserIdContext, YellowHeader } from '../../components/index'
+import { SuggestInput, PrettyTextInput, UserIdContext } from '../../components/index'
+import {YellowLine} from '../../../style/yellowLine'
 import { addModule, updateModulesData, getModulesData } from '../../utils/data-fetchers/ProgressTracker'
-import { Searchbar } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../../style/TodoStyles.js'
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
+import {Ionicons} from '@expo/vector-icons'
 
 export default function Finished({ navigation }) {
     const userId = useContext(UserIdContext);
@@ -27,8 +28,16 @@ export default function Finished({ navigation }) {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-            <View style={{ flex: 1 }}>
-                <YellowHeader title="New module" onPressBack={() => navigation.pop()} />
+            <View style={{ flex: 1, backgroundColor: '#fff' }}>
+                <View style={YellowLine.header}>
+                    <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Text style={YellowLine.whiteButtonText}>Back</Text>
+                        </View> 
+                    </TouchableOpacity>
+                    <Text h1 style={YellowLine.headerText}>New module</Text>
+                </View>
                 <Spinner
                     visible={loading}
                     textContent='Loading...'
@@ -63,5 +72,4 @@ const styles = StyleSheet.create({
         backgroundColor: "coral",
         padding: 10
     }
-}
-)
+})

@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
 import { PrettyTextInput, RadioButtons, UserIdContext, Spinner, SuggestInput, YellowHeader } from '../../components/index'
-import { hostTask, linkTask, getPublicTasks } from '../../utils/data-fetchers/ProgressTracker';
-import wrapper from '../../utils/data-fetchers/fetchingWrapper';
+import { YellowLine } from '../../../style/yellowLine'
+import {Ionicons} from '@expo/vector-icons'
 
 
 export default function Finished({ navigation, route }) {
@@ -39,8 +39,21 @@ export default function Finished({ navigation, route }) {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-            <View style={{ flex: 1 }}>
-                <YellowHeader title="Link task" onPressBack={() => navigation.pop()} />
+            <View style={{ flex: 1, backgroundColor: '#fff' }}>
+                <View style={YellowLine.header}>
+                    <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Text style={YellowLine.whiteButtonText}>Back</Text>
+                        </View> 
+                    </TouchableOpacity>
+                    <Text h1 style={YellowLine.headerText}>Link task</Text>
+                    <TouchableOpacity style={YellowLine.rightWhiteButton} onPress={() => handleSubmit("pressed")}   >
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Text style={YellowLine.whiteButtonText}>Done</Text>
+                        </View> 
+                    </TouchableOpacity>
+                </View>
                 {/*Radio buttons*/}
                 <RadioButtons onPressIndex={(index) => setChoice(index)} initialChoice={choice}>
                     {/*Choice 1*/}
@@ -61,12 +74,6 @@ export default function Finished({ navigation, route }) {
                         renderOption={renderOption}
                     />
                 </View>
-
-                <View style={{ flex: 1, alignItems: 'center', padding: '5%' }}>
-                    <TouchableOpacity onPress={() => handleSubmit("pressed")} style={styles.DoneButton}>
-                        <Text style={{ color: "white" }}>Done</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         </TouchableWithoutFeedback>
 
@@ -81,10 +88,4 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: "space-between"
     },
-    DoneButton: {
-        alignItems: "center",
-        aspectRatio: 5 / 2,
-        backgroundColor: "coral",
-        padding: 10
-    }
 })
