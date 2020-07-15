@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   backLeftBtn: {
     height: '100%',
     width: 75,
-    backgroundColor: '#e76f51',
+    backgroundColor: '#d11a2a',
     alignItems: 'center',
     justifyContent: 'center'
   },

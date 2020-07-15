@@ -6,6 +6,7 @@ import { FloatingAdd, UserIdContext, Spinner } from '../../components/index'
 import { getModules } from '../../utils/data-fetchers/ProgressTracker'
 import wrapper from '../../utils/data-fetchers/fetchingWrapper'
 import { deleteModuleRecursive } from "../../utils/progress-tracker-task-handler";
+import {AntDesign} from '@expo/vector-icons'
 
 export default function ProgressTracker({ navigation }) {
   const userId = useContext(UserIdContext)
@@ -50,11 +51,15 @@ export default function ProgressTracker({ navigation }) {
   // --------------------------------
   const renderItem = data => (
     <TouchableHighlight
+      style={{marginBottom: 10}}
       onPress={() => navigation.navigate('Module', { name: data.item.text, moduleId: data.item.key })}
     >
       <View style={styles.rowFront}>
-        <Text style={{ fontSize: 18 }}>{data.item.key}</Text>
-        <Text style={{ fontSize: 13 }}>{data.item.text}</Text>
+        <View style={styles.leftMarker}/>
+        <View style={styles.itemContent}>
+          <Text style={[{fontSize: 25 }, styles.text]}>{data.item.key}</Text>
+          <Text style={[{ fontSize: 20 }, styles.text]}>{data.item.text}</Text>
+        </View>
       </View>
     </TouchableHighlight>
   );
@@ -62,10 +67,10 @@ export default function ProgressTracker({ navigation }) {
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
-        style={[styles.backRightBtn, styles.backRightBtnRight]}
+        style={styles.backRightBtn}
         onPress={() => handleDeleteButton(data.item)}
       >
-        <Text style={{ color: "white" }}>Delete</Text>
+        <AntDesign name="delete" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -83,7 +88,8 @@ export default function ProgressTracker({ navigation }) {
           renderItem={renderItem}
           renderHiddenItem={renderHiddenItem}
 
-          rightOpenValue={-75}
+          rightOpenValue={-100}
+          disableRightSwipe
         />
 
         {/*add module button*/}
@@ -98,40 +104,48 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flex: 1,
+    padding: 20
   },
   backTextWhite: {
     color: '#FFF',
   },
   rowFront: {
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderBottomColor: 'coral',
-    borderBottomWidth: 1,
-    justifyContent: 'center',
-    height: 50,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+    borderBottomColor: '#e76f51',
+    height: 100,
+    flexDirection: 'row',
   },
   rowBack: {
+    marginBottom: 10,
     alignItems: 'center',
-    backgroundColor: '#DDD',
+    backgroundColor: '#fff',
     flex: 1,
-    flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: 15,
   },
   backRightBtn: {
     alignItems: 'center',
-    bottom: 0,
+    right: 0,
+    height: '100%',
     justifyContent: 'center',
     position: 'absolute',
-    top: 0,
-    width: 75,
+    width: 100,
+    backgroundColor: '#d11a2a',
   },
-  backRightBtnLeft: {
-    backgroundColor: 'blue',
-    right: 75,
+  leftMarker: {
+    backgroundColor: '#e76f51', 
+    width: 20
   },
-  backRightBtnRight: {
-    backgroundColor: 'red',
-    right: 0,
+  itemContent: {
+    flex: 1, 
+    justifyContent: 'center', 
+    padding: 20,
+    backgroundColor: '#e76f5150'
   },
+  text: {
+    fontFamily: 'sourcesanspro-regular'
+  }
 });

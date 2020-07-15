@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
-import { FloatingAdd, UserIdContext, YellowHeader } from '../../components/index'
+import { FloatingAdd, UserIdContext } from '../../components/index'
+import {YellowLine} from '../../../style/yellowLine'
 import { getTasks, getPublicTasks } from '../../utils/data-fetchers/ProgressTracker';
 import wrapper from '../../utils/data-fetchers/fetchingWrapper'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../../style/TodoStyles.js'
+import {Ionicons, Entypo} from '@expo/vector-icons'
 
 export default function Unfinished({ navigation, route }) {
     const isFocus = useIsFocused();
@@ -49,12 +51,21 @@ export default function Unfinished({ navigation, route }) {
                 newRefId: item.reference,
                 data: data
             })}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <View>
-                        <Text>{item.title}</Text>
-                        <Text style={styles.stat} >{stat(item)} {item.isHost ? "(host)" : ""}</Text>
+                <View 
+                    style={{ 
+                        flexDirection: 'row', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'center' 
+                    }}
+                >
+                    <View style={{flexDirection: 'row'}}>
+                        <Entypo name="dot-single" size={24} color="black" />
+                        <View>
+                            <Text style={styles.itemName}>{item.title}</Text>
+                            <Text style={styles.stat} >{stat(item)} {item.isHost ? "(host)" : ""}</Text>
+                        </View>
                     </View>
-                    <Text style={{ fontSize: 20 }}>{item.details}</Text>
+                    <Text style={{ fontSize: 20, fontFamily: 'sourcesanspro-regular' }}>{item.details}</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -63,7 +74,15 @@ export default function Unfinished({ navigation, route }) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
-                <YellowHeader title={moduleId} onPressBack={() => navigation.pop()} />
+                <View style={YellowLine.header}>
+                    <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Text style={YellowLine.whiteButtonText}>Back</Text>
+                        </View> 
+                    </TouchableOpacity>
+                    <Text h1 style={YellowLine.headerText}>{moduleId}</Text>
+                </View>
                 <Spinner
                     visible={loading}
                     textContent='Loading...'
@@ -95,19 +114,24 @@ export default function Unfinished({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignContent: "center"
+        alignContent: "center",
+        backgroundColor: '#fff',
     },
     item: {
         backgroundColor: 'white',
         padding: "3%",
-        borderColor: 'coral',
-        borderBottomWidth: 1
     },
     addButton: {
         backgroundColor: 'red',
         color: 'white'
     },
     stat: {
-        color: 'coral'
+        fontFamily: 'sourcesanspro-regular',
+        color: '#e76f51',
+        fontSize: 18,
+    },
+    itemName: {
+        fontFamily: 'sourcesanspro-regular',
+        fontSize: 20,
     }
 });

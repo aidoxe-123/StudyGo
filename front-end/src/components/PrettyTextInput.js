@@ -6,9 +6,14 @@ export default PrettyTextInput = (props) => {
     return (
         <TextInput
             {...props}
-            onFocus={() => setColor("coral")}
+            onFocus={() => setColor("#e76f51")}
             onBlur={() => setColor("grey")}
-            style={{ borderBottomColor: color, borderBottomWidth: 3 }}
+            style={{ 
+                borderBottomColor: color, 
+                borderBottomWidth: 1,
+                fontFamily: 'sourcesanspro-regular',
+                fontSize: 20
+            }}
         />
     )
 }

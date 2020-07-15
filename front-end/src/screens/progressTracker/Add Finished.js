@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react'
-import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
-import { PrettyTextInput, RadioButtons, UserIdContext, YellowHeader } from './../../components/index'
+import { View, Text, TouchableWithoutFeedback, 
+    Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
+import { PrettyTextInput, RadioButtons, UserIdContext} from './../../components/index'
+import { YellowLine } from '../../../style/yellowLine'
+import { Ionicons } from '@expo/vector-icons'
 import { addTask } from '../../utils/data-fetchers/ProgressTracker';
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
 
@@ -35,36 +38,45 @@ export default function Finished({ navigation, route }) {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-            <View style={{ flex: 1 }}>
-                <YellowHeader title="New task" onPressBack={() => navigation.pop()} />
+            <View style={{ flex: 1, backgroundColor: '#fff' }}>
+                <View style={YellowLine.header}>
+                    <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Text style={YellowLine.whiteButtonText}>Back</Text>
+                        </View> 
+                    </TouchableOpacity>
+                    <Text h1 style={YellowLine.headerText}>New task</Text>
+                    <TouchableOpacity style={YellowLine.rightWhiteButton} onPress={handleAdd}>
+                        <View style={YellowLine.insideWhiteButton}>
+                            <Text style={YellowLine.whiteButtonText}>Save</Text>
+                        </View> 
+                    </TouchableOpacity>
+                </View>
                 {/*Title input text box*/}
                 <View style={styles.InputWithTitle}>
                     <PrettyTextInput
                         onChangeText={text => handleTitleInput(text)}
                         value={title}
                         placeholder="What have you finished?"
+                        style={styles.text}
                     />
-                    <Text>Title</Text>
+                    <Text style={styles.text}>Title</Text>
                 </View>
 
                 {/*Radio buttons*/}
                 <RadioButtons onPressIndex={(index) => setChoice(index)} initialChoice={choice}>
-                    <Text>Not graded yet</Text>
+                    <Text style={styles.text}>Not graded yet</Text>
 
-                    <Text>Ungraded</Text>
+                    <Text style={styles.text}>Ungraded</Text>
 
                     <PrettyTextInput
                         onChangeText={text => handleMarkInput(text)}
                         value={mark}
                         placeholder="Mark (e.g. 38)"
+                        style={styles.text}
                     />
                 </RadioButtons>
-
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => handleAdd()} style={styles.DoneButton}>
-                        <Text style={{ color: "white" }}>Done</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         </TouchableWithoutFeedback>
 
@@ -77,10 +89,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: "5%"
     },
-    DoneButton: {
-        alignItems: "center",
-        aspectRatio: 5 / 2,
-        backgroundColor: "coral",
-        padding: 10
+    text: {
+        fontFamily: 'sourcesanspro-regular',
+        fontSize: 20,
     }
 })
