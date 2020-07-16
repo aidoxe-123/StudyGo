@@ -12,18 +12,19 @@ import DateTimePicker from '@react-native-community/datetimepicker'
   @return: A custom DatePicker component to replace DateTimePicker of @react-native-community/datetimepicker
 */
 export default function DatePicker({ showDatePicker, value, handleChange, mode }) {
-  return (Platform.OS ==='ios'
+  return (Platform.OS === 'ios'
     ? <Modal visible={showDatePicker}>
-        <DateTimePicker
-            value={value}
-            onChange={handleChange}
-            mode={typeof mode === 'undefined' ? 'date' : mode}
-        />
-    </Modal>
-    : showDatePicker && <DateTimePicker
+      <DateTimePicker
         value={value}
+        textColor='black'
         onChange={handleChange}
         mode={typeof mode === 'undefined' ? 'date' : mode}
+      />
+    </Modal>
+    : showDatePicker && <DateTimePicker
+      value={value}
+      onChange={handleChange}
+      mode={typeof mode === 'undefined' ? 'date' : mode}
     />
   )
 }

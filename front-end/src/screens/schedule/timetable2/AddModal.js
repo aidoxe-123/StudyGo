@@ -1,14 +1,14 @@
-import React, {useState, useEffect } from 'react'
-import { View, Modal, Text, 
+import React, { useState, useEffect } from 'react'
+import {
+  View, Modal, Text,
   Dimensions, TouchableOpacity, TextInput, StyleSheet,
-  TouchableWithoutFeedback, Keyboard, Picker, Alert
+  TouchableWithoutFeedback, Keyboard, Picker, Alert, Platform
 } from 'react-native'
 import Animated from 'react-native-reanimated'
-import {useTransition, mix} from 'react-native-redash'
-import { DatePicker } from '../../../components/index'
-import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons'; 
-
-export default function EditModal({height, width, x, y, handleClose, handleAdd}) {
+import { useTransition, mix } from 'react-native-redash'
+import { DatePicker, DropdownList } from '../../../components/index'
+import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
+export default function EditModal({ height, width, x, y, handleClose, handleAdd }) {
   const SCREEN_WIDTH = Dimensions.get('window').width
   const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -22,7 +22,7 @@ export default function EditModal({height, width, x, y, handleClose, handleAdd})
   const [editingEnd, setEditingEnd] = useState(false)
 
   const [toggled, setToggle] = useState(false)
-  const transition = useTransition(toggled, {duration: 250})
+  const transition = useTransition(toggled, { duration: 250 })
   const translateX = mix(transition, 0, SCREEN_WIDTH / 8 - x)
   const translateY = mix(transition, 0, SCREEN_HEIGHT / 8 - y)
   const modalHeight = mix(transition, height, SCREEN_HEIGHT / 4 * 3)
@@ -31,13 +31,13 @@ export default function EditModal({height, width, x, y, handleClose, handleAdd})
   const whiteBoxFlex = mix(transition, 0, 4)
 
   const days = useState([
-    {dayName: 'monday'},
-    {dayName: 'tuesday'},
-    {dayName: 'wednesday'},
-    {dayName: 'thursday'},
-    {dayName: 'friday'},
-    {dayName: 'saturday'},
-    {dayName: 'sunday'},
+    { dayName: 'monday', id: 2 },
+    { dayName: 'tuesday', id: 3 },
+    { dayName: 'wednesday', id: 4 },
+    { dayName: 'thursday', id: 5 },
+    { dayName: 'friday', id: 6 },
+    { dayName: 'saturday', id: 7 },
+    { dayName: 'sunday', id: 8 },
   ])[0]
 
   function toTwoDigitString(number) {
@@ -45,14 +45,14 @@ export default function EditModal({height, width, x, y, handleClose, handleAdd})
   }
 
   function toHourString(timeFromMidnight) {
-    return toTwoDigitString(Math.floor(timeFromMidnight / 60))  + ':' 
-    + toTwoDigitString(timeFromMidnight % 60)
-  } 
+    return toTwoDigitString(Math.floor(timeFromMidnight / 60)) + ':'
+      + toTwoDigitString(timeFromMidnight % 60)
+  }
 
   function makeTimeString(start, end, day) {
     const startHour = toHourString(start)
     const endHour = toHourString(end)
-    const timeString = day.charAt(0).toUpperCase() + day.slice(1) + ', ' + startHour + ' - ' + endHour 
+    const timeString = day.charAt(0).toUpperCase() + day.slice(1) + ', ' + startHour + ' - ' + endHour
     // Day of week, hh:mm-hh:mm
     return timeString
   }
@@ -81,17 +81,17 @@ export default function EditModal({height, width, x, y, handleClose, handleAdd})
 
   function handleSubmit() {
     if (name === '') {
-      Alert.alert('Missing name', 'Class name cannot be empty', 
-        [{text: 'ok'}]
+      Alert.alert('Missing name', 'Class name cannot be empty',
+        [{ text: 'ok' }]
       )
       return
     }
 
     if (end <= start) {
       Alert.alert('Invalid time interval', 'End time must be after start time',
-        [{text: 'ok'}]
+        [{ text: 'ok' }]
       )
-      return 
+      return
     }
 
     var newLesson = {
@@ -103,7 +103,7 @@ export default function EditModal({height, width, x, y, handleClose, handleAdd})
     }
     handleAdd(newLesson)
   }
-  
+
   return (
     <Modal visible={true} transparent={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -119,33 +119,24 @@ export default function EditModal({height, width, x, y, handleClose, handleAdd})
               overflow: 'hidden',
               borderRadius: borderRadius,
               transform: [
-                {translateX: translateX},
-                {translateY: translateY}
+                { translateX: translateX },
+                { translateY: translateY }
               ]
             }}
           >
             <View style={styles.insideBlueBox}>
               <View>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{flex: 4, height: 30}}>
-                    <Picker
-                      itemStyle={{}}
-                      mode="dropdown"
-                      style={styles.dayDropdown}
-                      selectedValue={day}
-                      onValueChange={value => setDay(value)}
-                    >
-                      {days.map((day, index) => (
-                        <Picker.Item
-                          color="black"
-                          label={day.dayName.charAt(0).toUpperCase() + day.dayName.slice(1,3)}
-                          value={day.dayName}
-                          index={index}
-                          key={index}
-                        />
-                      ))}
-                    </Picker>
+                <View style={{ flexDirection: 'row', zIndex: 1 }}>
+                  <View style={{ flex: 4, alignItems: 'center', padding: '5%', zIndex: 999 }}>
+                    <View style={{ position: 'absolute', width: '100%' }}>
+                      <DropdownList
+                        allOptions={days}
+                        labelExtractor={item => item.dayName.charAt(0).toUpperCase() + item.dayName.slice(1, 3)}
+                        onChoose={item => setDay(item.dayName)}
+                      />
+                    </View>
                   </View>
+
                   <View style={styles.hourContainer}>
                     <TouchableOpacity onPress={() => setEditingStart(true)}>
                       <Text style={styles.duration}>{toHourString(start)}</Text>
@@ -156,26 +147,29 @@ export default function EditModal({height, width, x, y, handleClose, handleAdd})
                     </TouchableOpacity>
                   </View>
                 </View>
-                <TextInput 
-                  style={[styles.name, 
-                    {borderBottomWidth: 1, borderColor: 'white'}
-                  ]}
-                  value={name}
-                  onChangeText={text => setName(text)}
-                  placeholder='Class name'
-                  placeholderTextColor='#ffffff80'
-                />
+                <View style={{ zIndex: 0 }}>
+                  <TextInput
+                    style={[styles.name,
+                    { borderBottomWidth: 1, borderColor: 'white' }
+                    ]}
+                    value={name}
+                    onChangeText={text => setName(text)}
+                    placeholder='Class name'
+                    placeholderTextColor='#ffffff80'
+                  />
+                </View>
               </View>
-              <TouchableOpacity 
-                onPress={handleClose} 
+              <TouchableOpacity
+                onPress={handleClose}
                 style={styles.closeButton}
               >
                 <AntDesign name="close" size={30} color="#ffffff" />
               </TouchableOpacity>
             </View>
-            <Animated.View 
+            <Animated.View
               style={{
-                flex: whiteBoxFlex, 
+                zIndex: 0,
+                flex: whiteBoxFlex,
                 backgroundColor: 'white',
                 padding: 10,
               }}>
@@ -191,41 +185,42 @@ export default function EditModal({height, width, x, y, handleClose, handleAdd})
                   onChangeText={text => setDescription(text)}
                 />
               </View>
-              <TouchableOpacity 
-                style={[styles.doneButton, {right: 10}]}
+              <TouchableOpacity
+                style={[styles.doneButton, { right: 10 }]}
                 onPress={handleSubmit}
               >
                 <MaterialIcons name="done" size={24} color="white" />
               </TouchableOpacity>
             </Animated.View>
           </Animated.View>
-          <DatePicker 
-            showDatePicker={editingStart} 
-            value={new Date(2020, 1, 1, Math.floor(start / 60), start % 60)}  
+          <DatePicker
+            showDatePicker={editingStart}
+            value={new Date(2020, 1, 1, Math.floor(start / 60), start % 60)}
             handleChange={handleChangeStartTime}
             mode='time'
           />
-          <DatePicker 
-            showDatePicker={editingEnd} 
-            value={new Date(2020, 1, 1, Math.floor(end / 60), end % 60)}  
+          <DatePicker
+            showDatePicker={editingEnd}
+            value={new Date(2020, 1, 1, Math.floor(end / 60), end % 60)}
             handleChange={handleChangeEndTime}
             mode='time'
           />
         </View>
       </TouchableWithoutFeedback>
-    </Modal>
+    </Modal >
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    flex: 1,
     backgroundColor: '#00000080'
   },
   insideBlueBox: {
-    flex: 1, 
-    paddingHorizontal: 10, 
-    paddingTop: 23
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingTop: 23,
+    zIndex: 1
   },
   duration: {
     color: 'rgba(255,255,255,0.7)',
@@ -233,42 +228,51 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   name: {
-    color: 'white', 
+    color: 'white',
     fontFamily: 'sourcesanspro-semibold',
     fontSize: 30
   },
-  dayDropdown: {
-    color: 'rgba(255,255,255,0.7)', 
+  dayDropdown: Platform.OS == 'android' ? {
+    color: 'rgba(255,255,255,0.7)',
     transform: [
-      {scaleX: 16/14}, 
-      {scaleY: 16/14}, 
-      {translateX: 5}, 
-      {translateY: -9}
+      { scaleX: 16 / 14 },
+      { scaleY: 16 / 14 },
+      { translateX: 5 },
+      { translateY: -9 }
     ],
     height: 50,
     width: 100
-  },
+  } : {
+      color: 'rgba(255,255,255,0.7)',
+      height: 50,
+      width: 100,
+      transform: [
+        { translateX: -10 },
+        { translateY: -87 },
+        { scaleY: 13 / 14 }
+      ],
+    },
   closeButton: {
-    position: 'absolute', 
-    right: 7, 
-    top: 7, 
-    alignItems: 'center', 
+    position: 'absolute',
+    right: 7,
+    top: 7,
+    alignItems: 'center',
     justifyContent: 'center'
   },
   viewDescription: {
     fontFamily: 'sourcesanspro-regular',
-    fontSize: 20, 
+    fontSize: 20,
     padding: 6
   },
   editDescriptionBox: {
-    borderColor: 'grey', 
-    borderWidth: 1, 
-    padding: 5, 
+    borderColor: 'grey',
+    borderWidth: 1,
+    padding: 5,
     height: 160
   },
   editDescriptionInput: {
-    textAlignVertical: 'top', 
-    height: 150, 
+    textAlignVertical: 'top',
+    height: 150,
     fontFamily: 'sourcesanspro-regular',
     fontSize: 20,
   },
@@ -286,7 +290,7 @@ const styles = StyleSheet.create({
   penButton: {
     position: 'absolute',
     bottom: 10,
-    right: 10, 
+    right: 10,
     height: 50,
     width: 50,
     borderRadius: 25,
@@ -306,8 +310,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   hourContainer: {
-    flex: 6, 
+    flex: 6,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex: 0
   }
 })
