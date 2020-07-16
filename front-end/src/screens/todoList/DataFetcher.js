@@ -52,6 +52,11 @@ export async function allTasks(userId) {
         date: new Date(Date.parse(task.date))
       }
     }))
+    .then(taskArr => {
+      let date = new Date()
+      return taskArr.filter(task => task.date >= date)
+          .concat(taskArr.filter(task => task.date < date))
+    })
     .catch(error => console.log(error))
 }
 ///////////////////////////////////////////////////////////////////

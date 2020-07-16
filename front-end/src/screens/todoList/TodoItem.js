@@ -7,6 +7,8 @@ export default function TodoItem({ item, navigation, inDeleteMode,
     var dateString = item.date.getDate() + '/' + (item.date.getMonth() + 1) + '/' + (item.date.getYear() + 1900)
         + ' ' + toTwoDigitString(item.date.getHours()) + ':' + toTwoDigitString(item.date.getMinutes())
 
+    const alreadyHappened = item.date - new Date() < 0
+
     function toTwoDigitString(num) {
         return num >= 10 ? "" + num : "0" + num
     }
@@ -37,10 +39,11 @@ export default function TodoItem({ item, navigation, inDeleteMode,
         >
             <View style={styles.task}>
                 <View>
-                    <Text style={styles.text}>{item.task}</Text>
-                    <Text style={styles.text}>{dateString}</Text>
+                    <Text style={[styles.text, alreadyHappened && {textDecorationLine: 'line-through', color: '#d3d3d3'}]}>{item.task}</Text>
+                    <Text style={[styles.text, alreadyHappened && {textDecorationLine: 'line-through', color: '#d3d3d3'}]}>{dateString}</Text>
                 </View>
                 {   inDeleteMode 
+                // check box
                 ?   <View style={styles.rightColumn}>
                         <View style={styles.checkbox}>
                             { selected &&
@@ -48,10 +51,10 @@ export default function TodoItem({ item, navigation, inDeleteMode,
                             }
                         </View>
                     </View>
-
+                // 'more' label
                 :   <View style={styles.rightColumn}>
-                        <Text style={[styles.text, {marginRight: 10}]}>More</Text>
-                        <Ionicons name='ios-arrow-forward' size={18}/>
+                        <Text style={[styles.text, {marginRight: 10}, alreadyHappened && {color: '#d3d3d3'}]}>More</Text>
+                        <Ionicons name='ios-arrow-forward' size={18} color={alreadyHappened ? '#d3d3d3' : 'black'}/>
                     </View>
                 }
             </View>

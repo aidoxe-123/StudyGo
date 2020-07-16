@@ -27,7 +27,7 @@ export const AddTodoStyles = StyleSheet.create({
     fontFamily: 'sourcesanspro-regular',
     fontSize: 20,
     padding: 5,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: 'grey',
     marginRight: 10,
   },
