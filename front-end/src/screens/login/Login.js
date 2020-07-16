@@ -149,8 +149,7 @@ export default function Login({ navigation }) {
             <Text style={LoginStyles.wrongInputAlert}>
               Please enter email
             </Text>
-          }
-          
+          }     
 
           {/* password input */}
           <View style={[LoginStyles.input, emptyPassword && {marginBottom: 0}]}>

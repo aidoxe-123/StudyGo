@@ -19,6 +19,12 @@ export default function DayNameColumn() {
         </View> 
         <View style={styles.day}>
           <Text style={styles.dayName}>Fri</Text>
+        </View>  
+        <View style={styles.day}>
+          <Text style={styles.dayName}>Sat</Text>
+        </View>  
+        <View style={styles.day}>
+          <Text style={styles.dayName}>Sun</Text>
         </View>    
     </View>
   )

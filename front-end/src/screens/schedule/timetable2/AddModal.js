@@ -36,6 +36,8 @@ export default function EditModal({height, width, x, y, handleClose, handleAdd})
     {dayName: 'wednesday'},
     {dayName: 'thursday'},
     {dayName: 'friday'},
+    {dayName: 'saturday'},
+    {dayName: 'sunday'},
   ])[0]
 
   function toTwoDigitString(number) {

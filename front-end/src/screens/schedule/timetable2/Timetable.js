@@ -40,7 +40,9 @@ export default function Timetable({navigation}) {
     tuesday: [],
     wednesday: [],
     thursday: [],
-    friday: []
+    friday: [],
+    saturday: [],
+    sunday: []
   }) 
 
   // when first mount
@@ -160,6 +162,8 @@ export default function Timetable({navigation}) {
                 <DayRow lessons={lessons.wednesday} openModal={openEditModal}/>
                 <DayRow lessons={lessons.thursday} openModal={openEditModal}/>
                 <DayRow lessons={lessons.friday} openModal={openEditModal}/>
+                <DayRow lessons={lessons.saturday} openModal={openEditModal}/>
+                <DayRow lessons={lessons.sunday} openModal={openEditModal}/>
                 </View>
                 </TouchableWithoutFeedback>
             </ScrollView>

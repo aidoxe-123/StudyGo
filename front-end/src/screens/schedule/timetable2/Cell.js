@@ -37,7 +37,7 @@ export default function Cell({lesson, openModal}) {
       onPress={handleClick}
     >
       <View style={{flex: 1}}>
-        <Text style={styles.time}>{timeString}</Text>
+        {(end - start) / 60.0 > 1.5 && <Text style={styles.time}>{timeString}</Text>}
         <Text style={styles.name}>{name}</Text>
       </View>
     </TouchableOpacity>
