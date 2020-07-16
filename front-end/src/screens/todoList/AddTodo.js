@@ -8,8 +8,12 @@ import { addTask } from './DataFetcher'
 
 export default function AddTodo({navigation}) {
     const userId = useContext(UserIdContext)
+    
+    const oneHourFromNow = new Date()
+    oneHourFromNow.setHours(oneHourFromNow.getHours() + 1)
+
     const [text, setText] = useState('')
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(oneHourFromNow)
     const [editDate, setEditDate] = useState(false)
     const [editTime, setEditTime] = useState(false)
 
@@ -74,11 +78,14 @@ export default function AddTodo({navigation}) {
                         value={text}
                     />
                     <View style={{flexDirection: 'row', marginTop: 20}}>
+                        {/* select date */}
                         <View>
-                            <Text style={AddTodoStyles.label}>Date:</Text>
                             <View style={AddTodoStyles.dateView}>
-                                <Text style={AddTodoStyles.dateBox}>{dateString}</Text>
-                                <Fontisto name='date' size={28} color='#333' onPress={() => setEditDate(true)}/>
+                                <Fontisto name='date' size={28} color='#333' />
+                                <Text style={AddTodoStyles.label}> Date: </Text>
+                                <TouchableOpacity onPress={() => setEditDate(true)}>
+                                    <Text style={AddTodoStyles.dateBox}>{dateString}</Text>
+                                </TouchableOpacity>                
                                 <DatePicker 
                                     showDatePicker={editDate} 
                                     value={date} 
@@ -86,17 +93,21 @@ export default function AddTodo({navigation}) {
                                 />
                             </View>
                         </View>
-                        <View style={{marginLeft: 20}}>
-                            <Text style={AddTodoStyles.label}>Time:</Text>
+                        
+                        {/* select time */}
+                        <View style={{marginLeft: 20}}>       
                             <View style={AddTodoStyles.dateView}>
-                            <Text style={AddTodoStyles.dateBox}>{timeString}</Text>
-                            <Feather name='clock' size={28} color='#333' onPress={() => setEditTime(true)}/>
-                            <DatePicker 
-                                showDatePicker={editTime} 
-                                value={date}  
-                                handleChange={handleChangeTimePicker}
-                                mode='time'
-                            />
+                                <Feather name='clock' size={28} color='#333' />
+                                <Text style={AddTodoStyles.label}> Time: </Text>
+                                <TouchableOpacity onPress={() => setEditTime(true)}>
+                                    <Text style={AddTodoStyles.dateBox}>{timeString}</Text>
+                                </TouchableOpacity>                               
+                                <DatePicker 
+                                    showDatePicker={editTime} 
+                                    value={date}  
+                                    handleChange={handleChangeTimePicker}
+                                    mode='time'
+                                />
                             </View>
                         </View>
                     </View>

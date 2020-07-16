@@ -7,7 +7,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { LoginStyles } from '../../../style/LoginStyles.js'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { signInGoogle } from '../../utils/googleSignIn';
-import { AntDesign, FontAwesome, Entypo } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, Entypo, Ionicons } from '@expo/vector-icons';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('')
@@ -16,6 +16,7 @@ export default function Login({ navigation }) {
   const [emptyPassword, setEmptyPassword] = useState(false)
   const [isValid, setIsValid] = useState(true)
   const [loading, setLoading] = useState(false)
+  const [secureInput, setSecureInput] = useState(true)
 
   function handleInputEmail(text) {
     setEmail(text)
@@ -157,12 +158,19 @@ export default function Login({ navigation }) {
               <FontAwesome name="lock" size={24} color="black" />
             </View>
             <TextInput 
-              secureTextEntry={true} 
+              secureTextEntry={secureInput} 
               style={LoginStyles.textInput}
               placeholder='Password'
               value={password}
               onChangeText={handleInputPassword}
             />
+            <TouchableOpacity style={LoginStyles.eyeContainer} onPress={() => setSecureInput(prev => !prev)}>
+              {
+                secureInput
+                ? <Ionicons name="ios-eye-off" size={20} color="black" />
+                : <Ionicons name="ios-eye" size={20} color="black" />
+              }
+            </TouchableOpacity>
           </View>
           {
             emptyPassword &&

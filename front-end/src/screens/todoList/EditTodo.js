@@ -163,11 +163,14 @@ export default function EditTodo({ route, navigation }) {
                 value={task}
             />
             <View style={{flexDirection: 'row', marginTop: 20}}>
-              <View>
-                <Text style={AddTodoStyles.label}>Date:</Text>
+              {/* select date */}
+              <View>  
                 <View style={AddTodoStyles.dateView}>
-                  <Text style={AddTodoStyles.dateBox}>{dateString}</Text>
-                  <Fontisto name='date' size={28} color='#333' onPress={() => setEditDate(true)}/>
+                  <Fontisto name="date" size={24} color="black" />
+                  <Text style={AddTodoStyles.label}> Date: </Text>
+                  <TouchableOpacity onPress={() => setEditDate(true)}>
+                    <Text style={AddTodoStyles.dateBox}>{dateString}</Text>
+                  </TouchableOpacity>
                   <DatePicker 
                     showDatePicker={editDate} 
                     value={date}  
@@ -175,11 +178,14 @@ export default function EditTodo({ route, navigation }) {
                   />
                 </View>
               </View>
-              <View style={{marginLeft: 20}}>
-                <Text style={AddTodoStyles.label}>Time:</Text>
+              {/* select time */}
+              <View style={{marginLeft: 20}}>    
                 <View style={AddTodoStyles.dateView}>
-                  <Text style={AddTodoStyles.dateBox}>{timeString}</Text>
-                  <Feather name='clock' size={28} color='#333' onPress={() => setEditTime(true)}/>
+                  <Feather name='clock' size={28} color='#333' />
+                  <Text style={AddTodoStyles.label}> Time: </Text>
+                  <TouchableOpacity onPress={() => setEditTime(true)}>
+                    <Text style={AddTodoStyles.dateBox}>{timeString}</Text>
+                  </TouchableOpacity>
                   <DatePicker 
                     showDatePicker={editTime} 
                     value={date}  

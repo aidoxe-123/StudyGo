@@ -8,7 +8,6 @@ export default FloatingAdd = (props) => {
         <TouchableOpacity style={styles.fab} {...props} >
             <AntDesign name="pluscircle" size={50} style={styles.addBtn} />
         </TouchableOpacity>
-
     )
 }
 

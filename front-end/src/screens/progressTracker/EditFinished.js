@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { PrettyTextInput, RadioButtons, UserIdContext, Spinner } from '../../components/index'
 import { updateTask, deleteTask } from '../../utils/data-fetchers/ProgressTracker';
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
+import {AntDesign} from '@expo/vector-icons'
 
 
 export default function Finished({ navigation, route }) {
@@ -92,8 +93,9 @@ export default function Finished({ navigation, route }) {
                 </RadioButtons>
 
                 < View style={{ flex: 1, alignItems: 'center' }}>
-                    <TouchableOpacity onPress={handleDelete} style={styles.DoneButton}>
-                        <Text style={{ color: "white" }}>Delete</Text>
+                    <TouchableOpacity onPress={handleDelete} style={styles.DeleteBtn}>
+                        <AntDesign name="delete" size={20} color="#d11a2a" />
+                        <Text style={[{ color: "#d11a2a", paddingLeft: 5}, styles.text]}>Delete</Text>              
                     </TouchableOpacity>
                 </View >
             </View>
@@ -107,5 +109,14 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: "space-between",
         padding: "5%"
+    },
+    DeleteBtn: {
+        flexDirection: 'row',
+        alignItems: "center",
+        backgroundColor: "#fff",
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#d11a2a',
+        borderRadius: 10,
     },
 })
