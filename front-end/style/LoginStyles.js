@@ -102,4 +102,9 @@ export const LoginStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  eyeContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 })
