@@ -2,12 +2,12 @@ import React, { useContext, useState, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import { FloatingAdd, UserIdContext } from '../../components/index'
-import {YellowLine} from '../../../style/yellowLine'
+import { YellowLine } from '../../../style/yellowLine'
 import { getTasks, getPublicTasks } from '../../utils/data-fetchers/ProgressTracker';
 import wrapper from '../../utils/data-fetchers/fetchingWrapper'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../../style/TodoStyles.js'
-import {Ionicons, Entypo} from '@expo/vector-icons'
+import { Ionicons, Entypo } from '@expo/vector-icons'
 
 export default function Unfinished({ navigation, route }) {
     const isFocus = useIsFocused();
@@ -37,7 +37,7 @@ export default function Unfinished({ navigation, route }) {
         if (item.reference !== "") {
             let i = data.filter(itemm => itemm.taskId === item.reference)[0];
             const { completed, registered } = i;
-            return completed + ' out of ' + registered + ' other(s) completed this'
+            return completed + '/' + registered + ' other(s) completed'
         } else return "Personal task"
     }
 
@@ -51,14 +51,14 @@ export default function Unfinished({ navigation, route }) {
                 newRefId: item.reference,
                 data: data
             })}>
-                <View 
-                    style={{ 
-                        flexDirection: 'row', 
-                        justifyContent: 'space-between', 
-                        alignItems: 'center' 
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
                     }}
                 >
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <Entypo name="dot-single" size={24} color="black" />
                         <View>
                             <Text style={styles.itemName}>{item.title}</Text>
@@ -77,9 +77,9 @@ export default function Unfinished({ navigation, route }) {
                 <View style={YellowLine.header}>
                     <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
                         <View style={YellowLine.insideWhiteButton}>
-                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon} />
                             <Text style={YellowLine.whiteButtonText}>Back</Text>
-                        </View> 
+                        </View>
                     </TouchableOpacity>
                     <Text h1 style={YellowLine.headerText}>{moduleId}</Text>
                 </View>
