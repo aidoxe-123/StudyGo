@@ -73,7 +73,7 @@ export const LoginStyles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 10,
     flexDirection: 'row',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   inpIconContainer: {
     flex: 1,
@@ -84,7 +84,7 @@ export const LoginStyles = StyleSheet.create({
   textInput: {
     flex: 5,
     fontFamily: 'sourcesanspro-regular',
-    fontSize: 20,
+    fontSize: 18,
     padding: '5%'
   },
   wrongInputAlert: {

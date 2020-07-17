@@ -237,7 +237,7 @@ export default class Register extends React.Component{
             <Text 
               style={{
                 fontFamily: 'sourcesanspro-semibold',
-                fontSize: 20,
+                fontSize: 18,
                 color: '#fff'
               }}
             >Sign up</Text>
