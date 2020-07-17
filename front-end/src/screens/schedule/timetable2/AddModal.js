@@ -8,6 +8,8 @@ import Animated from 'react-native-reanimated'
 import { useTransition, mix } from 'react-native-redash'
 import { DatePicker, DropdownList } from '../../../components/index'
 import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
+
+
 export default function EditModal({ height, width, x, y, handleClose, handleAdd }) {
   const SCREEN_WIDTH = Dimensions.get('window').width
   const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -31,13 +33,13 @@ export default function EditModal({ height, width, x, y, handleClose, handleAdd 
   const whiteBoxFlex = mix(transition, 0, 4)
 
   const days = useState([
-    { dayName: 'monday', id: 2 },
-    { dayName: 'tuesday', id: 3 },
-    { dayName: 'wednesday', id: 4 },
-    { dayName: 'thursday', id: 5 },
-    { dayName: 'friday', id: 6 },
-    { dayName: 'saturday', id: 7 },
-    { dayName: 'sunday', id: 8 },
+    { dayName: 'monday' },
+    { dayName: 'tuesday' },
+    { dayName: 'wednesday' },
+    { dayName: 'thursday' },
+    { dayName: 'friday' },
+    { dayName: 'saturday' },
+    { dayName: 'sunday' },
   ])[0]
 
   function toTwoDigitString(number) {
@@ -127,16 +129,51 @@ export default function EditModal({ height, width, x, y, handleClose, handleAdd 
             <View style={styles.insideBlueBox}>
               <View>
                 <View style={{ flexDirection: 'row', zIndex: 1 }}>
-                  <View style={{ flex: 4, alignItems: 'center', padding: '5%', zIndex: 999 }}>
-                    <View style={{ position: 'absolute', width: '100%' }}>
-                      <DropdownList
-                        allOptions={days}
-                        labelExtractor={item => item.dayName.charAt(0).toUpperCase() + item.dayName.slice(1, 3)}
-                        onChoose={item => setDay(item.dayName)}
-                      />
-                    </View>
+                  <View style={{ flex: 1, alignItems: 'center', zIndex: 999 }}>
+                    {Platform.OS == 'android'
+                      ? <Picker
+                        itemStyle={{}}
+                        mode="dropdown"
+                        style={styles.dayDropdown}
+                        selectedValue={day}
+                        onValueChange={value => setDay(value)}
+                      >
+                        {days.map((day, index) => (
+                          <Picker.Item
+                            color="black"
+                            label={day.dayName.toUpperCase()}
+                            value={day.dayName}
+                            index={index}
+                            key={index}
+                          />
+                        ))}
+                      </Picker>
+                      : <View style={styles.dayDropdown}>
+                        <DropdownList
+                          placeHolder="MONDAY"
+                          allOptions={days}
+                          labelExtractor={item => item.dayName.toUpperCase()}
+                          onChoose={item => setDay(item.dayName)}
+                          optionStyle={{
+                            backgroundColor: 'white',
+                            padding: "3%",
+                            borderColor: '#51c9e7',
+                            borderBottomWidth: 1
+                          }}
+                          selectStyle={{
+                            backgroundColor: '#51c9e7',
+                            padding: "3%",
+                            text: {
+                              fontSize: 18,
+                              color: 'rgba(255,255,255,0.7)',
+                            },
+                            borderColor: '#51c9e7',
+                            borderBottomWidth: 1
+                          }}
+                        />
+                      </View>
+                    }
                   </View>
-
                   <View style={styles.hourContainer}>
                     <TouchableOpacity onPress={() => setEditingStart(true)}>
                       <Text style={styles.duration}>{toHourString(start)}</Text>
@@ -168,10 +205,10 @@ export default function EditModal({ height, width, x, y, handleClose, handleAdd 
             </View>
             <Animated.View
               style={{
-                zIndex: 0,
                 flex: whiteBoxFlex,
                 backgroundColor: 'white',
                 padding: 10,
+                zIndex: 0,
               }}>
               <View style={styles.editDescriptionBox} >
                 <TextInput
@@ -207,7 +244,7 @@ export default function EditModal({ height, width, x, y, handleClose, handleAdd 
           />
         </View>
       </TouchableWithoutFeedback>
-    </Modal >
+    </Modal>
   )
 }
 
@@ -232,25 +269,15 @@ const styles = StyleSheet.create({
     fontFamily: 'sourcesanspro-semibold',
     fontSize: 30
   },
-  dayDropdown: Platform.OS == 'android' ? {
-    color: 'rgba(255,255,255,0.7)',
-    transform: [
-      { scaleX: 16 / 14 },
-      { scaleY: 16 / 14 },
-      { translateX: 5 },
-      { translateY: -9 }
-    ],
-    height: 50,
-    width: 100
-  } : {
+  dayDropdown: Platform.OS == 'android' ?
+    {
+      flex: 1,
       color: 'rgba(255,255,255,0.7)',
-      height: 50,
-      width: 100,
-      transform: [
-        { translateX: -10 },
-        { translateY: -87 },
-        { scaleY: 13 / 14 }
-      ],
+      width: '100%'
+    } : {
+      flex: 1,
+      position: 'absolute',
+      width: '100%'
     },
   closeButton: {
     position: 'absolute',
@@ -310,9 +337,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   hourContainer: {
-    flex: 6,
+    flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    zIndex: 0
+    justifyContent: 'center'
   }
 })

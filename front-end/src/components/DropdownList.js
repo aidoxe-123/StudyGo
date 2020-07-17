@@ -9,8 +9,8 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 //          keyExtractor    (id of items)
 
 export default function (props) {
-    let { allOptions, labelExtractor, renderOption, onChoose } = props;
-    const [text, setText] = useState("Mon")
+    let { allOptions, labelExtractor, renderOption, onChoose, placeHolder, optionStyle, selectStyle } = props;
+    const [text, setText] = useState(placeHolder)
     const [isSearch, setIsSearch] = useState(false);
 
     renderOption = renderOption || ((item) => <Text>{labelExtractor(item)}</Text>)
@@ -19,7 +19,7 @@ export default function (props) {
     return (
         <View>
             <TouchableOpacity onPress={() => setIsSearch(true)}>
-                <View style={styles.item}><Text>{text}</Text></View>
+                <View style={selectStyle || styles.item}><Text style={selectStyle.text}>{text}</Text></View>
             </TouchableOpacity>
 
             <FlatList
@@ -30,10 +30,11 @@ export default function (props) {
                         onChoose(item);
                         setText(labelExtractor(item));
                         setIsSearch(false);
-                    }} style={styles.item}>
+                    }} style={optionStyle || styles.item}>
                         {renderOption(item)}
                     </TouchableOpacity>
                 )}
+                keyExtractor={(item, index) => index.toString()}
             />
         </View>
     )
