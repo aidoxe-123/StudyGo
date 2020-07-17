@@ -6,9 +6,9 @@ import { YellowLine } from '../../../style/yellowLine'
 import { UserIdContext, DatePicker } from '../../components/index'
 import { addTask } from './DataFetcher'
 
-export default function AddTodo({navigation}) {
+export default function AddTodo({ navigation }) {
     const userId = useContext(UserIdContext)
-    
+
     const oneHourFromNow = new Date()
     oneHourFromNow.setHours(oneHourFromNow.getHours() + 1)
 
@@ -21,18 +21,18 @@ export default function AddTodo({navigation}) {
     var timeString = toTwoDigitString(date.getHours()) + ":" + toTwoDigitString(date.getMinutes())
 
     function toTwoDigitString(num) {
-      return num >= 10 ? "" + num : "0" + num
+        return num >= 10 ? "" + num : "0" + num
     }
 
     function handleSubmit() {
-        if (text.length >= 1) {     
+        if (text.length >= 1) {
             addTask(userId, text, date)
-            .then(() => {
-                setText('')
-                setDate(new Date())
-                navigation.navigate('Deadlines')
-            })
-        }        
+                .then(() => {
+                    setText('')
+                    setDate(new Date())
+                    navigation.navigate('Deadlines')
+                })
+        }
     }
 
     function handleChangeDatePicker(event, date) {
@@ -55,18 +55,18 @@ export default function AddTodo({navigation}) {
                 <View style={YellowLine.header}>
                     <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
                         <View style={YellowLine.insideWhiteButton}>
-                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon} />
                             <Text style={YellowLine.whiteButtonText}>Back</Text>
-                        </View> 
+                        </View>
                     </TouchableOpacity>
                     <Text h1 style={YellowLine.headerText}>Add Task</Text>
-                    <TouchableOpacity 
-                        style={YellowLine.rightWhiteButton} 
+                    <TouchableOpacity
+                        style={YellowLine.rightWhiteButton}
                         onPress={handleSubmit}
                     >
                         <View style={YellowLine.insideWhiteButton}>
                             <Text style={YellowLine.whiteButtonText}>Save</Text>
-                        </View> 
+                        </View>
                     </TouchableOpacity>
                 </View>
                 <View style={AddTodoStyles.form}>
@@ -77,7 +77,7 @@ export default function AddTodo({navigation}) {
                         onChangeText={(value) => setText(value)}
                         value={text}
                     />
-                    <View style={{flexDirection: 'row', marginTop: 20}}>
+                    <View style={{ marginTop: 20 }}>
                         {/* select date */}
                         <View>
                             <View style={AddTodoStyles.dateView}>
@@ -85,33 +85,33 @@ export default function AddTodo({navigation}) {
                                 <Text style={AddTodoStyles.label}> Date: </Text>
                                 <TouchableOpacity onPress={() => setEditDate(true)}>
                                     <Text style={AddTodoStyles.dateBox}>{dateString}</Text>
-                                </TouchableOpacity>                
-                                <DatePicker 
-                                    showDatePicker={editDate} 
-                                    value={date} 
+                                </TouchableOpacity>
+                                <DatePicker
+                                    showDatePicker={editDate}
+                                    value={date}
                                     handleChange={handleChangeDatePicker}
                                 />
                             </View>
                         </View>
-                        
+
                         {/* select time */}
-                        <View style={{marginLeft: 20}}>       
+                        <View>
                             <View style={AddTodoStyles.dateView}>
                                 <Feather name='clock' size={28} color='#333' />
                                 <Text style={AddTodoStyles.label}> Time: </Text>
                                 <TouchableOpacity onPress={() => setEditTime(true)}>
                                     <Text style={AddTodoStyles.dateBox}>{timeString}</Text>
-                                </TouchableOpacity>                               
-                                <DatePicker 
-                                    showDatePicker={editTime} 
-                                    value={date}  
+                                </TouchableOpacity>
+                                <DatePicker
+                                    showDatePicker={editTime}
+                                    value={date}
                                     handleChange={handleChangeTimePicker}
                                     mode='time'
                                 />
                             </View>
                         </View>
                     </View>
-                </View>              
+                </View>
             </View>
         </TouchableWithoutFeedback>
     )
