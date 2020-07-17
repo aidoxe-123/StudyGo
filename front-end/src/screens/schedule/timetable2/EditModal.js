@@ -1,14 +1,15 @@
-import React, {useState, useEffect } from 'react'
-import { View, Modal, Text, 
+import React, { useState, useEffect } from 'react'
+import {
+  View, Modal, Text,
   Dimensions, TouchableOpacity, TextInput, StyleSheet,
   TouchableWithoutFeedback, Keyboard, Picker, Alert
 } from 'react-native'
 import Animated from 'react-native-reanimated'
-import {useTransition, mix} from 'react-native-redash'
-import { DatePicker } from '../../../components/index'
-import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons'; 
+import { useTransition, mix } from 'react-native-redash'
+import { DatePicker, DropdownList } from '../../../components/index'
+import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
 
-export default function EditModal({height, width, x, y, handleClose, handleEdit, handleDelete, lesson}) {
+export default function EditModal({ height, width, x, y, handleClose, handleEdit, handleDelete, lesson }) {
   const SCREEN_WIDTH = Dimensions.get('window').width
   const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -22,7 +23,7 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
   const [editingEnd, setEditingEnd] = useState(false)
 
   const [toggled, setToggle] = useState(false)
-  const transition = useTransition(toggled, {duration: 250})
+  const transition = useTransition(toggled, { duration: 250 })
   const translateX = mix(transition, 0, SCREEN_WIDTH / 8 - x)
   const translateY = mix(transition, 0, SCREEN_HEIGHT / 8 - y)
   const modalHeight = mix(transition, height, SCREEN_HEIGHT / 4 * 3)
@@ -33,11 +34,13 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
   const [edit, setEdit] = useState(false)
 
   const days = useState([
-    {dayName: 'monday'},
-    {dayName: 'tuesday'},
-    {dayName: 'wednesday'},
-    {dayName: 'thursday'},
-    {dayName: 'friday'},
+    { dayName: 'monday' },
+    { dayName: 'tuesday' },
+    { dayName: 'wednesday' },
+    { dayName: 'thursday' },
+    { dayName: 'friday' },
+    { dayName: 'saturday' },
+    { dayName: 'sunday' },
   ])[0]
 
   function toTwoDigitString(number) {
@@ -45,14 +48,14 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
   }
 
   function toHourString(timeFromMidnight) {
-    return toTwoDigitString(Math.floor(timeFromMidnight / 60))  + ':' 
-    + toTwoDigitString(timeFromMidnight % 60)
-  } 
+    return toTwoDigitString(Math.floor(timeFromMidnight / 60)) + ':'
+      + toTwoDigitString(timeFromMidnight % 60)
+  }
 
   function makeTimeString(start, end, day) {
     const startHour = toHourString(start)
     const endHour = toHourString(end)
-    const timeString = day.charAt(0).toUpperCase() + day.slice(1) + ', ' + startHour + ' - ' + endHour 
+    const timeString = day.charAt(0).toUpperCase() + day.slice(1) + ', ' + startHour + ' - ' + endHour
     // Day of week, hh:mm-hh:mm
     return timeString
   }
@@ -90,17 +93,17 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
 
   function handleSubmit() {
     if (name === '') {
-      Alert.alert('Missing name', 'Class name cannot be empty', 
-        [{text: 'ok'}]
+      Alert.alert('Missing name', 'Class name cannot be empty',
+        [{ text: 'ok' }]
       )
       return
     }
 
     if (end <= start) {
       Alert.alert('Invalid time interval', 'End time must be after start time',
-        [{text: 'ok'}]
+        [{ text: 'ok' }]
       )
-      return 
+      return
     }
 
     var newLesson = {
@@ -116,8 +119,8 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
 
   function handleDeleteClicked() {
     Alert.alert('Delete task', 'Are you sure you want to delete?', [
-      {text: 'cancel', onPress:() => {}},
-      {text: 'proceed', onPress:() => handleDelete(lesson.id)}
+      { text: 'cancel', onPress: () => { } },
+      { text: 'proceed', onPress: () => handleDelete(lesson.id) }
     ])
   }
   return (
@@ -135,96 +138,125 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
               overflow: 'hidden',
               borderRadius: borderRadius,
               transform: [
-                {translateX: translateX},
-                {translateY: translateY}
+                { translateX: translateX },
+                { translateY: translateY }
               ]
             }}
           >
             <View style={styles.insideBlueBox}>
-              { !edit ? (
+              {!edit ? (
                 <View>
                   <Text style={styles.duration}>
                     {makeTimeString(start, end, day)}
                   </Text>
                   <Text style={styles.name}>{name}</Text>
                 </View>
-                ) : (
-                <View>
-                  <View style={{flexDirection: 'row'}}>
-                    <View style={{flex: 4, height: 30}}>
-                      <Picker
-                        itemStyle={{}}
-                        mode="dropdown"
-                        style={styles.dayDropdown}
-                        selectedValue={day}
-                        onValueChange={value => setDay(value)}
-                      >
-                        {days.map((day, index) => (
-                          <Picker.Item
-                            color="black"
-                            label={day.dayName.charAt(0).toUpperCase() + day.dayName.slice(1,3)}
-                            value={day.dayName}
-                            index={index}
-                            key={index}
-                          />
-                        ))}
-                      </Picker>
+              ) : (
+                  <View>
+                    <View style={{ flexDirection: 'row', zIndex: 1 }}>
+                      <View style={{ flex: 1, alignItems: 'center', zIndex: 999 }}>
+                        {Platform.OS == 'android'
+                          ? <Picker
+                            itemStyle={{}}
+                            mode="dropdown"
+                            style={styles.dayDropdown}
+                            selectedValue={day}
+                            onValueChange={value => setDay(value)}
+                          >
+                            {days.map((day, index) => (
+                              <Picker.Item
+                                color="black"
+                                label={day.dayName.toUpperCase()}
+                                value={day.dayName}
+                                index={index}
+                                key={index}
+                              />
+                            ))}
+                          </Picker>
+                          : <View style={styles.dayDropdown}>
+                            <DropdownList
+                              placeHolder={day.toUpperCase()}
+                              allOptions={days}
+                              labelExtractor={item => item.dayName.toUpperCase()}
+                              onChoose={item => setDay(item.dayName)}
+                              optionStyle={{
+                                backgroundColor: 'white',
+                                padding: "3%",
+                                borderColor: '#51c9e7',
+                                borderBottomWidth: 1
+                              }}
+                              selectStyle={{
+                                backgroundColor: '#51c9e7',
+                                padding: "3%",
+                                text: {
+                                  fontSize: 18,
+                                  color: 'rgba(255,255,255,0.7)',
+                                },
+                                borderColor: '#51c9e7',
+                                borderBottomWidth: 1
+                              }}
+                            />
+                          </View>
+                        }
+                      </View>
+                      <View style={styles.hourContainer}>
+                        <TouchableOpacity onPress={() => setEditingStart(true)}>
+                          <Text style={styles.duration}>{toHourString(start)}</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.duration}> - </Text>
+                        <TouchableOpacity onPress={() => setEditingEnd(true)}>
+                          <Text style={styles.duration}>{toHourString(end)}</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    <View style={styles.hourContainer}>
-                      <TouchableOpacity onPress={() => setEditingStart(true)}>
-                        <Text style={styles.duration}>{toHourString(start)}</Text>
-                      </TouchableOpacity>
-                      <Text style={styles.duration}> - </Text>
-                      <TouchableOpacity onPress={() => setEditingEnd(true)}>
-                        <Text style={styles.duration}>{toHourString(end)}</Text>
-                      </TouchableOpacity>
+                    <View style={{ zIndex: 0 }}>
+                      <TextInput
+                        style={[styles.name,
+                        { borderBottomWidth: 1, borderColor: 'white' }
+                        ]}
+                        value={name}
+                        onChangeText={text => setName(text)}
+                        placeholder='Class name'
+                        placeholderTextColor='#00000030'
+                      />
                     </View>
                   </View>
-                  <TextInput 
-                    style={[styles.name, 
-                      {borderBottomWidth: 1, borderColor: 'white'}
-                    ]}
-                    value={name}
-                    onChangeText={text => setName(text)}
-                    placeholder='Class name'
-                    placeholderTextColor='#00000030'
-                  />
-                </View>
                 )
               }
-              
-              <TouchableOpacity 
-                onPress={handleClose} 
+
+              <TouchableOpacity
+                onPress={handleClose}
                 style={styles.closeButton}
               >
                 <AntDesign name="close" size={30} color="#ffffff" />
               </TouchableOpacity>
             </View>
-            <Animated.View 
+            <Animated.View
               style={{
-                flex: whiteBoxFlex, 
+                flex: whiteBoxFlex,
                 backgroundColor: 'white',
                 padding: 10,
+                zIndex: 0,
               }}>
               {
-                !edit 
-                ? <Text style={styles.viewDescription}>{description}</Text> 
-                : <View style={styles.editDescriptionBox} >
-                  <TextInput
-                    style={styles.editDescriptionInput}
-                    underlineColorAndroid="transparent"
-                    placeholder="Type the description of the class"
-                    placeholderTextColor="#00000030"
-                    numberOfLines={10}
-                    multiline={true}
-                    value={description}
-                    onChangeText={text => setDescription(text)}
-                  />
-                </View>
+                !edit
+                  ? <Text style={styles.viewDescription}>{description}</Text>
+                  : <View style={styles.editDescriptionBox} >
+                    <TextInput
+                      style={styles.editDescriptionInput}
+                      underlineColorAndroid="transparent"
+                      placeholder="Type the description of the class"
+                      placeholderTextColor="#00000030"
+                      numberOfLines={10}
+                      multiline={true}
+                      value={description}
+                      onChangeText={text => setDescription(text)}
+                    />
+                  </View>
               }
               {
-                edit && 
-                <TouchableOpacity 
+                edit &&
+                <TouchableOpacity
                   style={styles.doneButton}
                   onPress={handleSubmit}
                 >
@@ -240,24 +272,24 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
                   <AntDesign name="delete" size={24} color="white" />
                 </TouchableOpacity>
               }
-              
+
               <TouchableOpacity
                 style={styles.penButton}
                 onPress={handlePenButtonClicked}
               >
-                  <Feather name="edit-2" size={24} color='white'/>
+                <Feather name="edit-2" size={24} color='white' />
               </TouchableOpacity>
             </Animated.View>
           </Animated.View>
-          <DatePicker 
-            showDatePicker={editingStart} 
-            value={new Date(2020, 1, 1, Math.floor(start / 60), start % 60)}  
+          <DatePicker
+            showDatePicker={editingStart}
+            value={new Date(2020, 1, 1, Math.floor(start / 60), start % 60)}
             handleChange={handleChangeStartTime}
             mode='time'
           />
-          <DatePicker 
-            showDatePicker={editingEnd} 
-            value={new Date(2020, 1, 1, Math.floor(end / 60), end % 60)}  
+          <DatePicker
+            showDatePicker={editingEnd}
+            value={new Date(2020, 1, 1, Math.floor(end / 60), end % 60)}
             handleChange={handleChangeEndTime}
             mode='time'
           />
@@ -269,13 +301,14 @@ export default function EditModal({height, width, x, y, handleClose, handleEdit,
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    flex: 1,
     backgroundColor: '#00000080'
   },
   insideBlueBox: {
-    flex: 1, 
-    paddingHorizontal: 10, 
-    paddingTop: 23
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingTop: 23,
+    zIndex: 1
   },
   duration: {
     color: 'rgba(255,255,255,0.7)',
@@ -283,42 +316,41 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   name: {
-    color: 'white', 
+    color: 'white',
     fontFamily: 'sourcesanspro-semibold',
     fontSize: 30
   },
-  dayDropdown: {
-    color: 'rgba(255,255,255,0.7)', 
-    transform: [
-      {scaleX: 16/14}, 
-      {scaleY: 16/14}, 
-      {translateX: 5}, 
-      {translateY: -9}
-    ],
-    height: 50,
-    width: 100
-  },
+  dayDropdown: Platform.OS == 'android' ?
+    {
+      flex: 1,
+      color: 'rgba(255,255,255,0.7)',
+      width: '100%'
+    } : {
+      flex: 1,
+      position: 'absolute',
+      width: '100%'
+    },
   closeButton: {
-    position: 'absolute', 
-    right: 7, 
-    top: 7, 
-    alignItems: 'center', 
+    position: 'absolute',
+    right: 7,
+    top: 7,
+    alignItems: 'center',
     justifyContent: 'center'
   },
   viewDescription: {
     fontFamily: 'sourcesanspro-regular',
-    fontSize: 20, 
+    fontSize: 20,
     padding: 6
   },
   editDescriptionBox: {
-    borderColor: 'grey', 
-    borderWidth: 1, 
-    padding: 5, 
+    borderColor: 'grey',
+    borderWidth: 1,
+    padding: 5,
     height: 160
   },
   editDescriptionInput: {
-    textAlignVertical: 'top', 
-    height: 150, 
+    textAlignVertical: 'top',
+    height: 150,
     fontFamily: 'sourcesanspro-regular',
     fontSize: 20,
   },
@@ -336,7 +368,7 @@ const styles = StyleSheet.create({
   penButton: {
     position: 'absolute',
     bottom: 10,
-    right: 10, 
+    right: 10,
     height: 50,
     width: 50,
     borderRadius: 25,
@@ -356,7 +388,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   hourContainer: {
-    flex: 6, 
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center'
   }
