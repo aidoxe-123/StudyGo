@@ -5,7 +5,7 @@ export const LoginStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#51c9e7', 
+    backgroundColor: '#51c9e7',
   },
   container2: {
     height: '80%',
@@ -41,7 +41,7 @@ export const LoginStyles = StyleSheet.create({
   ggBtnTxt: {
     paddingLeft: 10,
     fontFamily: 'sourcesanspro-regular',
-    fontSize: 20,
+    fontSize: 18,
     color: '#fff'
   },
   spinner: {
@@ -60,7 +60,7 @@ export const LoginStyles = StyleSheet.create({
     shadowRadius: 9.51,
     elevation: 15,
     alignItems: 'center'
-    
+
   },
   heading: {
     fontSize: 20,
