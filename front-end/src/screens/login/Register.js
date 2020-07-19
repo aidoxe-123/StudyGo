@@ -177,7 +177,7 @@ export default class Register extends React.Component{
             </View>
             <TextInput 
               secureTextEntry={this.state.secureInput1} 
-              style={LoginStyles.textInput}
+              style={[LoginStyles.textInput, {flex: 4}]}
               placeholder='Password'
               value={this.state.password}
               onChangeText={(text) => this.handleChange('password', text)}
@@ -204,7 +204,7 @@ export default class Register extends React.Component{
             </View>
             <TextInput 
               secureTextEntry={this.state.secureInput2} 
-              style={LoginStyles.textInput}
+              style={[LoginStyles.textInput, {flex: 4}]}
               placeholder='Repeat password'
               value={this.state.repeatPassword}
               onChangeText={(text) => this.handleChange('repeatPassword', text)}

@@ -159,7 +159,7 @@ export default function Login({ navigation }) {
             </View>
             <TextInput 
               secureTextEntry={secureInput} 
-              style={LoginStyles.textInput}
+              style={[LoginStyles.textInput, {flex: 4}]}
               placeholder='Password'
               value={password}
               onChangeText={handleInputPassword}

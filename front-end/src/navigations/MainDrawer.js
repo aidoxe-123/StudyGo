@@ -59,7 +59,7 @@ export default function MainDrawer({ route }) {
                         )
                     }}
                 />
-                <Drawer.Screen
+                {/* <Drawer.Screen
                     name='Settings'
                     component={SettingStack}
                     options={{
@@ -67,7 +67,7 @@ export default function MainDrawer({ route }) {
                             <AntDesign name='setting' size={24} color={color} />
                         )
                     }}
-                />
+                /> */}
             </Drawer.Navigator>
         </UserIdContext.Provider>
     )
