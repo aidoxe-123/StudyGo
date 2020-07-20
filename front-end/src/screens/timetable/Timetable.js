@@ -4,9 +4,8 @@ import {
   Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Dimensions
 } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Ionicons, AntDesign } from '@expo/vector-icons'
-import { YellowLine } from '../../../../style/yellowLine'
-import { UserIdContext } from '../../../components/index'
+import { AntDesign } from '@expo/vector-icons'
+import { UserIdContext } from '../../components/index'
 import DayNameColumn from './DayNameColumn'
 import HourTitle from './HourTitle'
 import DayRow from './DayRow'
@@ -131,20 +130,6 @@ export default function Timetable({navigation}) {
           textContent='Loading...'
           textStyle={{color: "#fff"}}
         />
-        {/* title */}
-        <View style={YellowLine.header}>
-          <Text style={YellowLine.headerText}>Timetable</Text>
-          <TouchableOpacity 
-            style={YellowLine.rightWhiteButton} 
-            onPress={() => navigation.navigate('Calendar')}
-          >
-              <View style={YellowLine.insideWhiteButton}>
-                  <Text style={YellowLine.whiteButtonText}>Calendar</Text>
-                  <Ionicons name='ios-arrow-forward' size={18} style={YellowLine.whiteButtonIcon}/>
-              </View> 
-          </TouchableOpacity>
-        </View>
-
         <View style={styles.content}>
           <DayNameColumn/>
           <View style={{flex: 1}} onStartShouldSetResponder={() => true}>

@@ -24,8 +24,9 @@ export default function CalendarTask({task}) {
   }, [task])
     
   const line = (props) => (
-    <View style={{height: '100%', justifyContent: 'center', ...props}}>
-      <View style={{height: '50%', borderLeftWidth: 2, borderColor: '#d3d3d3'}}></View>
+    <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', ...props}}>
+      <View style={{height: '50%', borderLeftWidth: 1, borderColor: '#d3d3d3', marginRight: 2}}></View>
+      <View style={{height: '50%', borderLeftWidth: 1, borderColor: '#d3d3d3'}}></View>
     </View>
   )
   

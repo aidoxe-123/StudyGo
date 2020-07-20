@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import Timetable from '../screens/timetable/Timetable'
+import Calendar from '../screens/calendar/Calendar'
 import { Header } from '../components/index'
 
 const Stack = createStackNavigator()
@@ -17,11 +17,11 @@ export default function TimetableStack() {
       }}
     >
       <Stack.Screen 
-        name='Timetable' 
-        component={Timetable}
+        name='Calendar' 
+        component={Calendar}
         options = {({navigation}) => {
           return {
-            headerTitle: () => <Header title='Timetable' navigation={navigation} />
+            headerTitle: () => <Header title='Calendar' navigation={navigation} />
           }
         }} 
       />  

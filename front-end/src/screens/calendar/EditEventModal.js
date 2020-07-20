@@ -4,19 +4,19 @@ import {
   Text, TextInput, Alert, TouchableWithoutFeedback, Keyboard 
 } from 'react-native'
 import { AntDesign, MaterialIcons } from '@expo/vector-icons'
-import { RadioButtons, UserIdContext } from '../../../components/index'
-import { addEvent } from './DataFetcher'
+import { RadioButtons, UserIdContext } from '../../components/index'
+import { editEvent } from './DataFetcher'
 
-export default function AddEventModal({onFinishAdding, refetchData, dateString}) {
+export default function EditEventModal({onFinishEditing, task, refetchData, dateString}) {
   const userId = useContext(UserIdContext)
 
-  const [headerColor, setHeaderColor] = useState('#c0c0c0')
-  const [type, setType] = useState('')
-  const [detail, setDetail] = useState('')
+  const [headerColor, setHeaderColor] = useState('')
+  const [type, setType] = useState(task.type)
+  const [detail, setDetail] = useState(task.detail)
   const [title, setTitle] = useState('')
   
   const map = { deadline: 0, assessment: 1, special: 2}
-  const [choice, setChoice] = useState(0)
+  const [choice, setChoice] = useState(map[type])
 
   // decide the color of the modal, depending on the type of task
   // ---------------------------------------------
@@ -33,9 +33,6 @@ export default function AddEventModal({onFinishAdding, refetchData, dateString})
       case 'special':
         setHeaderColor('#e76f51') // red
         setTitle('Special: ')
-        break
-      default:
-        setHeaderColor('#c0c0c0')
         break
     }
   }, [type])
@@ -62,13 +59,14 @@ export default function AddEventModal({onFinishAdding, refetchData, dateString})
   // update changes in the api
   // --------------------------------------------------
   const handleSubmit = () => {
-    if (type !== '' && detail !== '') {
-      const event = {
+    if (detail !== '') {
+      const newEvent = {
+        detail: detail,
         type: type,
-        detail: detail
+        createAt: task.createAt
       }
-      addEvent(userId, dateString, event)
-        .then(() => onFinishAdding())
+      editEvent(userId, task.id, dateString, newEvent)
+        .then(() => onFinishEditing())
         .then(() => refetchData(dateString))
     }
   }
@@ -80,7 +78,7 @@ export default function AddEventModal({onFinishAdding, refetchData, dateString})
         <View style={styles.container}>
           <View style={styles.whiteBox}>
             <View style={[styles.header, {backgroundColor: headerColor}]}>
-              <Text style={styles.title}>{title !== '' ? title : 'Type of event'}</Text>
+              <Text style={styles.title}>{title}</Text>
               <TextInput 
                 value={detail}
                 placeholder='Event name'
@@ -88,12 +86,12 @@ export default function AddEventModal({onFinishAdding, refetchData, dateString})
                 onChangeText={handleChangeDetail}
                 style={styles.input}
               />
-              <TouchableOpacity style={styles.closeButton} onPress={onFinishAdding}>
+              <TouchableOpacity style={styles.closeButton} onPress={onFinishEditing}>
                 <AntDesign name='close' size={30} color='#ffffff'/>
               </TouchableOpacity>
             </View>
             <View style={styles.content}>
-              <RadioButtons onPressIndex={handleChoice}>
+              <RadioButtons onPressIndex={handleChoice} initialChoice={choice}>
                   {/*Choice 1*/}
                   <Text style={styles.choice}>Deadline</Text>
                   {/*Choice 2*/}
@@ -114,6 +112,7 @@ export default function AddEventModal({onFinishAdding, refetchData, dateString})
     </Modal>
   )
 }
+////////////////////////////////////////////////////////////////////////////
 
 const styles = StyleSheet.create({
   container: {
@@ -128,13 +127,13 @@ const styles = StyleSheet.create({
     width: '70%',
     minHeight: 350,
     borderRadius: 10,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   header: {
     height: '30%',
     minHeight: 150,
     justifyContent: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   closeButton: {
     position: 'absolute',
