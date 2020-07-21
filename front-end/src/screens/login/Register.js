@@ -124,7 +124,7 @@ export default class Register extends React.Component{
           <View style={LoginStyles.logoContainer}>
             <View style={LoginStyles.logo}>
                 <Image 
-                  source={require('../../../assets/studygo6.png')} 
+                  source={require('../../../assets/studygo7.png')} 
                   style={{height: 50, width: 50}}
                 />
             </View>

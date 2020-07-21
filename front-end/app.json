@@ -7,11 +7,11 @@
       "android",
       "web"
     ],
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
-    "icon": "./assets/app icon.png",
+    "icon": "./assets/studygo7.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/studygo7.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,14 +23,14 @@
     ],
     "ios": {
       "bundleIdentifier": "com.DnP.StudyGo",
-      "buildNumber": "1.0.1"
+      "buildNumber": "1.0.2"
     },
     "android": {
       "package": "com.DnP.StudyGo",
-      "versionCode": 2
+      "versionCode": 3
     },
     "notification": {
-      "icon": "./assets/app icon.png",
+      "icon": "./assets/studygo7.png",
       "color": "#000000",
       "iosDisplayInForeground": true,
       "androidMode": "default",

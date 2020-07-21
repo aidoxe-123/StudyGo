@@ -23,25 +23,35 @@ export default function CalendarTask({task}) {
     }
   }, [task])
     
-    
+  const line = (props) => (
+    <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', ...props}}>
+      <View style={{height: '50%', borderLeftWidth: 1, borderColor: '#d3d3d3', marginRight: 2}}></View>
+      <View style={{height: '50%', borderLeftWidth: 1, borderColor: '#d3d3d3'}}></View>
+    </View>
+  )
+  
   return (
     <View style={styles.container}>
-      <View style={[styles.dot, color]}/>
-      <View>
-        <Text style={styles.text}>{title}</Text>
-        <Text style={styles.text}>{task.detail}</Text>
-      </View>    
+      {line({marginRight: '2%'})}
+      <View style={{flexDirection: 'row', flex: 1, paddingRight: '4%', alignItems: 'center'}}>
+        <View style={[styles.dot, color]}/>
+        <View>
+          <Text style={styles.text}>{title}</Text>
+          <Text style={styles.text}>{task.detail}</Text>
+        </View> 
+      </View>  
+      {line({position: 'absolute', right: '2%'})} 
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%', 
+    flex: 1, 
     flexDirection: 'row', 
     alignItems: 'center', 
-    marginTop: 14,
-    marginLeft: 14,
+    marginTop: '2%',
+    marginLeft: '2%',
   },
   dot: {
     width: 50, 

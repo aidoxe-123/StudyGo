@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useTransition, mix } from 'react-native-redash'
-import { DatePicker, DropdownList } from '../../../components/index'
+import { DatePicker, DropdownList } from '../../components/index'
 import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
 
 export default function EditModal({ height, width, x, y, handleClose, handleEdit, handleDelete, lesson }) {

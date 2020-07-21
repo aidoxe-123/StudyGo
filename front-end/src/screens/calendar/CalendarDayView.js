@@ -4,7 +4,7 @@ import { SwipeListView } from 'react-native-swipe-list-view'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import CalendarTask from './CalendarTask'
 import EditEventModal from './EditEventModal'
-import { UserIdContext } from '../../../components/index'
+import { UserIdContext } from '../../components/index'
 import { deleteEvent } from './DataFetcher'
 
 export default function CalendarDayView({tasks, dateString, refetchData}) {

@@ -2,9 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { Text, View, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { Calendar as RNCalendar} from 'react-native-calendars'
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Ionicons } from '@expo/vector-icons'
-import { YellowLine } from '../../../../style/yellowLine'
-import { UserIdContext } from '../../../components/index'
+import { UserIdContext } from '../../components/index'
 import { getEvents } from './DataFetcher'
 import CalendarDayView from './CalendarDayView'
 import AddEventModal from './AddEventModal'
@@ -129,18 +127,6 @@ export default function Calendar({navigation}) {
           textContent='Loading...'
           textStyle={{color: "#fff"}}
         />
-        <View style={YellowLine.header}>
-          <Text h1 style={YellowLine.headerText}>Calendar</Text>
-          <TouchableOpacity 
-            style={YellowLine.leftWhiteButton}
-            onPress={() => navigation.navigate('Timetable')}
-          >
-              <View style={YellowLine.insideWhiteButton}>
-                  <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
-                  <Text style={YellowLine.whiteButtonText}>Timetable</Text>
-              </View> 
-          </TouchableOpacity>
-        </View>
         <RNCalendar
           markedDates={{
             ...marked,

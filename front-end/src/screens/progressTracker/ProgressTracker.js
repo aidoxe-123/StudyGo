@@ -46,6 +46,13 @@ export default function ProgressTracker({ navigation }) {
   }
   ///////////////////////////////////
 
+  const line = (props) => (
+    <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', ...props}}>
+      <View style={{height: '50%', borderLeftWidth: 1, borderColor: '#e76f51', marginRight: 2}}></View>
+      <View style={{height: '50%', borderLeftWidth: 1, borderColor: '#e76f51'}}></View>
+    </View>
+  )
+
 
   // handle the swipable button lists
   // --------------------------------
@@ -59,6 +66,7 @@ export default function ProgressTracker({ navigation }) {
         <View style={styles.itemContent}>
           <Text style={[{fontSize: 25 }, styles.text]}>{data.item.key}</Text>
           <Text style={[{ fontSize: 20 }, styles.text]}>{data.item.text}</Text>
+          {line({position: 'absolute', right: '2%'})} 
         </View>
       </View>
     </TouchableHighlight>
