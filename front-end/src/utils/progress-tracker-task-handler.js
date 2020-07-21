@@ -35,7 +35,7 @@ export const completeTask = async (userId, moduleId, title, taskId, reference, i
     ]);
     if (isTransfer) addTask(userId, moduleId, title, true, "Not graded yet");
 }
-
+// Explanation for the function handling links in unfinished task of progress tracker:
 // // host new task
 // hostTask
 // linkTaskY
@@ -119,6 +119,8 @@ export const link2 = async (userId, moduleId, taskId, title, isFinished, prevId)
         editStat(moduleId, newId, 1, finish)
     ])
 }
+
+// P.S.: this is a mess, will refactor if have time 
 
 
 
