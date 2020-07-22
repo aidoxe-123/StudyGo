@@ -8,7 +8,8 @@ const IOS_CLIENT_ID =
     "1046116434295-7suaev7unf6pel9qmmua6lm9kq93vs4q.apps.googleusercontent.com";
 const ANDROID_CLIENT_ID =
     "1046116434295-hccicqe5j8mro3flgu05g6hrqlfip3t0.apps.googleusercontent.com";
-
+const ANDROID_STANDALONE_CLIENT_ID =
+    "1046116434295-rukia5e839aegnsag4ohcr7dbk7k4eba.apps.googleusercontent.com";
 
 // https://medium.com/@inaguirre/react-native-login-with-google-quick-guide-fe351e464752
 
@@ -17,6 +18,7 @@ export const signInGoogle = async () => {
         const result = await Google.logInAsync({
             iosClientId: IOS_CLIENT_ID,
             androidClientId: ANDROID_CLIENT_ID,
+            androidStandaloneAppClientId: ANDROID_STANDALONE_CLIENT_ID,
             scopes: ["profile", "email"]
         });
 

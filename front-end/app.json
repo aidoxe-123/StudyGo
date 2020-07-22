@@ -27,7 +27,12 @@
     },
     "android": {
       "package": "com.DnP.StudyGo",
-      "versionCode": 3
+      "versionCode": 3,
+      "config": {
+        "googleSignIn": {
+          "certificateHash": "7F:12:AF:AF:D4:D7:AD:D9:03:A4:9F:6B:C3:CF:5B:5B:30:C1:48:6B"
+        }
+      }
     },
     "notification": {
       "icon": "./assets/studygo7.png",
