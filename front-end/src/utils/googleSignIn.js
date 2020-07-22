@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, Alert, Platform } from "react-native";
 
 import * as Google from "expo-google-app-auth";
 
@@ -17,7 +17,8 @@ export const signInGoogle = async () => {
         const result = await Google.logInAsync({
             iosClientId: IOS_CLIENT_ID,
             androidClientId: ANDROID_CLIENT_ID,
-            scopes: ["profile", "email"]
+            scopes: ["profile", "email"],
+            behavior: Platform.OS === 'android' ? 'web' : 'system'
         });
 
         if (result.type === "success") {
@@ -43,6 +44,7 @@ export const signInGoogle = async () => {
         }
     } catch (e) {
         console.log('LoginScreen.js.js 30 | Error with login', e);
+        //Alert.alert(e)
         return { error: true };
     }
 };

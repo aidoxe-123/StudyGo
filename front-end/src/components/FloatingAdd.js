@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, TextInput, StyleSheet, Text } from 'react-native'
+import { TouchableOpacity, StyleSheet} from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 
+// @params: props: styling properties
 export default FloatingAdd = (props) => {
-    const [color, setColor] = useState("blue");
     return (
         <TouchableOpacity style={styles.fab} {...props} >
             <AntDesign name="pluscircle" size={50} style={styles.addBtn} />

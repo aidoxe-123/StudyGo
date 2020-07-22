@@ -7,7 +7,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.2",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/studygo7.png",
     "splash": {
@@ -23,11 +23,11 @@
     ],
     "ios": {
       "bundleIdentifier": "com.DnP.StudyGo",
-      "buildNumber": "1.0.2"
+      "buildNumber": "1.0.4"
     },
     "android": {
       "package": "com.DnP.StudyGo",
-      "versionCode": 3
+      "versionCode": 4
     },
     "notification": {
       "icon": "./assets/studygo7.png",
