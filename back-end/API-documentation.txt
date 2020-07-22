@@ -126,10 +126,6 @@ POST /progress-tracker/modules
 DELETE /progress-tracker/modules
     req: userId (string), moduleId (string)
 
-// return all tasks (finished or unfinished)
-POST /progress-tracker/tasks/list
-    req: userId (string), moduleId (string), isFinished (boolean)
-
 // add new task
 POST /progress-tracker/tasks
     req: userId, moduleId, title, isFinished, details
