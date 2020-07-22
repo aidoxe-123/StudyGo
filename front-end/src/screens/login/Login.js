@@ -39,7 +39,7 @@ export default function Login({ navigation }) {
   }
 
   useEffect(() => {
-    checkLoggedInAlready()
+    checkLoggedInAlready()  
   }, [])
 
   function handleInputEmail(text) {
