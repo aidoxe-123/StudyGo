@@ -18,6 +18,7 @@ export default function Finished({ navigation, route }) {
     const handleAdd = () => {
         if (newTitle === "") Alert.alert("", "Please input the title!");
         else if (newDetails === "") Alert.alert("", "Please input your progress!");
+        if (newDetails === '100%') handleFinish()
         else {
             setLoading(true);
 

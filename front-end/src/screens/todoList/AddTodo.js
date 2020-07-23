@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { View, TextInput, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { View, TextInput, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
 import { Fontisto, Ionicons, Feather } from '@expo/vector-icons'
 import { AddTodoStyles } from '../../../style/AddTodoStyles'
 import { YellowLine } from '../../../style/yellowLine'
@@ -32,6 +32,8 @@ export default function AddTodo({ navigation }) {
                     setDate(new Date())
                     navigation.navigate('Deadlines')
                 })
+        } else {
+            Alert.alert('Empty title', 'Title must have at least 1 character', [{text: 'Got it'}])
         }
     }
 
