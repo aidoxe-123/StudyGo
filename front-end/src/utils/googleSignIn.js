@@ -1,8 +1,11 @@
 
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
-
+import { Text, View, StyleSheet, Button, Alert } from "react-native";
+import * as AppAuth from 'expo-app-auth'
 import * as Google from "expo-google-app-auth";
+import * as GoogleSignIn from "expo-google-sign-in"
+import Constants from "expo-constants";
+import { logMsg } from '../utils/logMsg';
 
 const IOS_CLIENT_ID =
     "1046116434295-7suaev7unf6pel9qmmua6lm9kq93vs4q.apps.googleusercontent.com";
@@ -15,17 +18,28 @@ const ANDROID_STANDALONE_CLIENT_ID =
 
 export const signInGoogle = async () => {
     try {
-        const result = await Google.logInAsync({
-            iosClientId: IOS_CLIENT_ID,
-            androidClientId: ANDROID_CLIENT_ID,
-            androidStandaloneAppClientId: ANDROID_STANDALONE_CLIENT_ID,
-            scopes: ["profile", "email"]
-        });
+        let result, email, name, id;
+        if (Constants.appOwnership === 'expo') {
+            result = await Google.logInAsync({
+                iosClientId: IOS_CLIENT_ID,
+                androidClientId: ANDROID_CLIENT_ID,
+                androidStandaloneAppClientId: ANDROID_STANDALONE_CLIENT_ID,
+                scopes: ["profile", "email"],
+                redirectUrl: `${AppAuth.OAuthRedirect}:/oauth2redirect/google`
+            });
+            email = result.user.email;
+            name = result.user.name;
+            id = result.user.id;
+        } else if (Constants.appOwnership === "standalone") {
+            await GoogleSignIn.initAsync();
+            result = await GoogleSignIn.signInAsync();
+            email = result.user.email;
+            name = result.user.displayName;
+            id = result.user.uid;
+        }
 
         if (result.type === "success") {
             let res = {};
-
-            const { email, name, id } = result.user;
 
             let requestOption = {
                 method: 'POST',
@@ -41,6 +55,7 @@ export const signInGoogle = async () => {
 
             return { success: true, id: id };
         } else {
+
             return { cancelled: true };
         }
     } catch (e) {
