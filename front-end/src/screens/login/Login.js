@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View, Text, TextInput, TouchableWithoutFeedback,
   Keyboard, TouchableOpacity, Platform, Image
@@ -8,6 +8,7 @@ import { LoginStyles } from '../../../style/LoginStyles.js'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { signInGoogle } from '../../utils/googleSignIn';
 import { AntDesign, FontAwesome, Entypo, Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('')
@@ -17,6 +18,29 @@ export default function Login({ navigation }) {
   const [isValid, setIsValid] = useState(true)
   const [loading, setLoading] = useState(false)
   const [secureInput, setSecureInput] = useState(true)
+
+  async function checkLoggedInAlready() {
+    try {
+      const id = await AsyncStorage.getItem('userId')
+      if (id !== null && id !== '-1') {
+        navigation.navigate('MainDrawer', { userId: id })
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  async function storeId(id) {
+    try {
+      await AsyncStorage.setItem('userId', id)
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    checkLoggedInAlready()  
+  }, [])
 
   function handleInputEmail(text) {
     setEmail(text)
@@ -40,6 +64,7 @@ export default function Login({ navigation }) {
     } else {
       setEmail('')
       setPassword('')
+      storeId(userId)
       navigation.navigate('MainDrawer', { userId: userId })
     }
   }
@@ -79,6 +104,7 @@ export default function Login({ navigation }) {
     signInGoogle()
       .then(res => {
         if (res.success) {
+          storeId(res.id)
           navigation.navigate('MainDrawer', { userId: res.id });
         }})
       .catch(error => console.log(error))

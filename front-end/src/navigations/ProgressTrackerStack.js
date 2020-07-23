@@ -4,7 +4,6 @@ import ProgressTracker from '../screens/progressTracker/ProgressTracker'
 import Module from './ProgressTrackerBottomTab';
 import AddModule from '../screens/progressTracker/Add Module';
 import AddFinished from '../screens/progressTracker/Add Finished';
-//import AddUnfinished from '../screens/progressTracker/Add Unfinished';
 import EditFinished from '../screens/progressTracker/EditFinished';
 import EditUnfinished from '../screens/progressTracker/EditUnfinished';
 import LinkTask from '../screens/progressTracker/Link';
@@ -63,17 +62,6 @@ export default function ProgressTrackerStack() {
           }
         }}
       />
-
-      {/* <Stack.Screen
-        name='Add Unfinished'
-        component={AddUnfinished}
-        options={({ navigation }) => {
-          return {
-            headerTitle: () => <Header title='New tasks' navigation={navigation} />
-          }
-        }}
-      /> */}
-
       <Stack.Screen
         name='Edit Finished'
         component={EditFinished}

@@ -103,6 +103,8 @@ export default function EditTodo({ route, navigation }) {
             navigation.navigate('Deadlines')
           })
       }
+    } else {
+      Alert.alert('Empty title', 'Title must have at least 1 character', [{text: 'Got it'}])
     }
   }
 

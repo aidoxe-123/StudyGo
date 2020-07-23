@@ -60,6 +60,7 @@ export const signInGoogle = async () => {
         }
     } catch (e) {
         console.log('LoginScreen.js.js 30 | Error with login', e);
+        //Alert.alert(e)
         return { error: true };
     }
 };

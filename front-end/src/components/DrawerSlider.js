@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage';
 import { DrawerItemList} from '@react-navigation/drawer'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { UserIdContext } from './UserIdContext'
@@ -23,6 +24,14 @@ export default function DrawerSlider(props) {
       .catch(error => console.log(error))
   }, [])
 
+  async function logout() {
+    try {
+      await AsyncStorage.setItem('userId', '-1')
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
     <ScrollView contentContainerStyle={{flex: 1, marginTop: 25}}>
       <View style={styles.profileContainer}>
@@ -33,7 +42,12 @@ export default function DrawerSlider(props) {
         <DrawerItemList {...props}/>
       </SafeAreaView>
       <View style={{borderBottomColor: '#696969', borderBottomWidth: 1, margin: 10}} />
-      <TouchableOpacity style={styles.logoutButton} onPress={() => props.navigation.navigate('Login')}>
+      <TouchableOpacity style={styles.logoutButton} 
+        onPress={() => {
+          logout()
+          props.navigation.navigate('Login')
+        }}
+      >
         <View style={styles.insideLogoutButton}>
           <SimpleLineIcons name='logout' size={20} color='#696969'/>
           <Text style={styles.logoutText}>Log out</Text>
