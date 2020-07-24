@@ -1,9 +1,8 @@
 import React, { useRef } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
-export default function Cell({ lesson, openModal }) {
+export default function Cell({ lesson, openModal, dayStart }) {
   const thisCell = useRef(null)
-
   const { name, start, end } = lesson
 
   const startHour = toTwoDigitString(Math.floor(start / 60)) + ':' + toTwoDigitString(start % 60)
@@ -30,7 +29,7 @@ export default function Cell({ lesson, openModal }) {
   return (
     <TouchableOpacity style={[
       styles.cell,
-      { left: (start / 60 + 0.5) * 50, width: (end - start) / 60 * 50 },
+      { left: (start / 60 - dayStart + 0.5) * 50, width: (end - start) / 60 * 50 },
       end % 60 === 0 && end < 1440 && { borderRightWidth: 0 }
     ]}
       ref={thisCell}

@@ -15,6 +15,8 @@ import { allClasses, editClass, deleteClass, addClass } from './DataFetcher.js'
 
 export default function Timetable({ navigation }) {
   const userId = useContext(UserIdContext)
+  const [startHour, setStartHour] = useState(9)
+  const [endHour, setEndHour] = useState(18)
 
   const [loading, setLoading] = useState(false)
 
@@ -51,6 +53,21 @@ export default function Timetable({ navigation }) {
     setLoading(true)
     allClasses(userId).then(data => {
       setLessons(data.timetable)
+      let start = 9 * 60
+      let end = 0 * 60
+      Object.keys(data.timetable).forEach(key => {
+        let arr = data.timetable[key]
+        for (i = 0; i < arr.length; i++) {
+          let lesson = arr[i]
+          start = Math.min(start, lesson.start)
+          end = Math.max(end, lesson.end)
+        }
+      })
+      start = Math.floor(start / 60)
+      end = Math.ceil(end / 60)
+      if (end - start < 8) end = start + 8
+      setStartHour(start)
+      setEndHour(end)
       setLoading(false)
     })
   }
@@ -136,19 +153,19 @@ export default function Timetable({ navigation }) {
             <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
               <TouchableWithoutFeedback>
                 <View>
-                  <HourTitle />
+                  <HourTitle startHour={startHour} endHour={endHour}/>
                   <View style={{ flexDirection: 'row' }}>
                     <View style={{ width: 25 }} />
-                    <View style={{ width: 1200, borderBottomWidth: 1 }} />
+                    <View style={{ width: (endHour - startHour) * 50, borderBottomWidth: 1 }} />
                     <View style={{ width: 25 }} />
                   </View>
-                  <DayRow lessons={lessons.monday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.tuesday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.wednesday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.thursday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.friday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.saturday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.sunday} openModal={openEditModal} />
+                  <DayRow lessons={lessons.monday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.tuesday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.wednesday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.thursday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.friday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.saturday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.sunday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
                 </View>
               </TouchableWithoutFeedback>
             </ScrollView>
