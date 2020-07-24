@@ -1,7 +1,8 @@
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, Animated} from 'react-native'
 
-export default function HourTitle() {
+//portionWidth: Animted.Value
+export default function HourTitle({portionWidth}) {
   const timeArray = []
   for (var i = 0; i <= 24; i++) {
     timeArray[i] = (i  < 10) 
@@ -9,17 +10,17 @@ export default function HourTitle() {
       : i + ':00' 
   }
   return (
-    <View style={styles.row}>
+    <Animated.View style={styles.row}>
       {
         timeArray.map(hour => {
           return (
-            <View key={hour} style={styles.hourContainer}>
+            <Animated.View key={hour} style={[styles.hourContainer, {width: portionWidth}]}>
               <Text style={styles.hourText}>{hour}</Text>
-            </View>
+            </Animated.View>
           )
         })
       }
-    </View>
+    </Animated.View>
   )
 }
 

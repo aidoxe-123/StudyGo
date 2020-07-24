@@ -1,8 +1,9 @@
 import React, {useContext, useState, useEffect, useRef} from 'react'
 import { 
-  View, Text, TouchableWithoutFeedback, Platform,
+  View, Text, TouchableWithoutFeedback, Platform, Animated,
   Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Dimensions
 } from 'react-native'
+import {PinchGestureHandler, State} from 'react-native-gesture-handler'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { AntDesign } from '@expo/vector-icons'
 import { UserIdContext } from '../../components/index'
@@ -122,6 +123,27 @@ export default function Timetable({navigation}) {
   }
   ///////////////////////////////////////////////////////////////////
 
+  // ---------------------------------------------------------------
+  // resizing the timetable
+  const baseWidth = useState(new Animated.Value(2500))[0]
+  const pinchScale = useState(new Animated.Value(1))[0]
+  const width = Animated.multiply(baseWidth, pinchScale)
+  const portionWidth = Animated.divide(width, new Animated.Value(25))
+  var lastWidth = 2500
+
+  const onPinchGestureEvent = Animated.event(
+    [{nativeEvent: {scale: pinchScale}}],
+    {useNativeDriver: false}
+  )
+
+  const onPinchStageChange = (event) => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      lastWidth *= event.nativeEvent.scale
+      baseWidth.setValue(lastWidth)
+      pinchScale.setValue(1)
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -135,22 +157,27 @@ export default function Timetable({navigation}) {
           <View style={{flex: 1}} onStartShouldSetResponder={() => true}>
             <ScrollView horizontal={true} contentContainerStyle={{flexGrow: 1}}>
               <TouchableWithoutFeedback>
-              <View>
-                <HourTitle/>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{width: 50}}/>
-                  <View style={{width: 2400, borderBottomWidth: 1}}/>
-                  <View style={{width: 50}}/>
-                </View>
-                <DayRow lessons={lessons.monday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.tuesday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.wednesday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.thursday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.friday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.saturday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.sunday} openModal={openEditModal}/>
-                </View>
-                </TouchableWithoutFeedback>
+                <PinchGestureHandler 
+                  onGestureEvent={onPinchGestureEvent} 
+                  onHandlerStateChange={onPinchStageChange}
+                >
+                  <Animated.View style={{width: width}}>
+                    <HourTitle portionWidth={portionWidth}/>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{width: '2%'}}/>
+                      <View style={{width: '96%', borderBottomWidth: 1}}/>
+                      <View style={{width: '2%'}}/>
+                    </View>
+                    <DayRow lessons={lessons.monday} openModal={openEditModal} portionWidth={portionWidth}/>
+                    <DayRow lessons={lessons.tuesday} openModal={openEditModal} portionWidth={portionWidth}/>
+                    <DayRow lessons={lessons.wednesday} openModal={openEditModal} portionWidth={portionWidth}/>
+                    <DayRow lessons={lessons.thursday} openModal={openEditModal} portionWidth={portionWidth}/>
+                    <DayRow lessons={lessons.friday} openModal={openEditModal} portionWidth={portionWidth}/>
+                    <DayRow lessons={lessons.saturday} openModal={openEditModal} portionWidth={portionWidth}/>
+                    <DayRow lessons={lessons.sunday} openModal={openEditModal} portionWidth={portionWidth}/>
+                  </Animated.View>
+                </PinchGestureHandler>
+              </TouchableWithoutFeedback>
             </ScrollView>
           </View>
         </View>

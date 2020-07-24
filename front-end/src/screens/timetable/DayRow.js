@@ -1,33 +1,36 @@
 import React from 'react'
-import {View, StyleSheet} from 'react-native'
+import {View, StyleSheet, Animated} from 'react-native'
 import Cell from './Cell'
 
-export default function DayRow({lessons, openModal}) {
+export default function DayRow({lessons, openModal, portionWidth}) {
+  const paddingWidth = Animated.divide(portionWidth, new Animated.Value(2))
+
   const timeArray = []
   for (var i = 0; i < 24; i++) {
     timeArray[i] = i
   }
 
   return (
-    <View style={styles.row}>
-      <View style={{width: 50}}/>
+    <Animated.View style={styles.row}>
+      <Animated.View style={{width: paddingWidth}}/>
       { timeArray.map(index => {
           return (
-            <View style={styles.backgroundCell} key={index.toString()}/>
+            <Animated.View style={[styles.backgroundCell, {width: portionWidth}]} key={index.toString()}/>
           )
         })
       }
-      <View style={{width: 50, borderLeftWidth: 1}}/>
+      <Animated.View style={{width: paddingWidth, borderLeftWidth: 1}}/>
       { lessons.map(lesson => {
         return (
           <Cell 
             key={lesson.id} 
             lesson={lesson} 
             openModal={openModal}
+            portionWidth={portionWidth}
           />
         )
       })}
-    </View>
+    </Animated.View>
   )
 }
 
@@ -37,7 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   backgroundCell: {
-    width: 100,
+    // width: 100,
     borderLeftWidth: 1,
     borderBottomWidth: 1,
   }

@@ -1,7 +1,7 @@
 import React, {useRef} from 'react'
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native'
+import {View, Text, TouchableOpacity, StyleSheet, Animated} from 'react-native'
 
-export default function Cell({lesson, openModal}) {
+export default function Cell({lesson, openModal, portionWidth}) {
   const thisCell = useRef(null)
 
   const {name, start, end} = lesson
@@ -14,6 +14,8 @@ export default function Cell({lesson, openModal}) {
     return number < 10 ? '0' + number : '' + number
   }
 
+  const left = Animated.multiply(portionWidth, new Animated.Value(start / 60 + 0.5))
+  const classWidth = Animated.multiply(portionWidth, new Animated.Value((end - start) / 60))
   function handleClick() {
     thisCell.current.measure( (fx, fy, width, height, px, py) => {
       // console.log(name)
@@ -28,19 +30,33 @@ export default function Cell({lesson, openModal}) {
   }
 
   return (
-    <TouchableOpacity style={[
-        styles.cell,
-        {left: (start / 60 + 0.5) * 100, width: (end - start) / 60 * 100},
-        end % 60 === 0 && end < 1440 && {borderRightWidth: 0}
-      ]}
-      ref = {thisCell}
-      onPress={handleClick}
+    // <TouchableOpacity style={[
+    //     styles.cell,
+    //     {left: (start / 60 + 0.5) * 100, width: (end - start) / 60 * 100},
+    //     end % 60 === 0 && end < 1440 && {borderRightWidth: 0}
+    //   ]}
+    //   ref = {thisCell}
+    //   onPress={handleClick}
+    // >
+    //   <View style={{flex: 1}}>
+    //     {(end - start) / 60.0 > 1.5 && <Text style={styles.time}>{timeString}</Text>}
+    //     <Text style={styles.name}>{name}</Text>
+    //   </View>
+    // </TouchableOpacity>
+    <Animated.View 
+      style={[styles.cell, {width: classWidth, left: left}]} 
+      ref={thisCell}
     >
-      <View style={{flex: 1}}>
-        {(end - start) / 60.0 > 1.5 && <Text style={styles.time}>{timeString}</Text>}
-        <Text style={styles.name}>{name}</Text>
-      </View>
-    </TouchableOpacity>
+      <TouchableOpacity style={{flex: 1}} onPress={handleClick}>
+        <View style={{flex: 1}}>
+          {
+            (end - start) / 60.0 > 1.5 && 
+            <Text style={styles.time}>{timeString}</Text>
+          }
+          <Text style={styles.name}>{name}</Text>
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
   )
 }
 
