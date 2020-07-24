@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Image } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
-import { DrawerItemList} from '@react-navigation/drawer'
+import { DrawerItemList } from '@react-navigation/drawer'
 import { SimpleLineIcons } from '@expo/vector-icons';
-import { UserIdContext } from './UserIdContext'
-
+import { UserIdContext } from './UserIdContext';
+import * as GoogleSignIn from 'expo-google-sign-in';
+import Constants from 'expo-constants';
 
 export default function DrawerSlider(props) {
   const userId = useContext(UserIdContext)
@@ -13,7 +14,7 @@ export default function DrawerSlider(props) {
   useEffect(() => {
     const requestOptions = {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: userId
       })
@@ -26,30 +27,33 @@ export default function DrawerSlider(props) {
 
   async function logout() {
     try {
-      await AsyncStorage.setItem('userId', '-1')
+      await AsyncStorage.setItem('userId', '-1');
+      if ((Constants.appOwnership == 'standalone') && await GoogleSignIn.isSignedInAsync()) {
+        GoogleSignIn.signOutAsync();
+      }
     } catch (e) {
       console.log(e)
     }
   }
 
   return (
-    <ScrollView contentContainerStyle={{flex: 1, marginTop: 25}}>
+    <ScrollView contentContainerStyle={{ flex: 1, marginTop: 25 }}>
       <View style={styles.profileContainer}>
-        <Image source={require('../../assets/studygo7.png')} style={styles.profileImg}/>
+        <Image source={require('../../assets/studygo7.png')} style={styles.profileImg} />
         <Text style={styles.username}>{'Hi, ' + username + '!'}</Text>
       </View>
       <SafeAreaView>
-        <DrawerItemList {...props}/>
+        <DrawerItemList {...props} />
       </SafeAreaView>
-      <View style={{borderBottomColor: '#696969', borderBottomWidth: 1, margin: 10}} />
-      <TouchableOpacity style={styles.logoutButton} 
+      <View style={{ borderBottomColor: '#696969', borderBottomWidth: 1, margin: 10 }} />
+      <TouchableOpacity style={styles.logoutButton}
         onPress={() => {
           logout()
           props.navigation.navigate('Login')
         }}
       >
         <View style={styles.insideLogoutButton}>
-          <SimpleLineIcons name='logout' size={20} color='#696969'/>
+          <SimpleLineIcons name='logout' size={20} color='#696969' />
           <Text style={styles.logoutText}>Log out</Text>
         </View>
       </TouchableOpacity>
@@ -73,7 +77,7 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginHorizontal: 20,
-  }, 
+  },
   insideLogoutButton: {
     flexDirection: 'row',
     alignItems: 'center',
