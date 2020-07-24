@@ -138,9 +138,9 @@ export default function Timetable({ navigation }) {
                 <View>
                   <HourTitle />
                   <View style={{ flexDirection: 'row' }}>
-                    <View style={{ width: 50 }} />
-                    <View style={{ width: 2400, borderBottomWidth: 1 }} />
-                    <View style={{ width: 50 }} />
+                    <View style={{ width: 25 }} />
+                    <View style={{ width: 1200, borderBottomWidth: 1 }} />
+                    <View style={{ width: 25 }} />
                   </View>
                   <DayRow lessons={lessons.monday} openModal={openEditModal} />
                   <DayRow lessons={lessons.tuesday} openModal={openEditModal} />

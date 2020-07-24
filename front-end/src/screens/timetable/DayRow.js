@@ -10,14 +10,14 @@ export default function DayRow({ lessons, openModal }) {
 
   return (
     <View style={styles.row}>
-      <View style={{ width: 50 }} />
+      <View style={{ width: 25 }} />
       {timeArray.map(index => {
         return (
           <View style={styles.backgroundCell} key={index.toString()} />
         )
       })
       }
-      <View style={{ width: 50, borderLeftWidth: 1 }} />
+      <View style={{ width: 25, borderLeftWidth: 1 }} />
       {lessons.map(lesson => {
         return (
           <Cell
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   backgroundCell: {
-    width: 100,
+    width: 50,
     borderLeftWidth: 1,
     borderBottomWidth: 1,
   }

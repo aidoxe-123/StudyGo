@@ -29,13 +29,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   hourContainer: {
-    width: 100,
+    width: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
   hourText: {
     textAlign: 'center',
     fontFamily: 'sourcesanspro-regular',
-    fontSize: 20,
+    fontSize: 15,
   }
 })
