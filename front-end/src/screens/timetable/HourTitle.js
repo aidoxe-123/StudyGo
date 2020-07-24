@@ -1,12 +1,12 @@
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 
 export default function HourTitle() {
   const timeArray = []
   for (var i = 0; i <= 24; i++) {
-    timeArray[i] = (i  < 10) 
-      ? '0' + i +':00'
-      : i + ':00' 
+    timeArray[i] = (i < 10)
+      ? '0' + i + ':00'
+      : i + ':00'
   }
   return (
     <View style={styles.row}>

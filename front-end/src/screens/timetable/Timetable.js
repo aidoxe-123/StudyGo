@@ -1,5 +1,5 @@
-import React, {useContext, useState, useEffect, useRef} from 'react'
-import { 
+import React, { useContext, useState, useEffect, useRef } from 'react'
+import {
   View, Text, TouchableWithoutFeedback, Platform,
   Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Dimensions
 } from 'react-native'
@@ -11,9 +11,9 @@ import HourTitle from './HourTitle'
 import DayRow from './DayRow'
 import EditModal from './EditModal'
 import AddModal from './AddModal'
-import {allClasses, editClass, deleteClass, addClass} from './DataFetcher.js'
+import { allClasses, editClass, deleteClass, addClass } from './DataFetcher.js'
 
-export default function Timetable({navigation}) {
+export default function Timetable({ navigation }) {
   const userId = useContext(UserIdContext)
 
   const [loading, setLoading] = useState(false)
@@ -42,7 +42,7 @@ export default function Timetable({navigation}) {
     friday: [],
     saturday: [],
     sunday: []
-  }) 
+  })
 
   // when first mount
   useEffect(fetchData, [])
@@ -78,8 +78,8 @@ export default function Timetable({navigation}) {
   }
 
   useEffect(() => {
-    if (editModalHeight !== null && editModalWidth !== null && 
-        editModalX !== null && editModalY !== null && editedLesson !== null) { 
+    if (editModalHeight !== null && editModalWidth !== null &&
+      editModalX !== null && editModalY !== null && editedLesson !== null) {
       // wait for the setState in openEditModal to finish
       setEditModalVisible(true)
     }
@@ -124,46 +124,46 @@ export default function Timetable({navigation}) {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <View style={{ flex: 1, backgroundColor: 'white' }}>
         <Spinner
           visible={loading}
           textContent='Loading...'
-          textStyle={{color: "#fff"}}
+          textStyle={{ color: "#fff" }}
         />
         <View style={styles.content}>
-          <DayNameColumn/>
-          <View style={{flex: 1}} onStartShouldSetResponder={() => true}>
-            <ScrollView horizontal={true} contentContainerStyle={{flexGrow: 1}}>
+          <DayNameColumn />
+          <View style={{ flex: 1 }} onStartShouldSetResponder={() => true}>
+            <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
               <TouchableWithoutFeedback>
-              <View>
-                <HourTitle/>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{width: 50}}/>
-                  <View style={{width: 2400, borderBottomWidth: 1}}/>
-                  <View style={{width: 50}}/>
+                <View>
+                  <HourTitle />
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ width: 50 }} />
+                    <View style={{ width: 2400, borderBottomWidth: 1 }} />
+                    <View style={{ width: 50 }} />
+                  </View>
+                  <DayRow lessons={lessons.monday} openModal={openEditModal} />
+                  <DayRow lessons={lessons.tuesday} openModal={openEditModal} />
+                  <DayRow lessons={lessons.wednesday} openModal={openEditModal} />
+                  <DayRow lessons={lessons.thursday} openModal={openEditModal} />
+                  <DayRow lessons={lessons.friday} openModal={openEditModal} />
+                  <DayRow lessons={lessons.saturday} openModal={openEditModal} />
+                  <DayRow lessons={lessons.sunday} openModal={openEditModal} />
                 </View>
-                <DayRow lessons={lessons.monday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.tuesday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.wednesday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.thursday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.friday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.saturday} openModal={openEditModal}/>
-                <DayRow lessons={lessons.sunday} openModal={openEditModal}/>
-                </View>
-                </TouchableWithoutFeedback>
+              </TouchableWithoutFeedback>
             </ScrollView>
           </View>
         </View>
-        <TouchableOpacity 
-          style={styles.addButton} 
-          onPress={openAddModal} 
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={openAddModal}
           ref={addButtonPos}
         >
-          <AntDesign name="pluscircle" size={50} color='#e76f51'/>
+          <AntDesign name="pluscircle" size={50} color='#e76f51' />
         </TouchableOpacity>
-        { editModalVisible && 
-          <EditModal 
-            height={editModalHeight} 
+        {editModalVisible &&
+          <EditModal
+            height={editModalHeight}
             width={editModalWidth}
             x={editModalX}
             y={editModalY}
@@ -174,22 +174,22 @@ export default function Timetable({navigation}) {
           />
         }
         {
-          addModalVisible && 
+          addModalVisible &&
           <AddModal
             height={addModalHeight}
             width={addModalWidth}
             x={addModalX}
             y={addModalY}
-            handleClose={handleCloseAddModal}   
-            handleAdd={handleAdd} 
+            handleClose={handleCloseAddModal}
+            handleAdd={handleAdd}
           />
         }
-      </View> 
+      </View>
     </TouchableWithoutFeedback>
   )
 }
 
-const {height} = Dimensions.get('window')
+const { height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   content: {
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: 10, 
+    bottom: 10,
     right: 10,
     justifyContent: 'center',
     alignItems: 'center'
