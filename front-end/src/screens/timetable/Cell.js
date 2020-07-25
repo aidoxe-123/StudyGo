@@ -42,7 +42,7 @@ export default function Cell({ lesson, openModal, dayStart }) {
           ? <Text style={styles.time}>{timeString.substring(0,7) + '...'}</Text>
           : <Text></Text>
         }
-        {(end - start) / 60.0 > 1.5 
+        {(end - start) / 60.0 > 1.5 || name.length <= 3
           ? <Text style={styles.name}>{name}</Text>
           : (end - start) / 60.0 >= 1
           ? <Text style={styles.name}>{name.substring(0,3) + '...'}</Text>

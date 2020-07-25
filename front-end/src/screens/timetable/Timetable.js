@@ -3,6 +3,7 @@ import {
   View, Text, TouchableWithoutFeedback, Platform,
   Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Dimensions
 } from 'react-native'
+import { useHeaderHeight } from '@react-navigation/stack';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { AntDesign } from '@expo/vector-icons'
 import { UserIdContext } from '../../components/index'
@@ -13,7 +14,11 @@ import EditModal from './EditModal'
 import AddModal from './AddModal'
 import { allClasses, editClass, deleteClass, addClass } from './DataFetcher.js'
 
+
 export default function Timetable({ navigation }) {
+  const HEADER_HEIGHT = useHeaderHeight();
+  const SCREEN_HEIGHT = Dimensions.get('window').height
+  
   const userId = useContext(UserIdContext)
   const [startHour, setStartHour] = useState(9)
   const [endHour, setEndHour] = useState(18)
@@ -68,6 +73,7 @@ export default function Timetable({ navigation }) {
       if (end - start < 8) end = start + 8
       setStartHour(start)
       setEndHour(end)
+    }).then(() => {
       setLoading(false)
     })
   }
@@ -147,7 +153,7 @@ export default function Timetable({ navigation }) {
           textContent='Loading...'
           textStyle={{ color: "#fff" }}
         />
-        <View style={styles.content}>
+        <View style={[styles.content, {height: SCREEN_HEIGHT - HEADER_HEIGHT}]}>
           <DayNameColumn />
           <View style={{ flex: 1 }} onStartShouldSetResponder={() => true}>
             <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
@@ -206,8 +212,6 @@ export default function Timetable({ navigation }) {
   )
 }
 
-const { height } = Dimensions.get('window')
-
 const styles = StyleSheet.create({
   content: {
     flex: 1,
@@ -215,7 +219,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignSelf: 'stretch',
     marginBottom: 10,
-    minHeight: height * 70 / 100
   },
   addButton: {
     position: 'absolute',
