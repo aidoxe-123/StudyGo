@@ -12,7 +12,7 @@ import HourTitle from './HourTitle'
 import DayRow from './DayRow'
 import EditModal from './EditModal'
 import AddModal from './AddModal'
-import { allClasses, editClass, deleteClass, addClass } from './DataFetcher.js'
+import { allClasses, editClass, deleteClass, addClass } from '../../utils/data-fetchers/Timetable'
 
 
 export default function Timetable({ navigation }) {
@@ -52,11 +52,13 @@ export default function Timetable({ navigation }) {
   })
 
   // when first mount
-  useEffect(fetchData, [])
+  useEffect(() => {
+    fetchData()
+  }, [])
 
-  function fetchData() {
+  async function fetchData() {
     setLoading(true)
-    allClasses(userId).then(data => {
+    return allClasses(userId).then(data => {
       setLessons(data.timetable)
       let start = 9 * 60
       let end = 0 * 60
@@ -87,7 +89,7 @@ export default function Timetable({ navigation }) {
   }
 
   function handleAdd(lesson) {
-    addClass(userId, lesson.day, lesson).then(fetchData).then(handleCloseAddModal)
+    addClass(userId, lesson.day, lesson).then(() => fetchData().then(handleCloseAddModal))
   }
 
   // for the opening and closure of edit modal

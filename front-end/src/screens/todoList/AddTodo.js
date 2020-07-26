@@ -4,7 +4,7 @@ import { Fontisto, Ionicons, Feather } from '@expo/vector-icons'
 import { AddTodoStyles } from '../../../style/AddTodoStyles'
 import { YellowLine } from '../../../style/yellowLine'
 import { UserIdContext, DatePicker } from '../../components/index'
-import { addTask } from './DataFetcher'
+import { addTask } from '../../utils/data-fetchers/TodoList'
 
 export default function AddTodo({ navigation }) {
     const userId = useContext(UserIdContext)

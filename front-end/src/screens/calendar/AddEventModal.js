@@ -5,7 +5,7 @@ import {
 } from 'react-native'
 import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import { RadioButtons, UserIdContext } from '../../components/index'
-import { addEvent } from './DataFetcher'
+import { addEvent } from '../../utils/data-fetchers/Calendar'
 
 export default function AddEventModal({onFinishAdding, refetchData, dateString}) {
   const userId = useContext(UserIdContext)

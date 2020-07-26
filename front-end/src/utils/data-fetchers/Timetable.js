@@ -60,7 +60,7 @@ export async function addClass(userId, day, task) {
       task: task     
     })
   }
-  fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/timetable', requestOptions)
+  return fetch('https://fir-tut2-82e4f.firebaseapp.com/api/v1/timetable', requestOptions)
     .catch(error => console.log(error))
 }
 ////////////////////////////////////////////////////
