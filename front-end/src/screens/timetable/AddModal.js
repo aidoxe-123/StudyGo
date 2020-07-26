@@ -14,8 +14,8 @@ export default function EditModal({ height, width, x, y, handleClose, handleAdd 
   const SCREEN_WIDTH = Dimensions.get('window').width
   const SCREEN_HEIGHT = Dimensions.get('window').height
 
-  const [start, setStart] = useState(0)
-  const [end, setEnd] = useState(0)
+  const [start, setStart] = useState(480)
+  const [end, setEnd] = useState(540)
   const [name, setName] = useState('')
   const [day, setDay] = useState('monday')
   const [description, setDescription] = useState()
@@ -103,7 +103,8 @@ export default function EditModal({ height, width, x, y, handleClose, handleAdd 
       name: name,
       description: description,
     }
-    handleAdd(newLesson)
+    let done = handleAdd(newLesson)
+    if (done) handleClose()
   }
 
   return (

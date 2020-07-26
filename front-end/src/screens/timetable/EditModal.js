@@ -113,7 +113,10 @@ export default function EditModal({ height, width, x, y, handleClose, handleEdit
       name: name,
       description: description,
     }
-    handleEdit(newLesson, lesson.id)
+    var done = handleEdit(newLesson, lesson.id)
+    if (!done) {
+      handlePenButtonClicked()
+    }
     setEdit(false)
   }
 

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import {
   View, Text, TouchableWithoutFeedback, Platform,
-  Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Dimensions
+  Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Dimensions, Alert
 } from 'react-native'
 import { useHeaderHeight } from '@react-navigation/stack';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -81,7 +81,25 @@ export default function Timetable({ navigation }) {
   }
 
   function handleEdit(lesson, taskId) {
-    editClass(userId, taskId, lesson, lesson.day).then(fetchData)
+    let arr = lessons[lesson.day]
+    let valid = true
+    let clashingClass = ''
+    for (i = 0; i < arr.length; i++) {
+      let task = arr[i]
+      if ((task.start <= lesson.start && task.end > lesson.start) || (task.start < lesson.end && task.end >= lesson.end)) {
+        valid = false;
+        clashingClass = day.name
+        break
+      }
+    }
+    if (valid) {
+      editClass(userId, taskId, lesson, lesson.day).then(fetchData)
+      return true
+    } else {
+      Alert.alert('You are not allowed to create clashing classes', 
+        'Your class clashes with ' + clashingClass + ' on ' + lesson.day)
+      return false
+    }
   }
 
   function handleDelete(taskId) {
@@ -89,7 +107,25 @@ export default function Timetable({ navigation }) {
   }
 
   function handleAdd(lesson) {
-    addClass(userId, lesson.day, lesson).then(() => fetchData().then(handleCloseAddModal))
+    let arr = lessons[lesson.day]
+    let valid = true
+    let clashingClass = ''
+    for (i = 0; i < arr.length; i++) {
+      let task = arr[i]
+      if ((task.start <= lesson.start && task.end > lesson.start) || (task.start < lesson.end && task.end >= lesson.end)) {
+        valid = false;
+        clashingClass = day.name
+        break
+      }
+    }
+    if (valid) {
+      addClass(userId, lesson.day, lesson).then(() => fetchData().then(handleCloseAddModal))
+      return true
+    } else {
+      Alert.alert('You are not allowed to create clashing classes', 
+        'Your class clashes with ' + clashingClass + ' on ' + lesson.day)
+      return false
+    }
   }
 
   // for the opening and closure of edit modal
