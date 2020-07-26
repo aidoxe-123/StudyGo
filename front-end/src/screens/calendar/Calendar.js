@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Text, View, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native'
+import { Text, View, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native'
+import {YellowLine} from '../../../style/yellowLine'
 import { Calendar as RNCalendar} from 'react-native-calendars'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { UserIdContext } from '../../components/index'
-import { getEvents } from './DataFetcher'
+import { getEvents } from '../../utils/data-fetchers/Calendar'
 import CalendarDayView from './CalendarDayView'
 import AddEventModal from './AddEventModal'
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function Calendar({navigation}) {
   const userId = useContext(UserIdContext)
@@ -19,9 +21,9 @@ export default function Calendar({navigation}) {
   const [marked, setMarked] = useState({})
   // dot colors to be marked on calendars
   // --------------------------------------------------------------------------------------
-  const special = {key: 'special', color: '#e76f51', selectedDotColor: 'white'} // red
+  const special = {key: 'special', color: '#e76f51', selectedDotColor: 'white'} // orange
   const deadline = {key: 'deadline', color: '#517ee7', selectedDotColor: 'white'} // blue
-  const assessment = {key: 'assessment', color: '#51e7ba', selectedDotColor: 'white'} // yellow
+  const assessment = {key: 'assessment', color: '#51e7ba', selectedDotColor: 'white'} // green
   //////////////////////////////////////////////////////////////////////////////////////////////
   
   // get the data from the current month if the component is first fetched
@@ -119,6 +121,10 @@ export default function Calendar({navigation}) {
     setAddingDate(null)
   }
 
+  function openTip() {
+    Alert.alert('Tips', '- Long press any day to add a task to that day. \n\n- Press a day to view the list of tasks of that day')
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
       <View style={{flex: 1}}>
@@ -127,6 +133,14 @@ export default function Calendar({navigation}) {
           textContent='Loading...'
           textStyle={{color: "#fff"}}
         />
+        <View style={[YellowLine.header, {paddingTop: 15}]}>
+          <View style={YellowLine.rightWhiteButton}>
+            <TouchableOpacity style={[YellowLine.insideWhiteButton]} onPress={openTip}>
+              <FontAwesome5 name="lightbulb" size={15} style={YellowLine.whiteButtonIcon} />
+              <Text style={YellowLine.whiteButtonText}>Tips</Text>           
+            </TouchableOpacity>
+          </View>
+        </View>
         <RNCalendar
           markedDates={{
             ...marked,

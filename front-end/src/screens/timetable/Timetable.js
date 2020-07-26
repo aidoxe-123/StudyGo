@@ -3,6 +3,7 @@ import {
   View, Text, TouchableWithoutFeedback, Platform,
   Keyboard, TouchableOpacity, ScrollView, StatusBar, StyleSheet, Dimensions
 } from 'react-native'
+import { useHeaderHeight } from '@react-navigation/stack';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { AntDesign } from '@expo/vector-icons'
 import { UserIdContext } from '../../components/index'
@@ -11,10 +12,16 @@ import HourTitle from './HourTitle'
 import DayRow from './DayRow'
 import EditModal from './EditModal'
 import AddModal from './AddModal'
-import { allClasses, editClass, deleteClass, addClass } from './DataFetcher.js'
+import { allClasses, editClass, deleteClass, addClass } from '../../utils/data-fetchers/Timetable'
+
 
 export default function Timetable({ navigation }) {
+  const HEADER_HEIGHT = useHeaderHeight();
+  const SCREEN_HEIGHT = Dimensions.get('window').height
+  
   const userId = useContext(UserIdContext)
+  const [startHour, setStartHour] = useState(9)
+  const [endHour, setEndHour] = useState(18)
 
   const [loading, setLoading] = useState(false)
 
@@ -45,12 +52,30 @@ export default function Timetable({ navigation }) {
   })
 
   // when first mount
-  useEffect(fetchData, [])
+  useEffect(() => {
+    fetchData()
+  }, [])
 
-  function fetchData() {
+  async function fetchData() {
     setLoading(true)
-    allClasses(userId).then(data => {
+    return allClasses(userId).then(data => {
       setLessons(data.timetable)
+      let start = 9 * 60
+      let end = 0 * 60
+      Object.keys(data.timetable).forEach(key => {
+        let arr = data.timetable[key]
+        for (i = 0; i < arr.length; i++) {
+          let lesson = arr[i]
+          start = Math.min(start, lesson.start)
+          end = Math.max(end, lesson.end)
+        }
+      })
+      start = Math.floor(start / 60)
+      end = Math.ceil(end / 60)
+      if (end - start < 8) end = start + 8
+      setStartHour(start)
+      setEndHour(end)
+    }).then(() => {
       setLoading(false)
     })
   }
@@ -64,7 +89,7 @@ export default function Timetable({ navigation }) {
   }
 
   function handleAdd(lesson) {
-    addClass(userId, lesson.day, lesson).then(fetchData).then(handleCloseAddModal)
+    addClass(userId, lesson.day, lesson).then(() => fetchData().then(handleCloseAddModal))
   }
 
   // for the opening and closure of edit modal
@@ -130,25 +155,25 @@ export default function Timetable({ navigation }) {
           textContent='Loading...'
           textStyle={{ color: "#fff" }}
         />
-        <View style={styles.content}>
+        <View style={[styles.content, {height: SCREEN_HEIGHT - HEADER_HEIGHT}]}>
           <DayNameColumn />
           <View style={{ flex: 1 }} onStartShouldSetResponder={() => true}>
             <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
               <TouchableWithoutFeedback>
                 <View>
-                  <HourTitle />
+                  <HourTitle startHour={startHour} endHour={endHour}/>
                   <View style={{ flexDirection: 'row' }}>
-                    <View style={{ width: 50 }} />
-                    <View style={{ width: 2400, borderBottomWidth: 1 }} />
-                    <View style={{ width: 50 }} />
+                    <View style={{ width: 25 }} />
+                    <View style={{ width: (endHour - startHour) * 50, borderBottomWidth: 1 }} />
+                    <View style={{ width: 25 }} />
                   </View>
-                  <DayRow lessons={lessons.monday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.tuesday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.wednesday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.thursday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.friday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.saturday} openModal={openEditModal} />
-                  <DayRow lessons={lessons.sunday} openModal={openEditModal} />
+                  <DayRow lessons={lessons.monday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.tuesday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.wednesday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.thursday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.friday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.saturday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
+                  <DayRow lessons={lessons.sunday} openModal={openEditModal} startHour={startHour} endHour={endHour}/>
                 </View>
               </TouchableWithoutFeedback>
             </ScrollView>
@@ -189,8 +214,6 @@ export default function Timetable({ navigation }) {
   )
 }
 
-const { height } = Dimensions.get('window')
-
 const styles = StyleSheet.create({
   content: {
     flex: 1,
@@ -198,7 +221,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignSelf: 'stretch',
     marginBottom: 10,
-    minHeight: height * 70 / 100
   },
   addButton: {
     position: 'absolute',

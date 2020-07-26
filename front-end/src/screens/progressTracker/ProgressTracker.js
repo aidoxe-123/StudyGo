@@ -48,8 +48,8 @@ export default function ProgressTracker({ navigation }) {
 
   const line = (props) => (
     <View style={{height: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', ...props}}>
-      <View style={{height: '50%', borderLeftWidth: 1, borderColor: '#e76f51', marginRight: 2}}></View>
-      <View style={{height: '50%', borderLeftWidth: 1, borderColor: '#e76f51'}}></View>
+      <View style={{height: '80%', borderLeftWidth: 1, borderColor: '#e76f51', marginRight: 2}}></View>
+      <View style={{height: '80%', borderLeftWidth: 1, borderColor: '#e76f51'}}></View>
     </View>
   )
 

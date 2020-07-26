@@ -5,7 +5,7 @@ import { AntDesign, Feather } from '@expo/vector-icons'
 import CalendarTask from './CalendarTask'
 import EditEventModal from './EditEventModal'
 import { UserIdContext } from '../../components/index'
-import { deleteEvent } from './DataFetcher'
+import { deleteEvent } from '../../utils/data-fetchers/Calendar'
 
 export default function CalendarDayView({tasks, dateString, refetchData}) {
   const userId = useContext(UserIdContext)

@@ -10,7 +10,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { TodoStyles } from '../../../style/TodoStyles.js'
 import TodoItem from './TodoItem.js'
 import { UserIdContext } from '../../components/index'
-import { allTasks, deleteTask } from './DataFetcher'
+import { allTasks, deleteTask } from '../../utils/data-fetchers/TodoList'
 import { AntDesign } from '@expo/vector-icons';
 
 export default function TodoList({ navigation }) {
