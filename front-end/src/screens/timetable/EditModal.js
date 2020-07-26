@@ -7,7 +7,7 @@ import {
 import Animated from 'react-native-reanimated'
 import { useTransition, mix } from 'react-native-redash'
 import { DatePicker, DropdownList } from '../../components/index'
-import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Feather, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 
 export default function EditModal({ height, width, x, y, handleClose, handleEdit, handleDelete, lesson }) {
   const SCREEN_WIDTH = Dimensions.get('window').width
@@ -122,6 +122,10 @@ export default function EditModal({ height, width, x, y, handleClose, handleEdit
       { text: 'cancel', onPress: () => { } },
       { text: 'proceed', onPress: () => handleDelete(lesson.id) }
     ])
+  }
+
+  function openTip() {
+    Alert.alert('Tip', 'Press the pen button to toggle between view mode and edit mode')
   }
   return (
     <Modal visible={true} transparent={true}>
@@ -279,6 +283,13 @@ export default function EditModal({ height, width, x, y, handleClose, handleEdit
               >
                 <Feather name="edit-2" size={24} color='white' />
               </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.tipsBtn}
+                onPress={openTip}
+              >
+                <FontAwesome5 name="lightbulb" size={24} color="#e76f51" />
+                <Text style={styles.tipTxt}>Tips</Text>
+              </TouchableOpacity>
             </Animated.View>
           </Animated.View>
           <DatePicker
@@ -391,5 +402,20 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  tipsBtn: {
+    position: 'absolute',
+    flexDirection: 'row',
+    bottom: 10,
+    left: 10,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  tipTxt: {
+    paddingLeft: 5,
+    color: '#e76f51',
+    fontFamily: 'sourcesanspro-regular',
+    fontSize: 16
   }
 })

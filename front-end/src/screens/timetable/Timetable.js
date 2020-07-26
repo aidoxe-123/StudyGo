@@ -149,13 +149,13 @@ export default function Timetable({ navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={{ flex: 1, backgroundColor: 'white', height: SCREEN_HEIGHT - HEADER_HEIGHT }}>
         <Spinner
           visible={loading}
           textContent='Loading...'
           textStyle={{ color: "#fff" }}
         />
-        <View style={[styles.content, {height: SCREEN_HEIGHT - HEADER_HEIGHT}]}>
+        <View style={styles.content}>
           <DayNameColumn />
           <View style={{ flex: 1 }} onStartShouldSetResponder={() => true}>
             <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
