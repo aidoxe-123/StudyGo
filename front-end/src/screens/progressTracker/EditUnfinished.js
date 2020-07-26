@@ -20,8 +20,8 @@ export default function Finished({ navigation, route }) {
         else if (newDetails === "") Alert.alert("", "Please input your progress!");
         if (newDetails === '100%') {
             Alert.alert('', "Since this task's progress reaches 100%, it will be moved to finished task", [
-                {text: 'Cancel'},
-                {text: 'Proceed', onPress: handleFinish}
+                { text: 'Cancel' },
+                { text: 'Proceed', onPress: handleFinish }
             ])
         } else {
             setLoading(true);
@@ -127,7 +127,7 @@ export default function Finished({ navigation, route }) {
 
                 <View style={{ padding: '5%' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={styles.text}>Link property: </Text>
+                        <Text style={styles.text}>I want to... </Text>
                         <TouchableOpacity onPress={openAnnotate}>
                             <AntDesign name="questioncircleo" size={20} color="#e76f51" />
                         </TouchableOpacity>
@@ -136,10 +136,10 @@ export default function Finished({ navigation, route }) {
                         <Text style={styles.text}>
                             {
                                 willHost
-                                    ? "You will host this task"
+                                    ? "Be the first one created this\ntask to track with others"
                                     : (newRefId !== ""
-                                        ? "This task is linked to a public task"
-                                        : "This task is private")
+                                        ? "Track this task with others"
+                                        : "Track the task by myself")
                             }
                         </Text>
                         <TouchableOpacity

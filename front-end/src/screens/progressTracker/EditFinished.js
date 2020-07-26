@@ -1,26 +1,28 @@
 import React, { useState, useContext } from 'react'
-import { View, Text, TouchableWithoutFeedback, 
-    Keyboard, TouchableOpacity, Alert, StyleSheet 
+import {
+    View, Text, TouchableWithoutFeedback,
+    Keyboard, TouchableOpacity, Alert, StyleSheet
 } from 'react-native'
 import { YellowLine } from '../../../style/yellowLine'
 import { Ionicons } from '@expo/vector-icons'
 import { PrettyTextInput, RadioButtons, UserIdContext, Spinner } from '../../components/index'
 import { updateTask, deleteTask } from '../../utils/data-fetchers/ProgressTracker';
 import wrapper from '../../utils/data-fetchers/fetchingWrapper';
-import {AntDesign} from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 
 
 export default function Finished({ navigation, route }) {
     const map = { "Not graded yet": 0, "Ungraded": 1, graded: 2 };
     const { title, taskId, details } = route.params;
     const [newTitle, setTitle] = useState(title);
+    const [newMark2, setMark2] = useState("");
     const [newMark, setMark] = useState(details);
     const [choice, setChoice] = useState(details === "Not graded yet" ? 0 : (details === "Ungraded" ? 1 : 2));
     const userId = useContext(UserIdContext);
     const [loading, setLoading] = useState(false)
 
     const handleTitleInput = (text) => { setTitle(text); }
-    const handleMarkInput = (text) => { setMark(text); }
+    const handleMarkInput = (text) => { setMark(text); setMark2(text) }
     const handleAdd = () => {
         let details = "";
         if (title === "") {
@@ -55,15 +57,15 @@ export default function Finished({ navigation, route }) {
                 <View style={YellowLine.header}>
                     <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
                         <View style={YellowLine.insideWhiteButton}>
-                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon} />
                             <Text style={YellowLine.whiteButtonText}>Back</Text>
-                        </View> 
+                        </View>
                     </TouchableOpacity>
                     <Text h1 style={YellowLine.headerText}>Edit task</Text>
                     <TouchableOpacity style={YellowLine.rightWhiteButton} onPress={handleAdd}>
                         <View style={YellowLine.insideWhiteButton}>
                             <Text style={YellowLine.whiteButtonText}>Save</Text>
-                        </View> 
+                        </View>
                     </TouchableOpacity>
                 </View>
                 {/*Title input text box*/}
@@ -86,8 +88,9 @@ export default function Finished({ navigation, route }) {
                     <Text>Ungraded</Text>
                     {/*Choice 3*/}
                     <PrettyTextInput
+                        blurOnSubmit={true}
                         onChangeText={text => handleMarkInput(text)}
-                        value={choice === 2 ? newMark : ""}
+                        value={newMark2}
                         placeholder="Mark (e.g. 38)"
                     />
                 </RadioButtons>
@@ -95,7 +98,7 @@ export default function Finished({ navigation, route }) {
                 < View style={{ flex: 1, alignItems: 'center' }}>
                     <TouchableOpacity onPress={handleDelete} style={styles.DeleteBtn}>
                         <AntDesign name="delete" size={20} color="#d11a2a" />
-                        <Text style={[{ color: "#d11a2a", paddingLeft: 5}, styles.text]}>Delete</Text>              
+                        <Text style={[{ color: "#d11a2a", paddingLeft: 5 }, styles.text]}>Delete</Text>
                     </TouchableOpacity>
                 </View >
             </View>

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, StyleSheet } from 'react-native'
 import { PrettyTextInput, RadioButtons, UserIdContext, Spinner, SuggestInput, YellowHeader } from '../../components/index'
 import { YellowLine } from '../../../style/yellowLine'
-import {Ionicons} from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 
 
 export default function Finished({ navigation, route }) {
@@ -43,25 +43,25 @@ export default function Finished({ navigation, route }) {
                 <View style={YellowLine.header}>
                     <TouchableOpacity style={YellowLine.leftWhiteButton} onPress={() => navigation.pop()}>
                         <View style={YellowLine.insideWhiteButton}>
-                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon}/>
+                            <Ionicons name='ios-arrow-back' size={18} style={YellowLine.whiteButtonIcon} />
                             <Text style={YellowLine.whiteButtonText}>Back</Text>
-                        </View> 
+                        </View>
                     </TouchableOpacity>
                     <Text h1 style={YellowLine.headerText}>Link task</Text>
                     <TouchableOpacity style={YellowLine.rightWhiteButton} onPress={() => handleSubmit("pressed")}   >
                         <View style={YellowLine.insideWhiteButton}>
                             <Text style={YellowLine.whiteButtonText}>Done</Text>
-                        </View> 
+                        </View>
                     </TouchableOpacity>
                 </View>
                 {/*Radio buttons*/}
                 <RadioButtons onPressIndex={(index) => setChoice(index)} initialChoice={choice}>
                     {/*Choice 1*/}
-                    <Text>Make it private</Text>
+                    <Text>Track this task by myself</Text>
                     {/*Choice 2*/}
-                    <Text>Make it public</Text>
+                    <Text>{'Make this task available to others \nfor them to search'}</Text>
                     {/*Choice 3*/}
-                    <Text>Link with existing:</Text>
+                    <Text>Search for an already created one:</Text>
                 </RadioButtons>
 
                 <View style={styles.InputWithTitle}>

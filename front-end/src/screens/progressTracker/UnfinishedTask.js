@@ -37,7 +37,7 @@ export default function Unfinished({ navigation, route }) {
         if (item.reference !== "") {
             let i = data.filter(itemm => itemm.taskId === item.reference)[0];
             const { completed, registered } = i;
-            return completed + '/' + registered + ' other(s) completed'
+            return completed + '/' + (registered - 1) + ' other(s) completed'
         } else return "Personal task"
     }
 
